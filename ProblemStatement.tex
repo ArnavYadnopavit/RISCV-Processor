@@ -1,0 +1,100 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\setstretch{1.2}
+\titleformat{\section}{\bfseries\large}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\bfseries}{\thesubsection}{0.5em}{}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Large \textbf{CS2323: Computer Architecture}}\\[0.5cm]
+    {\large \textbf{Project and Specification Proposal}}\\[2.5cm]
+    
+    {\LARGE \textbf{Design and FPGA Implementation of a 64-bit RISC-V Processor with FPU and UART Interface}}\\[2cm]
+
+    \textbf{Submitted By:}\\[0.5cm]
+    \begin{tabular}{rl}
+        Krishna H. Patil & (EE24BTECH11036)\\
+        Arnav Yadnopavit & (EE24BTECH11007)
+    \end{tabular}\\[1.5cm]
+    
+    \vfill
+    Indian Institute of Technology Hyderabad\\
+    \vspace{0.5cm}
+    \today
+\end{titlepage}
+
+\section{Project Scope}
+
+The objective of this project is to design and demonstrate a 64-bit RISC-V processor on an FPGA board (Arty A7 or Pynq-Z2). The design will evolve in multiple stages—beginning with a single-cycle implementation and progressively extending to a multicycle version with additional components such as a Floating-Point Unit (FPU) and UART interface for communication with a host computer.
+
+\subsection*{Key Features Planned}
+\begin{itemize}
+    \item Implementation of the RV64I base instruction set (integer operations).
+    \item Support for arithmetic, logical, load/store, and branch instructions.
+    \item Development of a single-cycle CPU initially, followed by a multicycle version for improved resource utilization.
+    \item Addition of a Floating-Point Unit (FPU) supporting IEEE-754 operations.
+    \item Integration of a UART interface for serial communication and demonstration of results.
+\end{itemize}
+
+The final goal is to demonstrate the working of the 64-bit RISC-V processor executing sample programs (e.g., factorial, matrix operations, floating-point arithmetic) and verify outputs via UART on a connected terminal.
+
+\subsection*{Minimum Deliverable}
+The minimum deliverable planned for the project is a \textbf{64-bit multicycle RISC-V CPU} capable of correctly executing the core RV64I instruction set. This includes arithmetic, logical, load/store, and control-flow instructions, verified both through simulation and on FPGA hardware.
+
+\section{Implementation Plan}
+
+\subsection*{Phase 1 – Single Cycle RISC-V Processor (RV64I)}
+Design datapath components: Register File, ALU, Control Unit, Immediate Generator, Program Counter, and Instruction/Data Memory. Implement instruction fetch, decode, execute, memory access, and write-back in a single clock cycle. Verify correct execution using simulation for sample programs.
+
+\subsection*{Phase 2 – Multicycle RISC-V Processor}
+Modify datapath to reuse functional units across multiple cycles. Implement a finite state machine (FSM) for control, reducing hardware duplication and improving timing closure. Validate correctness using the same instruction tests.
+
+\subsection*{Phase 3 – Floating-Point Unit (FPU) Integration}
+Implement or integrate a basic IEEE-754 compliant single-precision FPU supporting add, subtract, and multiply operations. Extend control logic to recognize floating-point instructions. Test with mixed integer-floating point programs.
+
+\subsection*{Phase 4 – UART Integration}
+Add UART transmit and receive modules. Implement a memory-mapped I/O interface for UART communication. Demonstrate program output via a PC terminal.(some interface to work with the CPU in a more comfy way)
+
+\section{Verification Plan}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Stage} & \textbf{Verification Method} & \textbf{Tools Used} \\ \midrule
+Single Cycle & Simulation of instruction sequences (add, branch, load/store) & ModelSim / Vivado Simulator \\
+Multicycle & FSM state trace verification, timing analysis & Vivado \\
+FPU & Testbench for FP operations vs. software reference (Python / GCC) & ModelSim / Python script \\
+UART & Loopback and terminal tests for input/output & Tera Term / PuTTY \\
+Full System & Run compiled RISC-V assembly programs via \texttt{\$readmemh} & Vivado / FPGA board \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Tools and Resources}
+
+\begin{itemize}
+    \item \textbf{Hardware Description Language:} Verilog
+    \item \textbf{Simulation:} Vivado Simulator / ModelSim
+    \item \textbf{Synthesis \& Implementation:} Xilinx Vivado
+    \item \textbf{FPGA Boards:} Arty A7 / Pynq-Z2
+    \item \textbf{Software Toolchain:} RISC-V GCC / \texttt{objcopy} for .hex generation
+    \item \textbf{Optional Testing:} Python reference model for numerical verification
+\end{itemize}
+
+\section{Expected Outcome}
+
+\begin{itemize}
+    \item Working 64-bit RISC-V CPU running on FPGA.
+    \item UART output showing computation results (e.g., factorial, floating-point arithmetic).
+    \item Demonstration video or live hardware run during evaluation.
+\end{itemize}
+
+\end{document}
+
