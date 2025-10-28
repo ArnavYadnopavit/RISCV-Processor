@@ -11,7 +11,7 @@ module instruction_memory (
 
     	// preload program from file
     	initial begin
-        	$readmemh("program.hex", memory);
+        	$readmemh("data.hex", memory);
     	end
 endmodule
 
