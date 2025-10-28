@@ -6,7 +6,7 @@ module instruction_memory (
     	(* ram_style = "block" *)reg [7:0] memory [0:1023];       //1024 x 8-bit = 1 KB instruction_memory
         
     	always @(posedge clk) begin
-        	instruction <= memory[pc];  
+        	instruction <= { memory[pc], memory[pc+1], memory[pc+2], memory[pc+3] };  
     	end
 
     	// preload program from file
