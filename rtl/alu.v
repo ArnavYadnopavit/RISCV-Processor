@@ -1,4 +1,4 @@
-module ALU(
+(* use_dsp = "yes" *) module ALU(
     input  [63:0] a,
     input  [63:0] b,
     input  [3:0]  control,
