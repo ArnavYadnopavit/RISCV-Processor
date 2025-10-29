@@ -10,15 +10,15 @@ module reg_file(
 	output reg [63:0] read_data2
 );
 
-reg [63:0] registers [0:31];
+	reg [63:0] registers [0:31];
 
-always @(posedge clk or posedge reset) begin
-        if (reset)
-            registers[0] <= 64'b0;  
-	    else if (reg_write && rd != 5'd0)
-            registers[rd] <= write_data; 
-        read_data1 <= (rs1 == 5'd0) ? 64'b0 : registers[rs1];
-        read_data2 <= (rs2 == 5'd0) ? 64'b0 : registers[rs2];
-end
+	always @(posedge clk or posedge reset) begin
+        		if (reset)
+            			registers[0] <= 64'b0;  
+	    		else if (reg_write && rd != 5'd0)
+            			registers[rd] <= write_data; 
+        			read_data1 <= (rs1 == 5'd0) ? 64'b0 : registers[rs1];
+        			read_data2 <= (rs2 == 5'd0) ? 64'b0 : registers[rs2];
+	end
 
 endmodule

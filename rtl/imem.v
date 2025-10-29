@@ -1,17 +1,21 @@
 module instruction_memory (
-        input  wire         clk,
-    	input  wire [9:0] pc,         
-    	output reg [31:0] instruction
+    	input  wire         clk,
+    	input  wire [63:0]  pc,            
+    	output reg  [31:0]  instruction
 );
-    	(* ram_style = "block" *)reg [7:0] memory [0:1023];       //1024 x 8-bit = 1 KB instruction_memory
-        
+    	(* ram_style = "block" *) reg [7:0] memory [0:1023];  // 1 KB = 1024 bytes
+
+    	wire [9:0] addr_index = pc[9:0];  // Use only lower 10 bits (byte addressing)
+
+    	// Read instruction: 4 consecutive bytes form a 32-bit instruction
     	always @(posedge clk) begin
-        	instruction <= { memory[pc], memory[pc+1], memory[pc+2], memory[pc+3] };  
+        	instruction <= { memory[addr_index+3], memory[addr_index+2], memory[addr_index+1], memory[addr_index] };
     	end
 
     	// preload program from file
     	initial begin
-        	$readmemh("data.hex", memory);
+        	$readmemh("program.hex", memory);
     	end
+
 endmodule
 
