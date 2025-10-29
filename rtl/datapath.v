@@ -119,7 +119,8 @@ module datapath(
         assign take_branch = (Branch && flagzero) || Jump;
 
         // Next PC Calculation
-        assign pc_next = (Branch || Jump) ? (pc_out + imm) : 64'b0;
+        assign pc_next = take_branch ? ((Jump && (opcode == 7'b1100111)) ? (read_data1 + imm) : (pc_out + imm)) : (pc_out + 64'd4);
+
 
         // Program Counter
         program_counter PC (
