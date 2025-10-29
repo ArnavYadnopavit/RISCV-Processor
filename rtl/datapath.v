@@ -1,6 +1,8 @@
 module datapath(
         input  wire clk,
-        input  wire reset
+        input  wire reset,
+        output wire [63:0] debug_pc,
+        output wire [63:0] debug_alu_result
 );
         // Program Counter
         wire [63:0] pc_out;
@@ -36,7 +38,7 @@ module datapath(
         // Connections 
         wire [63:0] alu_result;
         wire [3:0]  ALUControlPort;
-        wire flagzero;
+        wire branchAlu;
         wire valid;
 
         // Data Memory Output
@@ -97,7 +99,7 @@ module datapath(
                 .b(ALUSrc ? imm : read_data2),
                 .control(ALUControlPort),
                 .out(alu_result),
-                .flagzero(flagzero),
+                .branchAlu(branchAlu),
                 .valid(valid)
         );
 
@@ -116,7 +118,7 @@ module datapath(
 
         // Branch / Jump Decision
         wire take_branch;
-        assign take_branch = (Branch && flagzero) || Jump;
+        assign take_branch = (Branch && branchAlu) || Jump;
 
         // Next PC Calculation
         assign pc_next = take_branch ? ((Jump && (opcode == 7'b1100111)) ? (read_data1 + imm) : (pc_out + imm)) : (pc_out + 64'd4);
@@ -127,9 +129,12 @@ module datapath(
                 .clk(clk),
                 .reset(reset),
                 .pc_next(pc_next),
-                .pc_branch(take_branch),
+                //.pc_branch(take_branch),
                 .pc_out(pc_out)
         );
+        
+        assign debug_pc = pc_out;
+        assign debug_alu_result = alu_result;
 
 endmodule
 
