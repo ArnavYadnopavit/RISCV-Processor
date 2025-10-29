@@ -69,28 +69,28 @@ module data_memory_tb;
         #10;
         addr = 0;
         write_data = 64'hAABBCCDDEEFF0011;
-        mem_write = 3'b001; // SB
+        mem_write = 3'b001; #15// SB
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b101; // LBU
         #1; check(64'h0000000000000011, "SB -> LBU");
 
         addr = 8;
         write_data = 64'h1122334455667788;
-        mem_write = 3'b010; // SH
+        mem_write = 3'b010; #15// SH
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b110; // LHU
         #1; check(64'h0000000000007788, "SH -> LHU");
 
         addr = 16;
         write_data = 64'hFFEEDDCCBBAA9988;
-        mem_write = 3'b011; // SW
+        mem_write = 3'b011; #15// SW
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b011; // LW (signed)
         #1; check({32'hFFFFFFFF, 32'hBBAA9988}, "SW -> LW (sign-extend)");
 
         addr = 32;
         write_data = 64'h0102030405060708;
-        mem_write = 3'b100; // SD
+        mem_write = 3'b100; #15// SD
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b100; // LD
         #1; check(64'h0102030405060708, "SD -> LD");
@@ -98,14 +98,14 @@ module data_memory_tb;
         // --- LOAD SIGN-EXTENSION TESTS ---
         addr = 0;
         write_data = 64'hFFFFFFFFFFFFFF80; // 0x80 = -128
-        mem_write = 3'b001; // SB
+        mem_write = 3'b001; #15// SB
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b001; // LB
         #1; check(64'hFFFFFFFFFFFFFFFF80, "LB sign-extend -128");
 
         addr = 64;
         write_data = 64'h000000000000F080;
-        mem_write = 3'b010; // SH
+        mem_write = 3'b010; #15// SH
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b010; // LH
         #1; check(64'hFFFFFFFFFFFFF080, "LH sign-extend -128");
@@ -113,14 +113,14 @@ module data_memory_tb;
         // --- LOAD ZERO-EXTENSION TESTS ---
         addr = 128;
         write_data = 64'h0000000000000080;
-        mem_write = 3'b001; // SB
+        mem_write = 3'b001; #15// SB
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b101; // LBU
         #1; check(64'h0000000000000080, "LBU zero-extend 0x80");
 
         addr = 256;
         write_data = 64'h000000000000F080;
-        mem_write = 3'b010; // SH
+        mem_write = 3'b010; #15// SH
         @(posedge clk); mem_write = 3'b000;
         mem_read = 3'b110; // LHU
         #1; check(64'h000000000000F080, "LHU zero-extend 0xF080");
