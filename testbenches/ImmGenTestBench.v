@@ -63,7 +63,7 @@ module ImmGen_tb;
 
         // Test 3: B-type (BEQ x1, x2, -16)
         inst = 32'b1_000001_00010_00001_000_0000_1100011; // imm = -16
-        check({52'hFFFFFFFFFFFFF, 12'hFF0}); // sign-extended -16
+        check({52'hFFFFFFFFFFFFF, 12'hFE0}); // sign-extended -16 left shift afterwards
 
         // Test 4: U-type (LUI x1, 0xABCDE)
         inst = 32'b10101011110011011110000010110111; // upper 20 bits = 0xABCDE
