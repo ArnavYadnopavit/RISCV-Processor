@@ -1,0 +1,377 @@
+$date
+	Wed Oct 29 09:35:40 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module reg_file_tb $end
+$var wire 64 ! read_data2 [63:0] $end
+$var wire 64 " read_data1 [63:0] $end
+$var reg 1 # clk $end
+$var reg 5 $ rd [4:0] $end
+$var reg 1 % reg_write $end
+$var reg 1 & reset $end
+$var reg 5 ' rs1 [4:0] $end
+$var reg 5 ( rs2 [4:0] $end
+$var reg 64 ) write_data [63:0] $end
+$var integer 32 * i [31:0] $end
+$scope module dut $end
+$var wire 1 # clk $end
+$var wire 5 + rd [4:0] $end
+$var wire 1 % reg_write $end
+$var wire 1 & reset $end
+$var wire 5 , rs1 [4:0] $end
+$var wire 5 - rs2 [4:0] $end
+$var wire 64 . write_data [63:0] $end
+$var wire 64 / read_data2 [63:0] $end
+$var wire 64 0 read_data1 [63:0] $end
+$var integer 32 1 i [31:0] $end
+$upscope $end
+$scope task check $end
+$var reg 64 2 exp [63:0] $end
+$var reg 64 3 got [63:0] $end
+$var reg 128 4 msg [127:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 5 \registers[0] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 6 \registers[1] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 7 \registers[2] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 8 \registers[3] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 9 \registers[4] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 : \registers[5] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 ; \registers[6] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 < \registers[7] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 = \registers[8] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 > \registers[9] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 ? \registers[10] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 @ \registers[11] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 A \registers[12] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 B \registers[13] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 C \registers[14] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 D \registers[15] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 E \registers[16] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 F \registers[17] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 G \registers[18] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 H \registers[19] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 I \registers[20] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 J \registers[21] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 K \registers[22] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 L \registers[23] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 M \registers[24] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 N \registers[25] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 O \registers[26] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 P \registers[27] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 Q \registers[28] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 R \registers[29] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 S \registers[30] [63:0] $end
+$upscope $end
+$upscope $end
+$scope module reg_file_tb $end
+$scope module dut $end
+$var reg 64 T \registers[31] [63:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b0 T
+b0 S
+b0 R
+b0 Q
+b0 P
+b0 O
+b0 N
+b0 M
+b0 L
+b0 K
+b0 J
+b0 I
+b0 H
+b0 G
+b0 F
+b0 E
+b0 D
+b0 C
+b0 B
+b0 A
+b0 @
+b0 ?
+b0 >
+b0 =
+b0 <
+b0 ;
+b0 :
+b0 9
+b0 8
+b0 7
+b0 6
+b0 5
+bx 4
+bx 3
+bx 2
+b100000 1
+b0 0
+b0 /
+b0 .
+b0 -
+b0 ,
+b0 +
+b100000 *
+b0 )
+b0 (
+b0 '
+1&
+0%
+b0 $
+0#
+b0 "
+b0 !
+$end
+#5000
+0&
+1#
+#10000
+0#
+#15000
+b0 *
+1#
+#20000
+0#
+#25000
+b1 *
+b1000000000000 )
+b1000000000000 .
+1%
+1#
+#30000
+0#
+#35000
+b1000000000001 6
+b10 *
+b1000000000001 )
+b1000000000001 .
+b1 $
+b1 +
+1#
+#40000
+0#
+#45000
+b1000000000010 7
+b11 *
+b1000000000010 )
+b1000000000010 .
+b10 $
+b10 +
+1#
+#50000
+0#
+#55000
+b1000000000011 8
+b100 *
+b1000000000011 )
+b1000000000011 .
+b11 $
+b11 +
+1#
+#60000
+0#
+#65000
+b1000000000010 !
+b1000000000010 /
+b1000000000001 "
+b1000000000001 0
+b10 (
+b10 -
+b1 '
+b1 ,
+0%
+1#
+#70000
+0#
+#75000
+1#
+#80000
+0#
+#85000
+b0 !
+b0 /
+b1000000000011 "
+b1000000000011 0
+1#
+b0 (
+b0 -
+b11 '
+b11 ,
+b11100100110010101100001011001000101111101100100011000010111010001100001001100100010000000101000011110000011001000101001 4
+b1000000000010 2
+b1000000000010 3
+#90000
+0#
+#95000
+1#
+#100000
+0#
+#105000
+b1010101010101010101110111011101111001100110011001101110111011101 )
+b1010101010101010101110111011101111001100110011001101110111011101 .
+b0 $
+b0 +
+1%
+1#
+b11100100110010101100001011001000101111101100100011000010111010001100001001100100010000000101000011110000011000000101001 4
+b0 2
+b0 3
+#110000
+0#
+#115000
+b0 "
+b0 0
+b0 '
+b0 ,
+0%
+1#
+#120000
+0#
+#125000
+1#
+#130000
+0#
+#135000
+1#
+b111100000110000001000000110110101110101011100110111010000100000011100110111010001100001011110010010000000110000 4
+#140000
+0#
+#145000
+1#
+#150000
+0#
+#155000
+1#
