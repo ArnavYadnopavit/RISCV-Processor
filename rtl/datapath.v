@@ -94,14 +94,16 @@ module datapath(
                 .valid(valid)
         );
 
-        data_memory DM (
-                .clk(clk),
-                .mem_read(MemRead),
-                .mem_write(MemWrite),
-                .addr(alu_result),
-                .write_data(read_data2),
-                .read_data(mem_data)
-        );
+	dmem_top DMEM (
+    		.clk(clk),
+    		.we(|MemWrite),         
+    		.re(|MemRead),          
+    		.data(read_data2),       
+    		.addr(alu_result),       
+    		.func3(func3),           
+    .		out_data(mem_data)      
+);
+
 
         assign write_data = MemtoReg ? mem_data : alu_result;
 
