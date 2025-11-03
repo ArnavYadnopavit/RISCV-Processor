@@ -16,7 +16,7 @@
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+// ONLY ALLOWS ALIGNED READS AND WRITES
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -59,6 +59,7 @@ output [63:0]out_data
     .re(re),
     .func3(func3),
     .data(read_data),
-    .read_data(out_data)
+    .read_data(out_data),
+    .addr_local(addr[2:0])
     );
 endmodule
