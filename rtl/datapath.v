@@ -28,7 +28,7 @@ module datapath(
 
         wire [2:0] ALUOp;
         wire RegWrite, ALUSrc, MemtoReg, Branch, Jump;
-        wire [2:0] MemRead, MemWrite;
+        wire MemRead, MemWrite;
         wire [2:0] InstType;
 
         wire [63:0] read_data1;
@@ -112,12 +112,12 @@ module datapath(
 
 	dmem_top DMEM (
     		.clk(clk),
-    		.we(|MemWrite),         
-    		.re(|MemRead),          
+    		.we(MemWrite),         
+    		.re(MemRead),          
     		.data(read_data2),       
     		.addr(alu_result),       
     		.func3(func3),           
-                .out_data(mem_data)      
+            .out_data(mem_data)      
 );
 
 

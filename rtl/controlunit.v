@@ -4,8 +4,8 @@ module ControlUnit(
         output reg [2:0] ALUOp,       
         output reg RegWrite,
         output reg ALUSrc,
-        output reg [2:0] MemRead,
-        output reg [2:0] MemWrite,
+        output reg MemRead,
+        output reg MemWrite,
         output reg MemtoReg,
         output reg Branch,
         output reg Jump,
@@ -18,8 +18,8 @@ module ControlUnit(
                 ALUOp    = 3'b000;
                 RegWrite = 1'b0;
                 ALUSrc   = 1'b0;
-                MemRead  = 3'b000;
-                MemWrite = 3'b000;
+                MemRead  = 1'b0;
+                MemWrite = 1'b0;
                 MemtoReg = 1'b0;
                 Branch   = 1'b0;
                 Jump     = 1'b0;
@@ -46,16 +46,7 @@ module ControlUnit(
                                 ALUSrc   = 1'b1;
                                 MemtoReg = 1'b1;
                                 InstType = 3'b001;
-                                case (func3)
-                                        3'b000: MemRead = 3'b001; // LB
-                                        3'b001: MemRead = 3'b010; // LH
-                                        3'b010: MemRead = 3'b011; // LW
-                                        3'b011: MemRead = 3'b100; // LD
-                                        3'b100: MemRead = 3'b101; // LBU
-                                        3'b101: MemRead = 3'b110; // LHU
-                                        3'b110: MemRead = 3'b111; // LWU
-                                        default: MemRead = 3'b000;
-                                endcase
+                                MemRead = 1'b1;
                         end
 
                         7'b0100011: begin         // STORE
@@ -63,13 +54,7 @@ module ControlUnit(
                                 ALUSrc   = 1'b1;
                                 RegWrite = 1'b0;
                                 InstType = 3'b010;
-                                case (func3)
-                                        3'b000: MemWrite = 3'b001; // SB
-                                        3'b001: MemWrite = 3'b010; // SH
-                                        3'b010: MemWrite = 3'b011; // SW
-                                        3'b011: MemWrite = 3'b100; // SD
-                                        default: MemWrite = 3'b000;
-                                endcase
+                                MemWrite = 1'b1;
                         end
 
                         7'b1100011: begin         // BRANCH
@@ -105,8 +90,8 @@ module ControlUnit(
                                 ALUOp    = 3'b000;
                                 RegWrite = 1'b0;
                                 ALUSrc   = 1'b0;
-                                MemRead  = 3'b000;
-                                MemWrite = 3'b000;
+                                MemRead  = 1'b0;
+                                MemWrite = 1'b0;
                                 MemtoReg = 1'b0;
                                 Branch   = 1'b0;
                                 Jump     = 1'b0;
