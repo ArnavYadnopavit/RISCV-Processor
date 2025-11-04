@@ -39,11 +39,20 @@ module datapath(
         
         wire take_branch;
 
-        instruction_memory IM (
-                .clk(clk),
-                .pc(pc_out),
-                .instruction(instruction)
-        );
+        //instruction_memory IM (
+          //      .clk(clk),
+           //     .pc(pc_out),
+           //     .instruction(instruction)
+        //);
+    
+    imem_ip IM(
+        .clka(clk),
+        .ena(1'b1),
+        .wea(4'b0),
+        .addra(pc_out[9:2]),
+        .dina(64'd0),
+        .douta(instruction)
+    );
 
 	ControlUnit CU (
         	.opcode(opcode),
