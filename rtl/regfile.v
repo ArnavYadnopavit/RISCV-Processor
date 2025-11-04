@@ -6,8 +6,8 @@ module reg_file(
     input wire [4:0] rs2,
     input wire [4:0] rd,
     input wire [63:0] write_data,
-    output reg [63:0] read_data1,
-    output reg [63:0] read_data2
+    output [63:0] read_data1,
+    output [63:0] read_data2
 );
 
     reg [63:0] registers [0:31];
@@ -20,11 +20,10 @@ module reg_file(
         else if (reg_write && rd != 5'd0)
             registers[rd] <= write_data;
             
-	read_data1 = (rs1 == 5'd0) ? 64'b0 : registers[rs1];
-    	read_data2 = (rs2 == 5'd0) ? 64'b0 : registers[rs2];
 
     end
-
+        assign read_data1 = (rs1 == 5'd0) ? 64'b0 : registers[rs1];
+    	assign read_data2 = (rs2 == 5'd0) ? 64'b0 : registers[rs2];
   
 
 endmodule

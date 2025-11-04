@@ -16,8 +16,8 @@ always@(*) begin
     valid=1'b1;
     branchAlu=1'b0;
     casez(control)
-    5'b00000:out=a+b;
-    5'b01000:out=a-b;
+    5'b00000:out=$signed(a)+$signed(b);
+    5'b01000:out=$signed(a)-$signed(b);
     5'b0?100:out=a^b; //xor 100
     5'b0?110:out=a|b; //or 110
     5'b0?111:out=a&b; //and 111
