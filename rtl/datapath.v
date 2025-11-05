@@ -2,14 +2,14 @@ module datapath(
         input  wire clk,
         input  wire reset,
         output wire [63:0] debug_pc,
-        output wire [63:0] debug_alu_result,
-        output wire [63:0] debug_alu_input1,
-        output wire [63:0] debug_alu_input2,
-        output wire [63:0] debug_regfile_out2,
-        output wire [63:0] debug_imm_out,
-        output wire [32:0] inst_debug,
-        output wire valid_alu_debug,
-        output wire [4:0] debug_alu_control
+        //output wire [63:0] debug_alu_result,
+        //output wire [63:0] debug_alu_input1,
+     //   output wire [63:0] debug_alu_input2,
+     //   output wire [63:0] debug_regfile_out2,
+     //   output wire [63:0] debug_imm_out,
+        output wire [32:0] inst_debug
+     //   output wire valid_alu_debug,
+      //  output wire [4:0] debug_alu_control
 );
         wire [63:0] pc_out;
         wire [63:0] pc_next;
@@ -124,9 +124,9 @@ module datapath(
         assign write_data = MemtoReg ? mem_data : alu_result;
 
         assign take_branch = (Branch && branchAlu) || Jump;
-        
+        wire [63:0]jumpimm=imm<<1;
         assign pc_next = take_branch ? 
-                         ((Jump && (opcode == 7'b1100111)) ? (read_data1 + imm) : (pc_out + imm)) 
+                         ((Jump && (opcode == 7'b1100111)) ? (read_data1 + jumpimm) : (pc_out-64'd8 + jumpimm)) 
                          : (pc_out + 64'd4);
 
         program_counter PC (
@@ -137,14 +137,14 @@ module datapath(
         );
         
         assign debug_pc = pc_out;
-        assign debug_alu_result = alu_result;
+       // assign debug_alu_result = alu_result;
         assign inst_debug=instruction;
-        assign debug_alu_input1=read_data1;
-        assign debug_regfile_out2=read_data2;
-        assign debug_imm_out=imm;
-        assign debug_alu_input2=ALUSrc ? imm : read_data2;
-        assign valid_alu_debug=valid;
-        assign debug_alu_control=ALUControlPort;
+       // assign debug_alu_input1=read_data1;
+       // assign debug_regfile_out2=read_data2;
+      //  assign debug_imm_out=imm;
+      //  assign debug_alu_input2=ALUSrc ? imm : read_data2;
+      //  assign valid_alu_debug=valid;
+      //  assign debug_alu_control=ALUControlPort;
 
 
 endmodule
