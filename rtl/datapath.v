@@ -121,7 +121,10 @@ module datapath(
 );
 
 
-        assign write_data = MemtoReg ? mem_data : alu_result;
+        assign write_data = (opcode == 7'b0110111) ? imm :
+                    (MemtoReg)              ? mem_data :
+                                             alu_result;
+
 
         assign take_branch = (Branch && branchAlu) || Jump;
         wire [63:0]jumpimm;
@@ -143,6 +146,7 @@ module datapath(
         //    if(opcode== 7'b0000011 | opcode==7'b1100011 | opcode==7'b1101111 | opcode==7'b1100111)
         //        stall=~stall;
         //end
+        
         
         assign debug_pc = pc_out;
        // assign debug_alu_result = alu_result;
