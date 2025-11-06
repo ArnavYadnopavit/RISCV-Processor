@@ -124,7 +124,8 @@ module datapath(
         assign write_data = MemtoReg ? mem_data : alu_result;
 
         assign take_branch = (Branch && branchAlu) || Jump;
-        wire [63:0]jumpimm=imm<<1;
+        wire [63:0]jumpimm;
+        assign jumpimm=imm<<1;
         assign pc_next = take_branch ? 
                          ((Jump && (opcode == 7'b1100111)) ? (read_data1 + jumpimm) : (pc_out-64'd8 + jumpimm)) 
                          : (pc_out + 64'd4);
@@ -135,6 +136,13 @@ module datapath(
                 .pc_next(pc_next),
                 .pc_out(pc_out)
         );
+        
+        //always @(posedge clk,posedge reset)begin
+        //    if (reset) 
+        //        stall<=1'b0;
+        //    if(opcode== 7'b0000011 | opcode==7'b1100011 | opcode==7'b1101111 | opcode==7'b1100111)
+        //        stall=~stall;
+        //end
         
         assign debug_pc = pc_out;
        // assign debug_alu_result = alu_result;
