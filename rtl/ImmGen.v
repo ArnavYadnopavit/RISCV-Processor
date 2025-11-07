@@ -28,10 +28,10 @@ module ImmGen(
     assign opcode = inst[6:0];
     always@(*) begin
         casez(opcode)
-        7'b0100011: imm={{52{inst[31]}},inst[31:25],inst[11:7]}; //for s type
-        7'b1100011: imm={{52{inst[31]}},inst[31],inst[7],inst[30:25],inst[11:8]}; //for b type to be right shifted  when given to pc hardware
-        7'b0110111: imm={32'd0,inst[31:12],12'd0}; //lui
-        7'b1101111: imm={{44{inst[31]}},inst[31],inst[19:12],inst[20],inst[30:21]}; //jal AAAAHHH
+        7'b010_0011: imm={{52{inst[31]}},inst[31:25],inst[11:7]}; //for s type
+        7'b110_0011: imm={{52{inst[31]}},inst[31],inst[7],inst[30:25],inst[11:8]}; //for b type to be right shifted  when given to pc hardware
+        7'b0?1_0111: imm={32'd0,inst[31:12],12'd0}; //lui and auipc
+        7'b110_1111: imm={{44{inst[31]}},inst[31],inst[19:12],inst[20],inst[30:21]}; //jal AAAAHHH
         default:imm={{52{inst[31]}},inst[31:20]};//For I type and load instructions and jalr
         endcase 
     end

@@ -121,17 +121,24 @@ module datapath(
 );
 
 
-        assign write_data = (opcode == 7'b0110111) ? imm :
-                    (MemtoReg)              ? mem_data :
-                                             alu_result;
+        assign write_data = (opcode == 7'b0110111) ? imm :                 // LUI
+                    ((opcode == 7'b1101111) ||                     // JAL
+                     (opcode == 7'b1100111)) ? (pc_out) :  // JAL / JALR
+                    (MemtoReg)              ? mem_data :           // load
+                                             alu_result;           // ALU result
 
+        
 
         assign take_branch = (Branch && branchAlu) || Jump;
         wire [63:0]jumpimm;
         assign jumpimm=imm<<1;
         assign pc_next = take_branch ? 
-                         ((Jump && (opcode == 7'b1100111)) ? (read_data1 + jumpimm) : (pc_out-64'd8 + jumpimm)) 
-                         : (pc_out + 64'd4);
+                    ((Jump && (opcode == 7'b1100111)) ? (read_data1 + imm) :     // JALR
+                     (Jump && (opcode == 7'b1101111)) ? (pc_out - 64'd4 + jumpimm) : // JAL
+                     (pc_out - 64'd8 + jumpimm))                                     // other branch
+                 : (opcode == 7'b0010111) ? imm                                       // AUIPC
+                 : (pc_out + 64'd4);                                                  // normal PC increment
+
 
         program_counter PC (
                 .clk(clk),
