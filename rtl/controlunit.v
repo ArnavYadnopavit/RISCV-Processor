@@ -9,7 +9,7 @@ module ControlUnit(
         output reg MemtoReg,
         output reg Branch,
         output reg Jump,
-        output reg [2:0] InstType     // For datapath decoding (R/I/S/B/U/J)
+        output reg InstType     // For datapath decoding (R/I/S/B/U/J)
 );
         // Instruction Type Encoding 
         // 000:R-type, 001:I-type, 010:S-type, 011:B-type, 100:U-type, 101:J-type
@@ -23,21 +23,20 @@ module ControlUnit(
                 MemtoReg = 1'b0;
                 Branch   = 1'b0;
                 Jump     = 1'b0;
-                InstType = 3'b000;
+                InstType = 1'b0;
 
                 case (opcode)
                         7'b0110011: begin         // R-type
                                 ALUOp    = 3'b010;  
                                 RegWrite = 1'b1;
                                 ALUSrc   = 1'b0;
-                                InstType = 3'b000;
+                                //InstType = 1'b0;
                         end
 
                         7'b0010011: begin         // I-type s
                                 ALUOp    = 3'b011;  
                                 RegWrite = 1'b1;
                                 ALUSrc   = 1'b1;
-                                InstType = 3'b001;
                         end
 
                         7'b0000011: begin         // LOAD
@@ -45,7 +44,7 @@ module ControlUnit(
                                 RegWrite = 1'b1;
                                 ALUSrc   = 1'b1;
                                 MemtoReg = 1'b1;
-                                InstType = 3'b001;
+                                //InstType = 3'b001;
                                 MemRead = 1'b1;
                         end
 
@@ -53,21 +52,21 @@ module ControlUnit(
                                 ALUOp    = 3'b000; 
                                 ALUSrc   = 1'b1;
                                 RegWrite = 1'b0;
-                                InstType = 3'b010;
+                                //InstType = 3'b010;
                                 MemWrite = 1'b1;
                         end
 
                         7'b1100011: begin         // BRANCH
                                 ALUOp    = 3'b101;  
                                 Branch   = 1'b1;
-                                InstType = 3'b011;
+                                //InstType = 3'b011;
                         end
 
                         7'b0110111: begin         // LUI
                                 ALUOp    = 3'b000;
                                 ALUSrc   = 1'b1;
                                 RegWrite = 1'b1;
-                                InstType = 3'b100;
+                                InstType = 1'b1;
                         end
 
                         7'b1101111: begin         // JAL
@@ -75,7 +74,7 @@ module ControlUnit(
                                 ALUSrc   = 1'b1;
                                 RegWrite = 1'b1;
                                 Jump     = 1'b1;
-                                InstType = 3'b101;
+                                //InstType = 3'b101;
                         end
 
                         7'b1100111: begin         // JALR
@@ -83,7 +82,7 @@ module ControlUnit(
                                 ALUSrc   = 1'b1;
                                 RegWrite = 1'b1;
                                 Jump     = 1'b1;
-                                InstType = 3'b001;
+                                //InstType = 3'b001;
                         end
 
                         default: begin
@@ -95,7 +94,7 @@ module ControlUnit(
                                 MemtoReg = 1'b0;
                                 Branch   = 1'b0;
                                 Jump     = 1'b0;
-                                InstType = 3'b000;
+                                //InstType = 3'b000;
                         end
                 endcase
         end
