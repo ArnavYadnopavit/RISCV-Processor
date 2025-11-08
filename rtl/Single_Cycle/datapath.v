@@ -29,7 +29,7 @@ module datapath(
         wire [2:0] ALUOp;
         wire RegWrite, ALUSrc, MemtoReg, Branch, Jump;
         wire MemRead, MemWrite;
-        wire [2:0] InstType;
+        wire InstType;
 
         wire [63:0] read_data1;
         wire [63:0] read_data2;
@@ -107,7 +107,8 @@ module datapath(
                 .control(ALUControlPort),
                 .out(alu_result),
                 .branchAlu(branchAlu),
-                .valid(valid)
+                .valid(valid),
+                .InstType(InstType)
         );
 
 	dmem_top DMEM (
@@ -121,11 +122,11 @@ module datapath(
 );
 
 
-        assign write_data = (opcode == 7'b0110111) ? imm :                 // LUI
-                    ((opcode == 7'b1101111) ||                     // JAL
-                     (opcode == 7'b1100111)) ? (pc_out) :  // JAL / JALR
-                    (MemtoReg)              ? mem_data :           // load
-                                             alu_result;           // ALU result
+        assign write_data = ((opcode == 7'b1101111) ||     // JAL
+                     (opcode == 7'b1100111)) ? pc_out :  // JAL / JALR
+                    (MemtoReg) ? mem_data :              // load
+                                 alu_result;             // ALU result (includes LUI)
+
 
         
 
