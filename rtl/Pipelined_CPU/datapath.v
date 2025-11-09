@@ -16,20 +16,9 @@ module datapath(
 
         wire [31:0] instruction;
 
-        wire [6:0] opcode   = instruction[6:0];
-        wire [4:0] rd       = instruction[11:7];
-        wire [2:0] func3    = instruction[14:12];
-        wire [4:0] rs1      = instruction[19:15];
-        wire [4:0] rs2      = instruction[24:20];
-        wire [6:0] func7    = instruction[31:25];
-        wire       op5      = opcode[5];
-        wire       func75   = func7[5];   
-
-
-        wire [2:0] ALUOp;
-        wire RegWrite, ALUSrc, MemtoReg, Branch, Jump;
-        wire MemRead, MemWrite;
-        wire InstType;
+  	wire [2:0] ALUOp;
+  	wire RegWrite, ALUSrc, MemtoReg, Branch, Jump, MemRead, MemWrite;
+  	wire InstType;
 
         wire [63:0] read_data1;
         wire [63:0] read_data2;
@@ -45,21 +34,66 @@ module datapath(
         wire [63:0] mem_data;
         
         wire take_branch;
-
+        
+        wire [63:0] if_id_pc_out;
+	wire [31:0] if_id_instruction_out;
+	
+  	wire [6:0] opcode = if_id_instruction_out[6:0];
+  	wire [4:0] rd = if_id_instruction_out[11:7];
+  	wire [2:0] func3 = if_id_instruction_out[14:12];
+  	wire [4:0] rs1 = if_id_instruction_out[19:15];
+  	wire [4:0] rs2 = if_id_instruction_out[24:20];
+  	wire [6:0] func7 = if_id_instruction_out[31:25];
+  	wire op5 = opcode[5];
+  	wire func75 = func7[5];
+  	
+  	wire [63:0] id_ex_pc_out, id_ex_rs1_out, id_ex_rs2_out, id_ex_imm_out;
+  	wire [4:0] id_ex_rd_out;
+  	wire [2:0] id_ex_func3_out, id_ex_ALUop_out;
+  	wire id_ex_func75_out, id_ex_op5_out;
+ 	wire id_ex_ALUSrc_out, id_ex_RegWrite_out, id_ex_MemtoReg_out;
+  	wire id_ex_Branch_out, id_ex_Jump_out, id_ex_MemRead_out, id_ex_MemWrite_out, id_ex_InstType_out;
+	
+	wire [63:0] ex_mem_pc_out, ex_mem_alu_result_out, ex_mem_rs2_out;
+  	wire [4:0] ex_mem_rd_out;
+ 	wire ex_mem_branchAlu_out, ex_mem_RegWrite_out, ex_mem_MemRead_out, ex_mem_MemWrite_out;
+  	wire ex_mem_MemtoReg_out, ex_mem_Branch_out, ex_mem_Jump_out;
+  	
+  	wire [63:0] mem_wb_mem_data_out, mem_wb_alu_result_out, mem_wb_pc_out;
+  	wire [4:0] mem_wb_rd_out;
+  	wire mem_wb_RegWrite_out, mem_wb_MemtoReg_out;
+	
         //instruction_memory IM (
           //      .clk(clk),
            //     .pc(pc_out),
            //     .instruction(instruction)
         //);
-    
-    imem_ip IM(
-        .clka(clk),
-        .ena(1'b1),
-        .wea(4'b0),
-        .addra(pc_out[9:2]),
-        .dina(32'd0),
-        .douta(instruction)
-    );
+        
+        program_counter PC (
+                .clk(clk),
+                .reset(reset),
+                .pc_next(pc_next),
+                .pc_out(pc_out)
+        );
+        
+            
+    	imem_ip IM(
+        	.clka(clk),
+        	.ena(1'b1),
+        	.wea(4'b0),
+        	.addra(pc_out[9:2]),
+        	.dina(32'd0),
+        	.douta(instruction)
+    	);
+        
+        if_id_reg IF_ID (
+    		.clk(clk),
+    		.reset(reset),
+    		.instruction_in(instruction),
+    		.pc_in(pc_out),
+    		.instruction_out(if_id_instruction_out),
+   		.pc_out(if_id_pc_out)
+	);
 
 	ControlUnit CU (
         	.opcode(opcode),
@@ -73,53 +107,141 @@ module datapath(
         	.Branch(Branch),
         	.Jump(Jump),
         	.InstType(InstType)
-);
+	);
 
 
         ImmGen IG (
-                .inst(instruction),
+                .inst(if_id_instruction_out),
                 .imm(imm)
         );
 
         reg_file RF (
                 .clk(clk),
                 .reset(reset),
-                .reg_write(RegWrite),
+                .reg_write(mem_wb_RegWrite_out),
                 .rs1(rs1),
                 .rs2(rs2),
-                .rd(rd),
+                .rd(mem_wb_rd_out),
                 .write_data(write_data),
                 .read_data1(read_data1),
                 .read_data2(read_data2)
         );
-
-        ALUControl ALUC (
-                .op5(op5),
-                .func75(func75),
-                .func3(func3),
-                .AluOp(ALUOp),
-                .AluControlPort(ALUControlPort)
-        );
-
-        ALU ALU64 (
-                .a(read_data1),
-                .b(ALUSrc ? imm : read_data2),
-                .control(ALUControlPort),
-                .out(alu_result),
-                .branchAlu(branchAlu),
-                .valid(valid),
-                .InstType(InstType)
-        );
-
-	dmem_top DMEM (
+        
+  	id_ex_reg ID_EX (
     		.clk(clk),
-    		.we(MemWrite),         
-    		.re(MemRead),          
-    		.data(read_data2),       
-    		.addr(alu_result),       
-    		.func3(func3),           
-            .out_data(mem_data)      
-);
+    		.reset(reset),
+    		.pc_in(if_id_pc_out),
+    		.rs1_data_in(read_data1),
+    		.rs2_data_in(read_data2),
+    		.imm_in(imm),
+    		.rd_in(rd),
+    		.func3_in(func3),
+    		.func75_in(func75),
+    		.ALUop_in(ALUOp),
+    		.op5_in(op5),
+    		.ALUSrc_in(ALUSrc),
+    		.RegWrite_in(RegWrite),
+    		.MemtoReg_in(MemtoReg),
+    		.Branch_in(Branch),
+    		.Jump_in(Jump),
+    		.MemRead_in(MemRead),
+    		.MemWrite_in(MemWrite),
+    		.InstType_in(InstType),
+    		.pc_out(id_ex_pc_out),
+    		.rs1_data_out(id_ex_rs1_out),
+    		.rs2_data_out(id_ex_rs2_out),
+    		.imm_out(id_ex_imm_out),
+    		.rd_out(id_ex_rd_out),
+    		.func3_out(id_ex_func3_out),
+    		.func75_out(id_ex_func75_out),
+    		.ALUop_out(id_ex_ALUop_out),
+    		.op5_out(id_ex_op5_out),
+    		.ALUSrc_out(id_ex_ALUSrc_out),
+    		.RegWrite_out(id_ex_RegWrite_out),
+    		.MemtoReg_out(id_ex_MemtoReg_out),
+    		.Branch_out(id_ex_Branch_out),
+    		.Jump_out(id_ex_Jump_out),
+    		.MemRead_out(id_ex_MemRead_out),
+    		.MemWrite_out(id_ex_MemWrite_out),
+    		.InstType_out(id_ex_InstType_out)
+  	);
+
+
+  	ALUControl ALUC (
+    		.op5(id_ex_op5_out),
+    		.func75(id_ex_func75_out),
+    		.func3(id_ex_func3_out),
+    		.AluOp(id_ex_ALUop_out),
+    		.AluControlPort(ALUControlPort)
+  	);
+
+
+	ALU ALU64 (
+    		.a(id_ex_rs1_out),
+    		.b(id_ex_ALUSrc_out ? id_ex_imm_out : id_ex_rs2_out),
+    		.control(ALUControlPort),
+    		.out(alu_result),
+    		.branchAlu(branchAlu),
+    		.valid(valid),
+    		.InstType(id_ex_InstType_out)
+  	);
+        
+  	ex_mem_reg EX_MEM (
+    		.clk(clk),
+    		.reset(reset),
+    		.pc_in(id_ex_pc_out),
+    		.alu_result_in(alu_result),
+    		.branchAlu_in(branchAlu),
+    		.alu_input2_in(id_ex_rs2_out),
+    		.rd_in(id_ex_rd_out),
+    		.RegWrite_in(id_ex_RegWrite_out),
+    		.MemRead_in(id_ex_MemRead_out),
+    		.MemWrite_in(id_ex_MemWrite_out),
+    		.MemReg_in(id_ex_MemtoReg_out),
+    		.Branch_in(id_ex_Branch_out),
+    		.Jump_in(id_ex_Jump_out),
+    		.pc_out(ex_mem_pc_out),
+    		.alu_result_out(ex_mem_alu_result_out),
+    		.branchAlu_out(ex_mem_branchAlu_out),
+    		.alu_input2_out(ex_mem_rs2_out),
+    		.rd_out(ex_mem_rd_out),
+    		.RegWrite_out(ex_mem_RegWrite_out),
+    		.MemRead_out(ex_mem_MemRead_out),
+    		.MemWrite_out(ex_mem_MemWrite_out),
+    		.MemReg_out(ex_mem_MemtoReg_out),
+    		.Branch_out(ex_mem_Branch_out),
+    		.Jump_out(ex_mem_Jump_out)
+  	);
+
+
+  	dmem_top DMEM (
+    		.clk(clk),
+    		.we(ex_mem_MemWrite_out),
+    		.re(ex_mem_MemRead_out),
+    		.data(ex_mem_rs2_out),
+    		.addr(ex_mem_alu_result_out),
+    		.func3(ID_EX_func3_out),
+    		.out_data(mem_data)
+  	);
+        
+  	mem_wb_reg MEM_WB (
+    		.clk(clk),
+    		.reset(reset),
+    		.mem_data_in(mem_data),
+    		.alu_result_in(ex_mem_alu_result_out),
+    		.pc_in(ex_mem_pc_out),
+    		.rd_in(ex_mem_rd_out),
+    		.RegWrite_in(ex_mem_RegWrite_out),
+    		.MemtoReg_in(ex_mem_MemtoReg_out),
+    		.mem_data_out(mem_wb_mem_data_out),
+    		.alu_result_out(mem_wb_alu_result_out),
+    		.pc_out(mem_wb_pc_out),
+    		.rd_out(mem_wb_rd_out),
+    		.RegWrite_out(mem_wb_RegWrite_out),
+    		.MemtoReg_out(mem_wb_MemtoReg_out)
+  	);
+
+
 
 
         assign write_data = ((opcode == 7'b1101111) ||     // JAL
@@ -141,12 +263,7 @@ module datapath(
                  : (pc_out + 64'd4);                                                  // normal PC increment
 
 
-        program_counter PC (
-                .clk(clk),
-                .reset(reset),
-                .pc_next(pc_next),
-                .pc_out(pc_out)
-        );
+
         
         //always @(posedge clk,posedge reset)begin
         //    if (reset) 

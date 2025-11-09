@@ -1,4 +1,3 @@
-
 module if_id_reg(
 	input wire clk,
     	input wire reset,
