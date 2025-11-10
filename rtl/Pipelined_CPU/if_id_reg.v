@@ -4,7 +4,7 @@ module if_id_reg(
     	input wire [31:0] instruction_in,
     	input wire [63:0] pc_in,
     	output reg [31:0] instruction_out,
-    	output reg [63:0] pc_out;
+    	output reg [63:0] pc_out
 );
 
 	always @(posedge clk or posedge reset) begin
