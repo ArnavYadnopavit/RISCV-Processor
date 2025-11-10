@@ -9,7 +9,7 @@
     input  [4:0]  control,
     input         InstType,
     output reg [63:0] out,
-    output        reg branchAlu,
+    //output        reg branchAlu,
     output        reg valid
 );
 
@@ -19,7 +19,7 @@
 //add,sub,xor,or,and,sl,sra,srl
 always@(*) begin
     valid=1'b1;
-    branchAlu=1'b0;
+    //branchAlu=1'b0;
     casez(cswire)
     6'b0_00000:out=$signed(a)+$signed(b);
     6'b0_01000:out=$signed(a)-$signed(b);
@@ -31,6 +31,7 @@ always@(*) begin
     6'b0_01101:out=$signed(a)>>>b; //sra 1 101
     6'b0_0?010:out={63'b0,$signed(a)<$signed(b)}; 
     6'b0_0?011:out={63'b0,a<b}; //sltu 011
+    /*
     6'b0_1?000:begin //beq
         out=64'b0;
         valid=1'b0;
@@ -62,6 +63,7 @@ always@(*) begin
         branchAlu=(a>=b)?1'b1:1'b0;            
     end
     6'b1_?????:out=b;
+    */
     default: begin out=64'b0;
                    valid=1'b0; 
              end

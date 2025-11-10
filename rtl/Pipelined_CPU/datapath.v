@@ -28,7 +28,7 @@ module datapath(
 
         wire [63:0] alu_result;
         wire [4:0]  ALUControlPort;
-        wire branchAlu;
+        wire branch_D;
         wire valid;
 
         wire [63:0] mem_data;
@@ -129,6 +129,16 @@ module datapath(
                 .read_data1(read_data1),
                 .read_data2(read_data2)
         );
+        //New unit added
+        Branch_D brD (
+                .rs1D_data(read_data1),
+                .rs2D_data(read_data2),
+                .pc(pcout),
+                .imm(imm),
+                .func3(func3),
+                .branch_dec(),
+                .branchpc()
+        );
         
   	id_ex_reg ID_EX (
     		.clk(clk),
@@ -188,7 +198,7 @@ module datapath(
     		.b(id_ex_ALUSrc_out ? id_ex_imm_out : id_ex_rs2_out),
     		.control(ALUControlPort),
     		.out(alu_result),
-    		.branchAlu(branchAlu),
+    		//.branchAlu(branchAlu), No longer in use as branch moved to Decode
     		.valid(valid),
     		.InstType(id_ex_InstType_out)
   	);
@@ -261,7 +271,7 @@ module datapath(
 
         
 
-        assign take_branch = (Branch && branchAlu) || Jump;
+        assign take_branch = (Branch && branch_D) || Jump;
         wire [63:0]jumpimm;
         assign jumpimm=imm<<1;
         assign pc_next = take_branch ? 
