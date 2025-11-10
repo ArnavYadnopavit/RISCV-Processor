@@ -27,7 +27,7 @@ module mem_store_unit(
     input  wire [63:0] data,
     output reg [7:0] write_en,
     output wire [63:0] write_data,
-    output wire [7:0] mem_addr
+    output wire [12:0] mem_addr
     );
 wire [6:0] cswire;
 assign cswire = {{we},{func3},{addr[2:0]}};

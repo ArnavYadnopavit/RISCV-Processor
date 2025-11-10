@@ -34,7 +34,7 @@ output [63:0]out_data
     wire [7:0] write_en;
     wire [63:0] write_data;
     wire [63:0] read_data;
-    wire [7:0] mem_addr;
+    wire [12:0] mem_addr;
     
     mem_store_unit MSU(
     .we(we),
@@ -46,7 +46,7 @@ output [63:0]out_data
     .mem_addr(mem_addr)
     );
     
-    blk_mem_gen_0 MEM(
+    dmem_ip MEM(
             .clka(clk),
             .ena(on),
             .wea(write_en),

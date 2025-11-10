@@ -84,7 +84,7 @@ module datapath(
         	.clka(clk),
         	.ena(1'b1),
         	.wea(4'b0),
-        	.addra(pc_out[9:2]),
+        	.addra(pc_out[15:2]),
         	.dina(32'd0),
         	.douta(instruction)
     	);
