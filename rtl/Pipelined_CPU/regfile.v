@@ -25,5 +25,4 @@ module reg_file(
         assign read_data1 = (rs1 == 5'd0) ? 64'b0 : registers[rs1];
     	assign read_data2 = (rs2 == 5'd0) ? 64'b0 : registers[rs2];
   
-
 endmodule

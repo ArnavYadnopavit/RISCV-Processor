@@ -53,8 +53,11 @@ module datapath(
   	wire id_ex_func75_out, id_ex_op5_out;
  	wire id_ex_ALUSrc_out, id_ex_RegWrite_out, id_ex_MemtoReg_out;
   	wire id_ex_Branch_out, id_ex_Jump_out, id_ex_MemRead_out, id_ex_MemWrite_out, id_ex_InstType_out;
+  	wire [4:0] id_ex_rs1_E_out;
+	wire [4:0] id_ex_rs2_E_out;
 	
-	wire [63:0] ex_mem_pc_out, ex_mem_alu_result_out, ex_mem_rs2_out;
+	
+	wire [63:0] ex_mem_pc_out, ex_mem_func3_out, ex_mem_alu_result_out, ex_mem_rs2_out;
   	wire [4:0] ex_mem_rd_out;
  	wire ex_mem_branchAlu_out, ex_mem_RegWrite_out, ex_mem_MemRead_out, ex_mem_MemWrite_out;
   	wire ex_mem_MemtoReg_out, ex_mem_Branch_out, ex_mem_Jump_out;
@@ -131,6 +134,8 @@ module datapath(
     		.clk(clk),
     		.reset(reset),
     		.pc_in(if_id_pc_out),
+    		.rs1_D_in(rs1),
+    		.rs2_D_in(rs2),
     		.rs1_data_in(read_data1),
     		.rs2_data_in(read_data2),
     		.imm_in(imm),
@@ -148,6 +153,8 @@ module datapath(
     		.MemWrite_in(MemWrite),
     		.InstType_in(InstType),
     		.pc_out(id_ex_pc_out),
+    		.rs1_E_out(id_ex_rs1_E_out),
+    		.rs2_E_out(id_ex_rs2_E_out),
     		.rs1_data_out(id_ex_rs1_out),
     		.rs2_data_out(id_ex_rs2_out),
     		.imm_out(id_ex_imm_out),
@@ -190,6 +197,7 @@ module datapath(
     		.clk(clk),
     		.reset(reset),
     		.pc_in(id_ex_pc_out),
+    		.func3_in(id_ex_func3_out),
     		.alu_result_in(alu_result),
     		.branchAlu_in(branchAlu),
     		.alu_input2_in(id_ex_rs2_out),
@@ -201,6 +209,7 @@ module datapath(
     		.Branch_in(id_ex_Branch_out),
     		.Jump_in(id_ex_Jump_out),
     		.pc_out(ex_mem_pc_out),
+    		.func3_out(ex_mem_func3_out),
     		.alu_result_out(ex_mem_alu_result_out),
     		.branchAlu_out(ex_mem_branchAlu_out),
     		.alu_input2_out(ex_mem_rs2_out),
@@ -220,7 +229,7 @@ module datapath(
     		.re(ex_mem_MemRead_out),
     		.data(ex_mem_rs2_out),
     		.addr(ex_mem_alu_result_out),
-    		.func3(ID_EX_func3_out),
+    		.func3(ex_mem_func3_out),
     		.out_data(mem_data)
   	);
         

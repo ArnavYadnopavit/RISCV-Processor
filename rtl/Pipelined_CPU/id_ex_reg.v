@@ -2,6 +2,8 @@ module id_ex_reg(
     	input wire clk,
     	input wire reset,
     	input wire [63:0] pc_in,
+    	input  wire [4:0] rs1_D_in,
+	input  wire [4:0] rs2_D_in,
     	input wire [63:0] rs1_data_in,
     	input wire [63:0] rs2_data_in,
     	input wire [63:0] imm_in,
@@ -19,6 +21,8 @@ module id_ex_reg(
     	input wire MemWrite_in,
     	input wire InstType_in,
     	output reg [63:0] pc_out,
+    	output reg [4:0] rs1_E_out,  // ???????????????????????????????????????????????????????
+	output reg [4:0] rs2_E_out,  // ???????????????????????????????????????????????????????
     	output reg [63:0] rs1_data_out,
    	output reg [63:0] rs2_data_out,
     	output reg [63:0] imm_out,
@@ -40,45 +44,49 @@ module id_ex_reg(
         always @(posedge clk or posedge reset) begin
                 if (reset) begin
                 
-                        pc_out        <= 64'b0;
-                        rs1_data_out  <= 64'b0;
-                        rs2_data_out  <= 64'b0;
-                        imm_out       <= 64'b0;
-                        rd_out        <= 5'b0;
-                        func3_out     <= 3'b0;
-                        func75_out    <= 1'b0;
-                        ALUop_out     <= 3'b0;
-                        op5_out       <= 1'b0;
-                        ALUSrc_out    <= 1'b0;
-                        RegWrite_out  <= 1'b0;
-                        MemtoReg_out  <= 1'b0;
-                        Branch_out    <= 1'b0;
-                        Jump_out      <= 1'b0;
-                        MemRead_out   <= 1'b0;
-                        MemWrite_out  <= 1'b0;
-                        InstType_out  <= 3'b0;
+                        pc_out <= 64'b0;
+                        rs1_E_out <= 5'b0;	
+			rs2_E_out <= 5'b0;          
+                        rs1_data_out <= 64'b0;
+                        rs2_data_out <= 64'b0;
+                        imm_out <= 64'b0;
+                        rd_out <= 5'b0;
+                        func3_out <= 3'b0;
+                        func75_out <= 1'b0;
+                        ALUop_out <= 3'b0;
+                        op5_out <= 1'b0;
+                        ALUSrc_out <= 1'b0;
+                        RegWrite_out <= 1'b0;
+                        MemtoReg_out <= 1'b0;
+                        Branch_out <= 1'b0;
+                        Jump_out <= 1'b0;
+                        MemRead_out <= 1'b0;
+                        MemWrite_out <= 1'b0;
+                        InstType_out <= 3'b0;
                         
                 end 
                 
                 else begin
                 
-                        pc_out        <= pc_in;
-                        rs1_data_out  <= rs1_data_in;
-                        rs2_data_out  <= rs2_data_in;
-                        imm_out       <= imm_in;
-                        rd_out        <= rd_in;
-                        func3_out     <= func3_in;
-                        func75_out    <= func75_in;
-                        ALUop_out     <= ALUop_in;
-                        op5_out       <= op5_in;
-                        ALUSrc_out    <= ALUSrc_in;
-                        RegWrite_out  <= RegWrite_in;
-                        MemtoReg_out  <= MemtoReg_in;
-                        Branch_out    <= Branch_in;
-                        Jump_out      <= Jump_in;
-                        MemRead_out   <= MemRead_in;
-                        MemWrite_out  <= MemWrite_in;
-                        InstType_out  <= InstType_in;
+                        pc_out <= pc_in;
+                        rs1_E_out <= rs1_D_in;		
+			rs2_E_out <= rs2_D_in;	
+                        rs1_data_out <= rs1_data_in;
+                        rs2_data_out <= rs2_data_in;
+                        imm_out <= imm_in;
+                        rd_out <= rd_in;
+                        func3_out <= func3_in;
+                        func75_out <= func75_in;
+                        ALUop_out <= ALUop_in;
+                        op5_out <= op5_in;
+                        ALUSrc_out <= ALUSrc_in;
+                        RegWrite_out <= RegWrite_in;
+                        MemtoReg_out <= MemtoReg_in;
+                        Branch_out <= Branch_in;
+                        Jump_out <= Jump_in;
+                        MemRead_out <= MemRead_in;
+                        MemWrite_out <= MemWrite_in;
+                        InstType_out <= InstType_in;
                         
                 end
         end

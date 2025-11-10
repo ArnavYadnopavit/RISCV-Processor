@@ -2,6 +2,7 @@ module ex_mem_reg(
         input wire clk,
         input wire reset,
         input wire [63:0] pc_in,
+        input wire [2:0] func3_in,
         input wire [63:0] alu_result_in,
         input wire branchAlu_in,
         input wire [63:0] alu_input2_in,  
@@ -13,6 +14,7 @@ module ex_mem_reg(
         input wire Branch_in,
         input wire Jump_in,
         output reg [63:0] pc_out,
+        output reg [2:0] func3_out,
         output reg [63:0] alu_result_out,
         output reg branchAlu_out,
         output reg [63:0] alu_input2_out,
@@ -29,6 +31,7 @@ module ex_mem_reg(
                 if (reset) begin
 
                         pc_out <= 64'b0;
+                        func3_out <= 3'b0;
                         alu_result_out <= 64'b0;
                         branchAlu_out <= 1'b0;
                         alu_input2_out <= 64'b0;
@@ -45,6 +48,7 @@ module ex_mem_reg(
 		else begin
 
                         pc_out <= pc_in;
+                        func3_out <= func3_in;
                         alu_result_out <= alu_result_in;
                         branchAlu_out <= branchAlu_in;
                         alu_input2_out <= alu_input2_in;
