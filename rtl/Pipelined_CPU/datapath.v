@@ -57,7 +57,8 @@ module datapath(
 	wire [4:0] id_ex_rs2_E_out;
 	
 	
-	wire [63:0] ex_mem_pc_out, ex_mem_func3_out, ex_mem_alu_result_out, ex_mem_rs2_out;
+	wire [63:0] ex_mem_pc_out, ex_mem_alu_result_out, ex_mem_rs2_out;
+	wire [2:0]  ex_mem_func3_out;
   	wire [4:0] ex_mem_rd_out;
  	//wire ex_mem_branchAlu_out;
  	wire ex_mem_RegWrite_out, ex_mem_MemRead_out, ex_mem_MemWrite_out;
