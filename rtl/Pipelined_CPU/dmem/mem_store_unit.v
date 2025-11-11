@@ -34,7 +34,7 @@ assign cswire = {{we},{func3},{addr[2:0]}};
 wire [5:0] shiftwire;
 assign shiftwire={{addr[2:0]},3'b0};
 assign write_data=data<<shiftwire;
-assign mem_addr=addr[10:3];
+assign mem_addr=addr[15:3];
 always @(*) begin
     casez(cswire)
         7'b1_000_000:write_en=8'h01;//sb addressing
