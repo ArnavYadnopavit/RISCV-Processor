@@ -11,6 +11,8 @@ module datapath(
      //   output wire valid_alu_debug,
       //  output wire [4:0] debug_alu_control
 );
+
+//DECLARING WIRES
         wire [63:0] pc_out;
         wire [63:0] pc_next;
 
@@ -33,7 +35,7 @@ module datapath(
 
         wire [63:0] mem_data;
         
-        wire take_branch;
+        //wire take_branch;
         
         wire [63:0] if_id_pc_out;
 	wire [31:0] if_id_instruction_out;
@@ -62,7 +64,8 @@ module datapath(
   	wire [4:0] ex_mem_rd_out;
  	//wire ex_mem_branchAlu_out;
  	wire ex_mem_RegWrite_out, ex_mem_MemRead_out, ex_mem_MemWrite_out;
-  	wire ex_mem_MemtoReg_out, ex_mem_Branch_out, ex_mem_Jump_out;
+  	wire ex_mem_MemtoReg_out, ex_mem_Jump_out;
+  	//wire  ex_mem_Branch_out;
   	
   	wire [63:0] mem_wb_mem_data_out, mem_wb_alu_result_out, mem_wb_pc_out;
   	wire [4:0] mem_wb_rd_out;
@@ -109,7 +112,7 @@ module datapath(
 	if_id_reg IF_ID (
   		.clk(clk),
   		.reset(reset),
-  		.enable(StallD),
+  		.enable(~StallD),
   		.FlushD(FlushD),
   		.instruction_in(instruction),
   		.pc_in(pc_out),
@@ -138,7 +141,7 @@ module datapath(
         );
 
         reg_file RF (
-                .clk(clk),
+                .clk(~clk),
                 .reset(reset),
                 .reg_write(mem_wb_RegWrite_out),
                 .rs1(rs1),
@@ -271,7 +274,7 @@ module datapath(
     		.MemRead_out(ex_mem_MemRead_out),
     		.MemWrite_out(ex_mem_MemWrite_out),
     		.MemReg_out(ex_mem_MemtoReg_out),
-    		.Branch_out(ex_mem_Branch_out),
+    		//.Branch_out(ex_mem_Branch_out),
     		.Jump_out(ex_mem_Jump_out)
   	);
 
@@ -337,7 +340,7 @@ module datapath(
 	wire [1:0]  pc_sel;
 
 	assign pc_plus4      = pc_out + 64'd4;
-	assign jal_target    = if_id_pc_out + imm;
+	//assign jal_target    = if_id_pc_out + imm;
 	assign jalr_target   = read_data1 + imm;
 
 	assign pc_sel[1] = Jump;
@@ -346,7 +349,7 @@ module datapath(
 	mux4_64 mux_pc_next (
 	    	.a(pc_plus4),
     		.b(branchpc),
-    		.c(jal_target),
+    		.c(branchpc),
     		.d(jalr_target),
     		.sel(pc_sel),
     		.y(pc_next)

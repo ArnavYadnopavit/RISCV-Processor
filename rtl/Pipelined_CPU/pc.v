@@ -10,9 +10,9 @@ module program_counter(
     		if (reset)
       			pc_out <= 64'b0;
     		else if (~stall)
-      			pc_out <= pc_out;     // Hold PC during stall
+      			pc_out <= pc_next;     // Hold PC during stall
     		else
-      			pc_out <= pc_next;
+      			pc_out <= pc_out;// Hold PC during stall
   	end
 
 endmodule

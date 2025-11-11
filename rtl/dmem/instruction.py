@@ -1,7 +1,7 @@
 # Read multiline input from user or file
 instructions = """
-12300293
-fd300313
+fce00293
+ffa00313
 00000393
 00000493
 020000ef
