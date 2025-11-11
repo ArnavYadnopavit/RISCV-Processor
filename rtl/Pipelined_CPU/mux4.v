@@ -1,4 +1,4 @@
-module mux4 (
+module mux4_64 (
     input  [63:0] a,
     input  [63:0] b,
     input  [63:0] c,
