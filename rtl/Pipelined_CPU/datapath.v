@@ -75,6 +75,8 @@ module datapath(
 	
 	wire StallD, StallF, FlushE;
  	wire [1:0] ForwardAE, ForwardBE;
+ 	wire [63:0] BranchD_in1,BranchD_in2;
+ 	wire [1:0] BranchForwardAE,BranchForwardBE;
  	
  	wire [63:0] srcA_E, srcB_E_pre, srcB_E;
  	
@@ -151,10 +153,28 @@ module datapath(
                 .read_data1(read_data1),
                 .read_data2(read_data2)
         );
-        //New unit added
+        //New muxes added for branch comparing regs forwarding
+        mux3 BranchD_A (
+            .a(read_data1),
+            .b(alu_result),
+            .c(write_data),
+            .sel(BranchForwardAE),
+            .y(BranchD_in1)
+        );
+        
+        mux3 BranchD_B (
+            .a(read_data2),
+            .b(alu_result),
+            .c(write_data),
+            .sel(BranchForwardBE),
+            .y(BranchD_in2)
+        );
+        
+        
+        
 	Branch_D brD (
-  		.rs1D_data(read_data1),
-  		.rs2D_data(read_data2),
+  		.rs1D_data(BranchD_in1),
+  		.rs2D_data(BranchD_in2),
   		.pc(if_id_pc_out),
   		.imm(imm),
   		.func3(func3),
@@ -323,15 +343,19 @@ module datapath(
   		.rd_M(ex_mem_rd_out),
   		.rd_W(mem_wb_rd_out),
   		//.PCSrc_E(1'b0), 
+  		.regwrite_E(id_ex_RegWrite_out),
   		.regwrite_M(ex_mem_RegWrite_out),
   		.regwrite_W(mem_wb_RegWrite_out),
   		.MemtoregE(id_ex_MemtoReg_out),
+  		.MemtoregM(ex_mem_MemtoReg_out),
   		.StallD(StallD),
   		//.FlushD(FlushD), 
   		.FlushE(FlushE),
   		.ForwardAE(ForwardAE),
   		.ForwardBE(ForwardBE),
-  		.StallF(StallF)
+  		.StallF(StallF),
+  		.BranchForwardAE(BranchForwardAE),
+  		.BranchForwardBE(BranchForwardBE)
 );
 
 	wire [63:0] pc_plus4;

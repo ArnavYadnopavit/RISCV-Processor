@@ -27,7 +27,7 @@
         input [63:0] imm,
         input [2:0]  func3,
         output reg   branch_dec,
-        output[63:0] branchpc
+        output reg   [63:0] branchpc
     );
     wire eq,lt,ltu;
     assign eq=(rs1D_data==rs2D_data);
@@ -44,7 +44,7 @@
             3'b111:branch_dec=~ltu;
             default:branch_dec=1'b0;
         endcase
-        branchpc=pc+(imm<<1'b0);
+        branchpc=pc+(imm<<1'b1);
     end
     
     
