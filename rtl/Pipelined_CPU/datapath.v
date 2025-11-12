@@ -101,7 +101,7 @@ module datapath(
 	);
           
     	imem_ip IM(
-        	.clka(clk),
+        	.clka(~clk),
         	.ena(1'b1),
         	.wea(4'b0),
         	.addra(pc_out[15:2]),
@@ -341,7 +341,7 @@ module datapath(
 
 	assign pc_plus4      = pc_out + 64'd4;
 	//assign jal_target    = if_id_pc_out + imm;
-	assign jalr_target   = read_data1 + imm;
+	assign jalr_target   = read_data1 + imm + 64'd4;
 
 	assign pc_sel[1] = Jump;
 	assign pc_sel[0] = (Branch && branch_D) || (Jump && (opcode == 7'b1100111));
