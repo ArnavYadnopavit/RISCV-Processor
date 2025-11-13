@@ -32,6 +32,7 @@ module HazardDetection(
   	input  wire [4:0] rd_E,
   	input  wire [4:0] rd_M,
   	input  wire [4:0] rd_W,
+  	input wire [6:0] opcode_E,
   	//input  wire       PCSrc_E,
   	input             regwrite_E,
   	input             regwrite_M,
@@ -48,6 +49,12 @@ module HazardDetection(
   	output reg [1:0]  BranchForwardAE,
   	output reg [1:0]  BranchForwardBE
 );
+wire isItype;
+assign isItype = (opcode_E == 7'b0010011) || 
+                (opcode_E == 7'b0000011) || 
+                (opcode_E == 7'b1100111) || 
+                (opcode_E == 7'b1110011);
+
   	always @(*) begin
     		StallD    = 1'b0;
     		StallF    = 1'b0;
@@ -71,12 +78,14 @@ module HazardDetection(
       			ForwardAE = 2'b01; //Forward Mem result
     		end
 
-    		if (regwrite_M && (rd_M != 5'b0) && (rs2_E == rd_M)) begin
-      			ForwardBE = 2'b10;  //Forward ALU result
-    		end 
-    		else if (regwrite_W && (rd_W != 5'b0) && (rs2_E == rd_W)) begin
-      			ForwardBE = 2'b01;  //Forward Mem result
-    		end
+    		if (!isItype) begin
+            if (regwrite_M && (rd_M != 5'b0) && (rs2_E == rd_M))
+                ForwardBE = 2'b10; //Forward ALU result
+            else if (regwrite_W && (rd_W != 5'b0) && (rs2_E == rd_W))
+                ForwardBE = 2'b01; //Forward Mem result
+        end else begin
+            ForwardBE = 2'b00; // Disable rs2 forwarding for I-type
+        end
 
     		/*
     		if (PCSrc_E == 1'b1) begin

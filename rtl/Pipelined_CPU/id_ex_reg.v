@@ -10,6 +10,7 @@ module id_ex_reg(
   	input wire [63:0] imm_in,
   	input wire [4:0] rd_in,
   	input wire [2:0] func3_in,
+  	input wire [6:0] opcode_in,
   	input wire func70_in,
   	input wire func75_in,
   	input wire [2:0] ALUop_in,
@@ -30,6 +31,7 @@ module id_ex_reg(
   	output reg [63:0] imm_out,
   	output reg [4:0] rd_out,
   	output reg [2:0] func3_out,
+  	output reg [6:0] opcode_out,
   	output reg func70_out,
   	output reg func75_out,
   	output reg [2:0] ALUop_out,
@@ -55,6 +57,7 @@ module id_ex_reg(
       			imm_out <= 64'b0;
       			rd_out <= 5'b0;
       			func3_out <= 3'b0;
+      			opcode_out<=7'b0;
       			func75_out <= 1'b0;
       			func75_out <= 1'b0;
       			ALUop_out <= 3'b0;
@@ -79,6 +82,7 @@ module id_ex_reg(
       			imm_out <= imm_in;
       			rd_out <= rd_in;
       			func3_out <= func3_in;
+      			opcode_out<=opcode_in;
       			func70_out <= func70_in;
       			func75_out <= func75_in;
       			ALUop_out <= ALUop_in;

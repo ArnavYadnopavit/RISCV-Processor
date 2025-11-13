@@ -53,12 +53,14 @@ module pipelined_datapath(
   	wire [63:0] id_ex_pc_out, id_ex_rs1_out, id_ex_rs2_out, id_ex_imm_out;
   	wire [4:0] id_ex_rd_out;
   	wire [2:0] id_ex_func3_out, id_ex_ALUop_out;
+  	wire [6:0] id_ex_opcode_out;
   	wire id_ex_func75_out,id_ex_func70_out, id_ex_op5_out;
  	wire id_ex_ALUSrc_out, id_ex_RegWrite_out, id_ex_MemtoReg_out;
   	wire id_ex_Branch_out, id_ex_Jump_out, id_ex_MemRead_out, id_ex_MemWrite_out, id_ex_InstType_out;
   	wire [4:0] id_ex_rs1_E_out;
 	wire [4:0] id_ex_rs2_E_out;
 	wire DivStalled;
+	wire Divreset;
 	
 	
 	wire [63:0] ex_mem_pc_out, ex_mem_alu_result_out, ex_mem_rs2_out;
@@ -196,6 +198,7 @@ module pipelined_datapath(
                 .imm_in(imm),
                 .rd_in(rd),
                 .func3_in(func3),
+                .opcode_in(opcode),
                 .func70_in(func70),
                 .func75_in(func75),
                 .ALUop_in(ALUOp),
@@ -216,6 +219,7 @@ module pipelined_datapath(
                 .imm_out(id_ex_imm_out),
                 .rd_out(id_ex_rd_out),
                 .func3_out(id_ex_func3_out),
+                .opcode_out(id_ex_opcode_out),
                 .func70_out(id_ex_func70_out),
                 .func75_out(id_ex_func75_out),
                 .ALUop_out(id_ex_ALUop_out),
@@ -244,7 +248,8 @@ module pipelined_datapath(
   	     .clk(clk),
   	     .reset(reset),
   	     .AluControlPort(ALUControlPort),
-  	     .DivStalled(DivStalled)
+  	     .DivStalled(DivStalled),
+  	     .Divreset(Divreset)
   	);
   	
   	// muxes needed for ALU
@@ -274,6 +279,8 @@ module pipelined_datapath(
 	);
 
 	ALU ALU64 (
+	        .clk(clk),
+	        .Divreset(reset),
     		.a(srcA_E),
     		.b(srcB_E),
     		.control(ALUControlPort),
@@ -370,6 +377,7 @@ module pipelined_datapath(
   		.rd_E(id_ex_rd_out),
   		.rd_M(ex_mem_rd_out),
   		.rd_W(mem_wb_rd_out),
+  		.opcode_E(id_ex_opcode_out),
   		//.PCSrc_E(1'b0), 
   		.regwrite_E(id_ex_RegWrite_out),
   		.regwrite_M(ex_mem_RegWrite_out),

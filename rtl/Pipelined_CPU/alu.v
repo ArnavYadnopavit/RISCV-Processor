@@ -5,7 +5,7 @@
 
 (* use_dsp = "yes" *) module ALU(
     input clk,
-    input reset,
+    input Divreset,
     input  [63:0] a,
     input  [63:0] b,
     input  [4:0]  control,
@@ -90,7 +90,7 @@ always@(*) begin
         out=multresult[127:64];
         end
     6'b0_10_010:begin //mulsu
-        multresult=($signed(a)* $unsigned(b));
+        multresult=(~($unsigned(a)* $unsigned(b)))+64'b1;
         out=multresult[127:64];
         end
     6'b0_10_011:begin //mulu
@@ -132,7 +132,7 @@ end
 
 div_gen_0 DIVS (
   .aclk(clk),
-  .aresetn(~reset),
+  .aresetn(~Divreset),
   .s_axis_divisor_tvalid(),
   .s_axis_divisor_tready(),
   .s_axis_divisor_tdata(divsin2),
@@ -146,7 +146,7 @@ div_gen_0 DIVS (
 
 div_gen_unsigned DIVU (
   .aclk(clk),
-  .aresetn(~reset),
+  .aresetn(~Divreset),
   .s_axis_divisor_tvalid(readyu),
   .s_axis_divisor_tready(),
   .s_axis_divisor_tdata(divuin2),

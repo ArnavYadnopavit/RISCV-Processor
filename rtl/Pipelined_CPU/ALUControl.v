@@ -32,10 +32,10 @@ output reg [4:0]AluControlPort
     assign cswire={AluOp,op5,func70,func75,func3};
     always@(*) begin
     casez(cswire)
-        8'b000_?_0?_???:AluControlPort=5'b00000; //add for load store
-        8'b010_1_00_000:AluControlPort=5'b00000; //add rtype i type
-        8'b011_0_0?_000:AluControlPort=5'b00000; //add i type
-        8'b010_1_01_000:AluControlPort=5'b01000; //sub rtype
+        9'b000_?_??_???:AluControlPort=5'b00000; //add for load store
+        9'b010_1_00_000:AluControlPort=5'b00000; //add rtype type
+        9'b011_0_??_000:AluControlPort=5'b00000; //add i type
+        9'b010_1_01_000:AluControlPort=5'b01000; //sub rtype
         default:AluControlPort={cswire[4:0]};
     endcase
     end
