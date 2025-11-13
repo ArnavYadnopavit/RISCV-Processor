@@ -1,4 +1,4 @@
-module datapath(
+module pipelined_datapath(
         input  wire clk,
         input  wire reset,
         output wire [63:0] debug_pc,

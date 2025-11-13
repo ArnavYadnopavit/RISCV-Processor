@@ -9,7 +9,7 @@ module tb_datapath;
     wire [63:0] debug_pc;
     wire [31:0] inst_debug;
 
-    datapath dut (
+    pipelined_datapath dut (
         .clk(clk),
         .reset(reset),
         .debug_pc(debug_pc),
