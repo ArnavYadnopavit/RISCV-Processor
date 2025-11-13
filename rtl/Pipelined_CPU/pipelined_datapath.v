@@ -339,7 +339,7 @@ module pipelined_datapath(
 	assign link_val = mem_wb_pc_out + 64'd4;
 
   	
-	mux3_64 wb_mux (
+	mux3 wb_mux (
     		.a(mem_wb_alu_result_out),   // sel = 00
     		.b(mem_wb_mem_data_out),     // sel = 01
     		.c(link_val),                // sel = 10
