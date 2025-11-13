@@ -38,6 +38,7 @@ module HazardDetection(
   	input             regwrite_W,
   	input             MemtoregE,
   	input             MemtoregM,
+  	input             DivStalled,
   	output reg        StallD,
   	//output reg        FlushD,
   	output reg        FlushE,
@@ -47,9 +48,7 @@ module HazardDetection(
   	output reg [1:0]  BranchForwardAE,
   	output reg [1:0]  BranchForwardBE
 );
-    reg [2:0] DivStageStall;
   	always @(*) begin
-  	        DivStageStall = 3'b000;
     		StallD    = 1'b0;
     		StallF    = 1'b0;
     		FlushE    = 1'b0;
@@ -107,7 +106,11 @@ module HazardDetection(
                 BranchForwardBE = 2'b11; // forward WB stage
             end 
             
-          
+            if(DivStalled)begin
+                StallD = 1'b1;
+      			StallF = 1'b1;
+      			FlushE = 1'b1;
+            end
         
   	end
 

@@ -48,15 +48,17 @@ module pipelined_datapath(
   	wire [6:0] func7 = if_id_instruction_out[31:25];
   	wire op5 = opcode[5];
   	wire func75 = func7[5];
+  	wire func70 = func7[0];
   	
   	wire [63:0] id_ex_pc_out, id_ex_rs1_out, id_ex_rs2_out, id_ex_imm_out;
   	wire [4:0] id_ex_rd_out;
   	wire [2:0] id_ex_func3_out, id_ex_ALUop_out;
-  	wire id_ex_func75_out, id_ex_op5_out;
+  	wire id_ex_func75_out,id_ex_func70_out, id_ex_op5_out;
  	wire id_ex_ALUSrc_out, id_ex_RegWrite_out, id_ex_MemtoReg_out;
   	wire id_ex_Branch_out, id_ex_Jump_out, id_ex_MemRead_out, id_ex_MemWrite_out, id_ex_InstType_out;
   	wire [4:0] id_ex_rs1_E_out;
 	wire [4:0] id_ex_rs2_E_out;
+	wire DivStalled;
 	
 	
 	wire [63:0] ex_mem_pc_out, ex_mem_alu_result_out, ex_mem_rs2_out;
@@ -194,6 +196,7 @@ module pipelined_datapath(
                 .imm_in(imm),
                 .rd_in(rd),
                 .func3_in(func3),
+                .func70_in(func70),
                 .func75_in(func75),
                 .ALUop_in(ALUOp),
                 .op5_in(op5),
@@ -213,6 +216,7 @@ module pipelined_datapath(
                 .imm_out(id_ex_imm_out),
                 .rd_out(id_ex_rd_out),
                 .func3_out(id_ex_func3_out),
+                .func70_out(id_ex_func70_out),
                 .func75_out(id_ex_func75_out),
                 .ALUop_out(id_ex_ALUop_out),
                 .op5_out(id_ex_op5_out),
@@ -228,10 +232,19 @@ module pipelined_datapath(
         
   	ALUControl ALUC (
     		.op5(id_ex_op5_out),
+    		.func70(id_ex_func70_out),
     		.func75(id_ex_func75_out),
     		.func3(id_ex_func3_out),
     		.AluOp(id_ex_ALUop_out),
     		.AluControlPort(ALUControlPort)
+  	);
+  	
+  	//New Unit added for stalling div
+  	DivStaller DIVSTALL(
+  	     .clk(clk),
+  	     .reset(reset),
+  	     .AluControlPort(ALUControlPort),
+  	     .DivStalled(DivStalled)
   	);
   	
   	// muxes needed for ALU
@@ -363,6 +376,7 @@ module pipelined_datapath(
   		.regwrite_W(mem_wb_RegWrite_out),
   		.MemtoregE(id_ex_MemtoReg_out),
   		.MemtoregM(ex_mem_MemtoReg_out),
+  		.DivStalled(DivStalled),
   		.StallD(StallD),
   		//.FlushD(FlushD), 
   		.FlushE(FlushE),
@@ -374,7 +388,7 @@ module pipelined_datapath(
 );
 
 	wire [63:0] pc_plus4;
-	wire [63:0] jal_target;
+	//wire [63:0] jal_target;
 	wire [63:0] jalr_target;
 	wire [1:0]  pc_sel;
 

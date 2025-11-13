@@ -17,16 +17,16 @@
 
     reg [63:0] divsin1;
     reg [63:0] divsin2;
-    reg [63:0] divsout;
-    reg [63:0] divsrem;
+    wire [63:0] divsout;
+    wire [63:0] divsrem;
     reg [63:0] divuin1;
     reg [63:0] divuin2;
     wire [63:0] divuout;
     wire [63:0] divurem;
-    reg [127:0] div_s_result;
-    reg [127:0] div_u_result;
-    reg readys,readysout;
-    reg readyu,readyuout;
+    wire [127:0] div_s_result;
+    wire [127:0] div_u_result;
+    reg readys;
+    reg readyu;
     wire [5:0] cswire;
     assign cswire = {InstType,control};
     reg [127:0]multresult;
@@ -133,13 +133,13 @@ end
 div_gen_0 DIVS (
   .aclk(clk),
   .aresetn(~reset),
-  .s_axis_divisor_tvalid(readys),
-  .s_axis_divisor_tready(readys),
+  .s_axis_divisor_tvalid(),
+  .s_axis_divisor_tready(),
   .s_axis_divisor_tdata(divsin2),
-  .s_axis_dividend_tvalid(readys),
-  .s_axis_dividend_tready(readys),
+  .s_axis_dividend_tvalid(),
+  .s_axis_dividend_tready(),
   .s_axis_dividend_tdata(divsin1),
-  .m_axis_dout_tvalid(readysout),
+  .m_axis_dout_tvalid(),
   .m_axis_dout_tuser(),
   .m_axis_dout_tdata(div_s_result)
 );
@@ -148,12 +148,12 @@ div_gen_unsigned DIVU (
   .aclk(clk),
   .aresetn(~reset),
   .s_axis_divisor_tvalid(readyu),
-  .s_axis_divisor_tready(readyu),
+  .s_axis_divisor_tready(),
   .s_axis_divisor_tdata(divuin2),
   .s_axis_dividend_tvalid(readyu),
-  .s_axis_dividend_tready(readyu),
+  .s_axis_dividend_tready(),
   .s_axis_dividend_tdata(divuin1),
-  .m_axis_dout_tvalid(readyuout),
+  .m_axis_dout_tvalid(),
   .m_axis_dout_tuser(),
   .m_axis_dout_tdata(div_u_result)
 );
