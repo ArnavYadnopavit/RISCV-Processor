@@ -47,9 +47,8 @@ module HazardDetection(
   	output reg [1:0]  BranchForwardAE,
   	output reg [1:0]  BranchForwardBE
 );
-    reg [2:0] DivStageStall;
+
   	always @(*) begin
-  	        DivStageStall = 3'b000;
     		StallD    = 1'b0;
     		StallF    = 1'b0;
     		FlushE    = 1'b0;
@@ -106,8 +105,6 @@ module HazardDetection(
             else if (regwrite_W && (rd_W != 5'b0) && (rd_W == rs2_D)) begin
                 BranchForwardBE = 2'b11; // forward WB stage
             end 
-            
-          
         
   	end
 

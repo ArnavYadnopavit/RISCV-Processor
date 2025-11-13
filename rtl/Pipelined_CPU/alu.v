@@ -4,6 +4,8 @@
 //valid if the output of alu is valid
 
 (* use_dsp = "yes" *) module ALU(
+    input clk,
+    input reset,
     input  [63:0] a,
     input  [63:0] b,
     input  [4:0]  control,
@@ -13,11 +15,24 @@
     output        reg valid
 );
 
-
+    wire [63:0] divsin1;
+    wire [63:0] divsin2;
+    wire [63:0] divsout;
+    wire [63:0] divsrem;
+    wire [63:0] divuin1;
+    wire [63:0] divuin2;
+    wire [63:0] divuout;
+    wire [63:0] divurem;
+    wire [127:0] div_s_result;
+    wire [127:0] div_u_result;
+    wire readys,readysout;
+    wire readyu,readyuout;
     wire [5:0] cswire;
     assign cswire = {InstType,control};
+    reg [127:0]multresult;
 //add,sub,xor,or,and,sl,sra,srl
 always@(*) begin
+    multresult=128'd0;
     valid=1'b1;
     //branchAlu=1'b0;
     casez(cswire)
@@ -26,7 +41,7 @@ always@(*) begin
     6'b0_0?100:out=a^b; //xor 100
     6'b0_0?110:out=a|b; //or 110
     6'b0_0?111:out=a&b; //and 111
-    6'b0_?001:out=a<<b; //sl 001
+    6'b0_0?001:out=a<<b; //sl 001
     6'b0_00101:out=a>>b; //srl 0 101 
     6'b0_01101:out=$signed(a)>>>b; //sra 1 101
     6'b0_0?010:out={63'b0,$signed(a)<$signed(b)}; 
@@ -62,13 +77,81 @@ always@(*) begin
         valid=1'b0;
         branchAlu=(a>=b)?1'b1:1'b0;            
     end
-    6'b1_?????:out=b;
     */
+    
+    //M EXTENSION
+    //MUL 
+    6'b0_10_000:begin //mul
+        multresult=($signed(a)* $signed(b));
+        out=multresult[63:0];
+        end
+    6'b0_10_001:begin //mulh
+        multresult=($signed(a)* $signed(b));
+        out=multresult[127:64];
+        end
+    6'b0_10_010:begin //mulsu
+        multresult=($signed(a)* $unsigned(b));
+        out=multresult[127:64];
+        end
+    6'b0_10_011:begin //mulu
+        multresult=($unsigned(a)* $unsigned(b));
+        out=multresult[127:64];
+        end
+        
+    6'b0_10_000:begin //mul
+        multresult=($signed(a)* $signed(b));
+        out=multresult[63:0];
+        end
+    6'b0_10_001:begin //mulh
+        multresult=($signed(a)* $signed(b));
+        out=multresult[127:64];
+        end
+    6'b0_10_010:begin //mulsu
+        multresult=($signed(a)* $unsigned(b));
+        out=multresult[127:64];
+        end
+    6'b0_10_011:begin //mulu
+        multresult=($unsigned(a)* $unsigned(b));
+        out=multresult[127:64];
+        end
+    6'b1_?????:out=b;
+    
     default: begin out=64'b0;
                    valid=1'b0; 
              end
     endcase
 end
 
+div_gen_0 DIVS (
+  .aclk(clk),
+  .aresetn(~reset),
+  .s_axis_divisor_tvalid(readys),
+  .s_axis_divisor_tready(readys),
+  .s_axis_divisor_tdata(divsin2),
+  .s_axis_dividend_tvalid(readys),
+  .s_axis_dividend_tready(readys),
+  .s_axis_dividend_tdata(divsin1),
+  .m_axis_dout_tvalid(readysout),
+  .m_axis_dout_tuser(),
+  .m_axis_dout_tdata(div_s_result)
+);
+
+div_gen_unsigned DIVU (
+  .aclk(clk),
+  .aresetn(~reset),
+  .s_axis_divisor_tvalid(readyu),
+  .s_axis_divisor_tready(readyu),
+  .s_axis_divisor_tdata(divuin2),
+  .s_axis_dividend_tvalid(readyu),
+  .s_axis_dividend_tready(readyu),
+  .s_axis_dividend_tdata(divuin1),
+  .m_axis_dout_tvalid(readyuout),
+  .m_axis_dout_tuser(),
+  .m_axis_dout_tdata(div_u_result)
+);
+assign divsout = div_u_result[63:0];
+assign divsrem = div_u_result[127:64];
+assign divuout = div_u_result[63:0];
+assign divurem = div_u_result[127:64];
 
 endmodule
