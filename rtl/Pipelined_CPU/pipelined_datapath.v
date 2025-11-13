@@ -69,7 +69,7 @@ module pipelined_datapath(
   	
   	wire [63:0] mem_wb_mem_data_out, mem_wb_alu_result_out, mem_wb_pc_out;
   	wire [4:0] mem_wb_rd_out;
-  	wire mem_wb_RegWrite_out, mem_wb_MemtoReg_out;
+  	wire mem_wb_RegWrite_out, mem_wb_MemtoReg_out,mem_wb_Jump_out;
   	
 	wire [63:0] branchpc;
 	
@@ -318,20 +318,35 @@ module pipelined_datapath(
     		.rd_in(ex_mem_rd_out),
     		.RegWrite_in(ex_mem_RegWrite_out),
     		.MemtoReg_in(ex_mem_MemtoReg_out),
+    		.Jump_in(ex_mem_Jump_out),
     		.mem_data_out(mem_wb_mem_data_out),
     		.alu_result_out(mem_wb_alu_result_out),
     		.pc_out(mem_wb_pc_out),
     		.rd_out(mem_wb_rd_out),
     		.RegWrite_out(mem_wb_RegWrite_out),
-    		.MemtoReg_out(mem_wb_MemtoReg_out)
+    		.MemtoReg_out(mem_wb_MemtoReg_out),
+    		.Jump_out(mem_wb_Jump_out)   
   	);
   	
-  	mux2 muxMemtoReg (
-    		.a(mem_wb_alu_result_out),
-   		.b(mem_wb_mem_data_out),
-    		.sel(mem_wb_MemtoReg_out),
+  	wire [1:0] wb_sel;
+
+	assign wb_sel =
+		mem_wb_MemtoReg_out ? 2'b01 :   // load
+		mem_wb_Jump_out     ? 2'b10 :   // JAL/JALR link address
+                            	      2'b00;    // ALU result
+
+	wire [63:0] link_val;
+	assign link_val = mem_wb_pc_out + 64'd4;
+
+  	
+	mux3_64 wb_mux (
+    		.a(mem_wb_alu_result_out),   // sel = 00
+    		.b(mem_wb_mem_data_out),     // sel = 01
+    		.c(link_val),                // sel = 10
+    		.sel(wb_sel),
     		.y(write_data)
 	);
+
 
 
 	HazardDetection HDU (

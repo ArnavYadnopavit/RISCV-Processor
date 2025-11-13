@@ -7,12 +7,14 @@ module mem_wb_reg(
 	input wire [4:0] rd_in,       
         input wire RegWrite_in,
         input wire MemtoReg_in,
+        input wire Jump_in,
 	output reg [63:0] mem_data_out,
         output reg [63:0] alu_result_out,
         output reg [63:0] pc_out,
         output reg [4:0] rd_out,
         output reg RegWrite_out,
-        output reg MemtoReg_out
+        output reg MemtoReg_out,
+        output reg Jump_out 
 );
 
         always @(posedge clk or posedge reset) begin
@@ -24,6 +26,7 @@ module mem_wb_reg(
                         rd_out <= 5'b0;
                         RegWrite_out <= 1'b0;
                         MemtoReg_out <= 1'b0;
+                        Jump_out <= 0;
 
                 end 
 		else begin
@@ -34,6 +37,7 @@ module mem_wb_reg(
                         rd_out <= rd_in;
                         RegWrite_out <= RegWrite_in;
                         MemtoReg_out <= MemtoReg_in;
+                        Jump_out <= Jump_in;
 
                 end
         end
