@@ -1,4 +1,4 @@
-module mux3_64 (
+module mux3 (
     input  [63:0] a,
     input  [63:0] b,
     input  [63:0] c,

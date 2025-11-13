@@ -15,18 +15,18 @@
     output        reg valid
 );
 
-    wire [63:0] divsin1;
-    wire [63:0] divsin2;
-    wire [63:0] divsout;
-    wire [63:0] divsrem;
-    wire [63:0] divuin1;
-    wire [63:0] divuin2;
+    reg [63:0] divsin1;
+    reg [63:0] divsin2;
+    reg [63:0] divsout;
+    reg [63:0] divsrem;
+    reg [63:0] divuin1;
+    reg [63:0] divuin2;
     wire [63:0] divuout;
     wire [63:0] divurem;
-    wire [127:0] div_s_result;
-    wire [127:0] div_u_result;
-    wire readys,readysout;
-    wire readyu,readyuout;
+    reg [127:0] div_s_result;
+    reg [127:0] div_u_result;
+    reg readys,readysout;
+    reg readyu,readyuout;
     wire [5:0] cswire;
     assign cswire = {InstType,control};
     reg [127:0]multresult;
@@ -97,22 +97,30 @@ always@(*) begin
         multresult=($unsigned(a)* $unsigned(b));
         out=multresult[127:64];
         end
-        
-    6'b0_10_000:begin //mul
-        multresult=($signed(a)* $signed(b));
-        out=multresult[63:0];
+    //DIV
+    6'b0_10_100:begin //div
+        divsin1=a;
+        divsin2=b;
+        readys=1'b1;
+        out=divsout;
         end
-    6'b0_10_001:begin //mulh
-        multresult=($signed(a)* $signed(b));
-        out=multresult[127:64];
+    6'b0_10_101:begin //divu
+        divuin1=a;
+        divuin2=b;
+        readyu=1'b1;
+        out=divuout;
         end
-    6'b0_10_010:begin //mulsu
-        multresult=($signed(a)* $unsigned(b));
-        out=multresult[127:64];
+    6'b0_10_110:begin //rem
+        divsin1=a;
+        divsin2=b;
+        readys=1'b1;
+        out=divsrem;
         end
-    6'b0_10_011:begin //mulu
-        multresult=($unsigned(a)* $unsigned(b));
-        out=multresult[127:64];
+    6'b0_10_111:begin //remu
+        divuin1=a;
+        divuin2=b;
+        readyu=1'b1;
+        out=divurem;
         end
     6'b1_?????:out=b;
     
@@ -149,8 +157,8 @@ div_gen_unsigned DIVU (
   .m_axis_dout_tuser(),
   .m_axis_dout_tdata(div_u_result)
 );
-assign divsout = div_u_result[63:0];
-assign divsrem = div_u_result[127:64];
+assign divsout = div_s_result[63:0];
+assign divsrem = div_s_result[127:64];
 assign divuout = div_u_result[63:0];
 assign divurem = div_u_result[127:64];
 
