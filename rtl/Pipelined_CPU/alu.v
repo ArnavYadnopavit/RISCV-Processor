@@ -30,6 +30,7 @@
     wire [5:0] cswire;
     assign cswire = {InstType,control};
     reg [127:0]multresult;
+    reg signed [129:0]multhsu;
 //add,sub,xor,or,and,sl,sra,srl
 always@(*) begin
     multresult=128'd0;
@@ -90,8 +91,8 @@ always@(*) begin
         out=multresult[127:64];
         end
     6'b0_10_010:begin //mulsu
-        multresult=(~($unsigned(a)* $unsigned(b)))+64'b1;
-        out=multresult[127:64];
+        multhsu=$signed({a[63],a})* $signed({1'b0,b});
+        out=multhsu[127:64];
         end
     6'b0_10_011:begin //mulu
         multresult=($unsigned(a)* $unsigned(b));
