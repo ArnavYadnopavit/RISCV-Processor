@@ -77,7 +77,7 @@ module pipelined_datapath(
   	
 	wire [63:0] branchpc;
 	
-	wire StallD, StallF, FlushE;
+	wire StallD, StallF,StallE, FlushE;
  	wire [1:0] ForwardAE, ForwardBE;
  	wire [63:0] BranchD_in1,BranchD_in2;
  	wire [1:0] BranchForwardAE,BranchForwardBE;
@@ -189,6 +189,7 @@ module pipelined_datapath(
         id_ex_reg ID_EX (
                 .clk(clk),
                 .reset(reset),
+                .StallE(StallE),
                 .FlushE(FlushE),
                 .pc_in(if_id_pc_out),
                 .rs1_D_in(rs1),
@@ -280,7 +281,7 @@ module pipelined_datapath(
 
 	ALU ALU64 (
 	        .clk(clk),
-	        .Divreset(reset),
+	        .Divreset(Divreset),
     		.a(srcA_E),
     		.b(srcB_E),
     		.control(ALUControlPort),
@@ -388,6 +389,7 @@ module pipelined_datapath(
   		.StallD(StallD),
   		//.FlushD(FlushD), 
   		.FlushE(FlushE),
+  		.StallE(StallE),
   		.ForwardAE(ForwardAE),
   		.ForwardBE(ForwardBE),
   		.StallF(StallF),

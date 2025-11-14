@@ -157,9 +157,9 @@ div_gen_unsigned DIVU (
   .m_axis_dout_tuser(),
   .m_axis_dout_tdata(div_u_result)
 );
-assign divsout = div_s_result[63:0];
-assign divsrem = div_s_result[127:64];
-assign divuout = div_u_result[63:0];
-assign divurem = div_u_result[127:64];
+assign divsrem = div_s_result[63:0];
+assign divsout = div_s_result[127:64];
+assign divurem = div_u_result[63:0];
+assign divuout = div_u_result[127:64];
 
 endmodule

@@ -42,6 +42,7 @@ module HazardDetection(
   	input             DivStalled,
   	output reg        StallD,
   	//output reg        FlushD,
+  	output reg        StallE,
   	output reg        FlushE,
   	output reg [1:0]  ForwardAE,
   	output reg [1:0]  ForwardBE,
@@ -59,6 +60,7 @@ assign isItype = (opcode_E == 7'b0010011) ||
     		StallD    = 1'b0;
     		StallF    = 1'b0;
     		FlushE    = 1'b0;
+    		StallE    = 1'b0;
     		//FlushD  = 1'b0;
     		ForwardAE = 2'b00;
     		ForwardBE = 2'b00;
@@ -118,7 +120,7 @@ assign isItype = (opcode_E == 7'b0010011) ||
             if(DivStalled)begin
                 StallD = 1'b1;
       			StallF = 1'b1;
-      			FlushE = 1'b1;
+      			StallE = 1'b1;
             end
         
   	end

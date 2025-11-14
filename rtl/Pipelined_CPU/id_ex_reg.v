@@ -1,6 +1,7 @@
 module id_ex_reg(
   	input wire clk,
   	input wire reset,
+  	input wire StallE,
   	input wire FlushE,
   	input wire [63:0] pc_in,
   	input wire [4:0] rs1_D_in,
@@ -72,6 +73,31 @@ module id_ex_reg(
       			InstType_out <= 1'b0;
       			
     		end 
+    		else if(StallE) begin
+    		
+      			pc_out <= pc_out;
+      			rs1_E_out <= rs1_E_out;
+      			rs2_E_out <= rs2_E_out;
+      			rs1_data_out <= rs1_data_out;
+      			rs2_data_out <= rs2_data_out;
+      			imm_out <= imm_out;
+      			rd_out <= rd_out;
+      			func3_out <= func3_out;
+      			opcode_out<=opcode_out;
+      			func70_out <= func70_out;
+      			func75_out <= func75_out;
+      			ALUop_out <= ALUop_out;
+      			op5_out <= op5_out;
+      			ALUSrc_out <= ALUSrc_out;
+      			RegWrite_out <= RegWrite_out;
+      			MemtoReg_out <= MemtoReg_out;
+      			Branch_out <= Branch_out;
+      			Jump_out <= Jump_out;
+      			MemRead_out <= MemRead_out;
+      			MemWrite_out <= MemWrite_out;
+      			InstType_out <= InstType_out;
+      			
+    		end
     		else begin
     		
       			pc_out <= pc_in;
