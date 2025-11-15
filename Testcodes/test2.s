@@ -48,10 +48,8 @@ add  x22, x21, x1      # x22 = 24 (depends on x21)
 # Load/Store + load-use hazard
 # --------------------------
 # Use address 100 in memory for simplicity
-addi x30, x0, 100
+addi x30, x0, 0x100
 sd   x1, 0(x30)        # MEM[100] = 5
-sd   x1, 0(x30)        # MEM[100] = 5
-ld   x23, 0(x30)       # x23 = MEM[100] = 5
 ld   x23, 0(x30)       # x23 = MEM[100] = 5
 add  x24, x23, x2      # hazard: x23 just loaded -> x24 = 12
 
@@ -61,10 +59,8 @@ add  x24, x23, x2      # hazard: x23 just loaded -> x24 = 12
 # Branch based on previous computation (should use forwarded value)
 add  x25, x1, x2       # x25 = 12
 beq  x25, x6, equal_label   # should take (12==12)
-nop
 addi x26, x0, 0        # skipped if branch taken
 j    branch_done
-nop
 
 equal_label:
 addi x26, x0, 1        # executed if branch taken
@@ -72,10 +68,8 @@ addi x26, x0, 1        # executed if branch taken
 branch_done:
 # Next branch not taken
 bne  x1, x1, not_taken
-nop
 addi x27, x0, 2        # should execute
 j    after_branch
-nop
 not_taken:
 addi x27, x0, 0
 after_branch:
@@ -84,7 +78,6 @@ after_branch:
 # JAL / JALR check
 # --------------------------
 jal  x28, jump_target   # x28 gets return address
-nop
 addi x29, x0, 0         # skipped
 jump_target:
 addi x29, x0, 9         # executed
@@ -93,5 +86,3 @@ addi x29, x0, 9         # executed
 # End: keep looping
 # --------------------------
 loop:
-j loop
-nop

@@ -1,6 +1,7 @@
 module ex_mem_reg(
         input wire clk,
         input wire reset,
+        input wire StallM,
         input wire [63:0] pc_in,
         input wire [2:0] func3_in,
         input wire [63:0] alu_result_in,
@@ -41,7 +42,19 @@ module ex_mem_reg(
                         Jump_out <= 1'b0;
 
                 end 
-
+        else if(StallM)begin
+                        pc_out <= pc_out;
+                        func3_out <= func3_out;
+                        alu_result_out <= alu_result_out;
+                        alu_input2_out <= alu_input2_out;
+                        rd_out <= rd_out;
+                        RegWrite_out <= RegWrite_out;
+                        MemRead_out <= MemRead_out;
+                        MemWrite_out <= MemWrite_out;
+                        MemReg_out <= MemReg_out;
+                        Branch_out <= Branch_out;
+                        Jump_out <= Jump_out;
+        end
 		else begin
 
                         pc_out <= pc_in;

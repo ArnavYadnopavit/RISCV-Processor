@@ -76,7 +76,7 @@ module tb_datapath;
         expected[25] = 64'd12;
         expected[26] = 64'd1;
         expected[27] = 64'd2;
-        expected[28] = 64'd168;
+        expected[28] = 64'd144;
         expected[29] = 64'd9;
         expected[30] = 64'h100;
         expected[31] = 64'd00;

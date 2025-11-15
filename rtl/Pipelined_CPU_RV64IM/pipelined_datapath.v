@@ -60,6 +60,7 @@ module pipelined_datapath(
   	wire [4:0] id_ex_rs1_E_out;
 	wire [4:0] id_ex_rs2_E_out;
 	wire DivStalled;
+	wire MemStall;
 	wire Divreset;
 	
 	
@@ -77,7 +78,7 @@ module pipelined_datapath(
   	
 	wire [63:0] branchpc;
 	
-	wire StallD, StallF,StallE, FlushE;
+	wire StallD, StallF,StallE,StallM,FlushD, FlushE;
  	wire [1:0] ForwardAE, ForwardBE;
  	wire [63:0] BranchD_in1,BranchD_in2;
  	wire [1:0] BranchForwardAE,BranchForwardBE;
@@ -289,10 +290,19 @@ module pipelined_datapath(
     		.valid(valid),
     		.InstType(id_ex_InstType_out)
 	);
+	
+	dmemstaller DMSTALL(
+	   .clk(clk),
+	   .reset(reset),
+	   .MemWrite(ex_mem_MemWrite_out),
+	   .MemRead(ex_mem_MemRead_out),
+	   .MemStall(MemStall)	   
+	);
 
   	ex_mem_reg EX_MEM (
     		.clk(clk),
     		.reset(reset),
+    		.StallM(StallM),
     		.pc_in(id_ex_pc_out),
     		.func3_in(id_ex_func3_out),
     		.alu_result_in(alu_result),
@@ -386,10 +396,12 @@ module pipelined_datapath(
   		.MemtoregE(id_ex_MemtoReg_out),
   		.MemtoregM(ex_mem_MemtoReg_out),
   		.DivStalled(DivStalled),
+  		.MemStall(MemStall),
   		.StallD(StallD),
   		//.FlushD(FlushD), 
   		.FlushE(FlushE),
   		.StallE(StallE),
+  		.StallM(StallM),
   		.ForwardAE(ForwardAE),
   		.ForwardBE(ForwardBE),
   		.StallF(StallF),

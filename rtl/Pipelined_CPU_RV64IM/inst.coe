@@ -1,3 +1,5 @@
+memory_initialization_radix=16;
+memory_initialization_vector=
 00500093,
 00700113,
 ffd00193,

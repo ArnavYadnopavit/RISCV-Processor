@@ -40,10 +40,12 @@ module HazardDetection(
   	input             MemtoregE,
   	input             MemtoregM,
   	input             DivStalled,
+  	input             MemStall,
   	output reg        StallD,
   	//output reg        FlushD,
   	output reg        StallE,
   	output reg        FlushE,
+  	output reg        StallM,
   	output reg [1:0]  ForwardAE,
   	output reg [1:0]  ForwardBE,
   	output reg        StallF,
@@ -61,11 +63,20 @@ assign isItype = (opcode_E == 7'b0010011) ||
     		StallF    = 1'b0;
     		FlushE    = 1'b0;
     		StallE    = 1'b0;
+    		StallM    = 1'b0;
     		//FlushD  = 1'b0;
     		ForwardAE = 2'b00;
     		ForwardBE = 2'b00;
     		BranchForwardAE = 2'b00;
     		BranchForwardBE = 2'b00;
+    		
+    		if(MemStall)begin
+                StallD = 1'b1;
+      			StallF = 1'b1;
+      			StallE = 1'b1;
+      			StallM = 1'b1;
+            end
+            else begin
 
     		if (MemtoregE && (rd_E != 5'b0) && (rd_E == rs1_D || rd_E == rs2_D)) begin
       			StallD = 1'b1;
@@ -122,6 +133,9 @@ assign isItype = (opcode_E == 7'b0010011) ||
       			StallF = 1'b1;
       			StallE = 1'b1;
             end
+            end
+            
+            
         
   	end
 
