@@ -292,8 +292,7 @@ module pipelined_datapath(
 	);
 	
 	dmemstaller DMSTALL(
-	   .clk(clk),
-	   .reset(reset),
+	   .clk(~clk),
 	   .MemWrite(ex_mem_MemWrite_out),
 	   .MemRead(ex_mem_MemRead_out),
 	   .MemStall(MemStall)	   

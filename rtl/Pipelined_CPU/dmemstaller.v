@@ -22,15 +22,14 @@
 
 module dmemstaller(
     input clk,
-    input reset,
     input MemWrite,
     input MemRead,
     output reg MemStall
     );
     wire isMem;
     assign isMem=MemWrite||MemRead;
-    always@(negedge clk or posedge reset or posedge isMem)begin
-        if(reset)MemStall<=1'b0;
+    always@(posedge clk or posedge isMem)begin
+        //if(reset)MemStall<=1'b0;
         casez(MemStall)
             1'b0:if(isMem)begin
                 MemStall<=1'b1;
