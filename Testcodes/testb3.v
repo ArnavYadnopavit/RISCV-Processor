@@ -70,10 +70,10 @@ module tb_datapath_mext;
         // Compare register file with expected values
         for (i = 0; i < 32; i = i + 1) begin
             if (dut.RF.registers[i] === expected[i]) begin
-                $display("x%0d = %0d ✅ PASS", i, dut.RF.registers[i]);
+                $display("x%0d = %0d  PASS", i, dut.RF.registers[i]);
                 pass_count = pass_count + 1;
             end else begin
-                $display("x%0d = %0d ❌ FAIL (expected %0d)",
+                $display("x%0d = %0d  FAIL (expected %0d)",
                          i, dut.RF.registers[i], expected[i]);
                 fail_count = fail_count + 1;
             end

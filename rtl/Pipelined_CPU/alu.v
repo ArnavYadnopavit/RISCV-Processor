@@ -33,6 +33,11 @@
     reg signed [129:0]multhsu;
 //add,sub,xor,or,and,sl,sra,srl
 always@(*) begin
+    divsin1=64'b0;
+    divsin2=64'b0;
+    divuin1=64'b0;
+    divuin2=64'b0;
+    readyu=64'b0;
     multresult=128'd0;
     valid=1'b1;
     //branchAlu=1'b0;
@@ -126,6 +131,11 @@ always@(*) begin
     6'b1_?????:out=b;
     
     default: begin out=64'b0;
+                   divsin1=64'b0;
+                   divsin2=64'b0;
+                   divuin1=64'b0;
+                   divuin2=64'b0;
+                   readyu=64'b0;
                    valid=1'b0; 
              end
     endcase

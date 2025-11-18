@@ -415,7 +415,7 @@ module pipelined_datapath(
 
 	assign pc_plus4      = pc_out + 64'd4;
 	//assign jal_target    = if_id_pc_out + imm;
-	assign jalr_target   = read_data1 + imm + 64'd4;
+	assign jalr_target   = read_data1 + imm + 64'h4;
 
 	assign pc_sel[1] = Jump;
 	assign pc_sel[0] = (Branch && branch_D) || (Jump && (opcode == 7'b1100111));
