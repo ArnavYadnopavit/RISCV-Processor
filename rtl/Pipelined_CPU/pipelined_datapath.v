@@ -459,7 +459,7 @@ module pipelined_datapath(
         //end
         */
         
-        assign debug_pc = ~pc_out[5:2];
+        assign debug_pc = pc_out[5:2];
        // assign debug_alu_result = alu_result;
         //assign inst_debug=instruction;
        // assign debug_alu_input1=read_data1;
