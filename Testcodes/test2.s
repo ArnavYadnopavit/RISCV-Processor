@@ -86,3 +86,4 @@ addi x29, x0, 9         # executed
 # End: keep looping
 # --------------------------
 loop:
+j loop

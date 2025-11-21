@@ -1,13 +1,13 @@
 module pipelined_datapath(
         input  wire clk,
         input  wire reset,
-        output wire [63:0] debug_pc,
+        output wire [3:0] debug_pc
         //output wire [63:0] debug_alu_result,
         //output wire [63:0] debug_alu_input1,
      //   output wire [63:0] debug_alu_input2,
      //   output wire [63:0] debug_regfile_out2,
      //   output wire [63:0] debug_imm_out,
-        output wire [31:0] inst_debug
+        //output wire [31:0] inst_debug
      //   output wire valid_alu_debug,
       //  output wire [4:0] debug_alu_control
 );
@@ -148,7 +148,7 @@ module pipelined_datapath(
         );
 
         reg_file RF (
-                .clk(~clk),
+                .clk(clk),
                 .reset(reset),
                 .reg_write(mem_wb_RegWrite_out),
                 .rs1(rs1),
@@ -247,7 +247,7 @@ module pipelined_datapath(
   	
   	//New Unit added for stalling div
   	DivStaller DIVSTALL(
-  	     .clk(~clk),
+  	     .clk(clk),
   	     .reset(reset),
   	     .AluControlPort(ALUControlPort),
   	     .DivStalled(DivStalled),
@@ -292,7 +292,7 @@ module pipelined_datapath(
 	);
 	
 	dmemstaller DMSTALL(
-	   .clk(~clk),
+	   .clk(clk),
 	   .MemWrite(ex_mem_MemWrite_out),
 	   .MemRead(ex_mem_MemRead_out),
 	   .MemStall(MemStall)	   
@@ -459,9 +459,9 @@ module pipelined_datapath(
         //end
         */
         
-        assign debug_pc = pc_out;
+        assign debug_pc = ~pc_out[5:2];
        // assign debug_alu_result = alu_result;
-        assign inst_debug=instruction;
+        //assign inst_debug=instruction;
        // assign debug_alu_input1=read_data1;
        // assign debug_regfile_out2=read_data2;
       //  assign debug_imm_out=imm;

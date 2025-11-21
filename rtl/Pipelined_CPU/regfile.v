@@ -13,7 +13,7 @@ module reg_file(
     reg [63:0] registers [0:31];
     integer i;
 
-    always @(posedge clk or posedge reset) begin
+    always @(negedge clk or posedge reset) begin
         if (reset)
             for (i = 0; i < 32; i = i + 1)
                 registers[i] <= 64'b0;

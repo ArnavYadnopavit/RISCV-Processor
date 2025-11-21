@@ -26,6 +26,5 @@
         rem    x14, x2, x1     # -3 % 15 = -3
         remu   x15, x1, x3     # 15 % 200 = 15
 
-# Stop simulation (depends on environment)
-        nop
-        nop
+loop:
+j loop
