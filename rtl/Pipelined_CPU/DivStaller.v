@@ -37,11 +37,11 @@ module DivStaller#(
     wire isDiv;
     assign isDiv = (AluControlPort[4] & AluControlPort[2]);
 
-    always @(posedge clk or posedge isDiv) begin
-        //if (reset) begin
-          //  Divfsm      <= {CNT_WIDTH{1'b0}};
-            //Divreset   <= 1'b1;
-        //end else begin
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            Divfsm      <= {CNT_WIDTH{1'b0}};
+            Divreset   <= 1'b1;
+        end else begin
             // Start a new division only when no division is active (count == 0)
             if (isDiv && (Divfsm == {CNT_WIDTH{1'b0}})) begin
                 // initialize counter to DIV_LATENCY
@@ -58,7 +58,7 @@ module DivStaller#(
                 Divfsm      <= {CNT_WIDTH{1'b0}};
             end
         end
-   // end
+    end
 
 
     

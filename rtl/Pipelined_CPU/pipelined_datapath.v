@@ -247,7 +247,7 @@ module pipelined_datapath(
   	
   	//New Unit added for stalling div
   	DivStaller DIVSTALL(
-  	     .clk(clk),
+  	     .clk(~clk),
   	     .reset(reset),
   	     .AluControlPort(ALUControlPort),
   	     .DivStalled(DivStalled),
