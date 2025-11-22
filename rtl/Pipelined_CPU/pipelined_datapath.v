@@ -1,6 +1,6 @@
 module pipelined_datapath(
         input  wire clk,
-        input  wire reset,
+        input  wire resetn,
         output wire [3:0] debug_pc
         //output wire [63:0] debug_alu_result,
         //output wire [63:0] debug_alu_input1,
@@ -13,6 +13,8 @@ module pipelined_datapath(
 );
 
 //DECLARING WIRES
+		wire reset;
+		assign reset=~resetn
         wire [63:0] pc_out;
         wire [63:0] pc_next;
 
