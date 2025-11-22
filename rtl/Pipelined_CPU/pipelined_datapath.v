@@ -14,7 +14,7 @@ module pipelined_datapath(
 
 //DECLARING WIRES
 		wire reset;
-		assign reset=~resetn
+		assign reset=~resetn;
         wire [63:0] pc_out;
         wire [63:0] pc_next;
 
