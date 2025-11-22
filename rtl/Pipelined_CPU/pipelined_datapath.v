@@ -1,7 +1,9 @@
 module pipelined_datapath(
         input  wire clk,
         input  wire resetn,
-        output wire [3:0] debug_pc
+        input  wire btn,
+        input  wire [3:0]sw,
+        output wire [7:0] reg_out
         //output wire [63:0] debug_alu_result,
         //output wire [63:0] debug_alu_input1,
      //   output wire [63:0] debug_alu_input2,
@@ -15,6 +17,8 @@ module pipelined_datapath(
 //DECLARING WIRES
 		wire reset;
 		assign reset=~resetn;
+		wire [4:0]debug_reg;
+		assign debug_reg={btn,sw};
         wire [63:0] pc_out;
         wire [63:0] pc_next;
 
@@ -158,7 +162,9 @@ module pipelined_datapath(
                 .rd(mem_wb_rd_out),
                 .write_data(write_data),
                 .read_data1(read_data1),
-                .read_data2(read_data2)
+                .read_data2(read_data2),
+                .debug_reg(debug_reg),
+                .debug_data(reg_out)
         );
         //New muxes added for branch comparing regs forwarding
         mux3 BranchD_A (
@@ -461,7 +467,7 @@ module pipelined_datapath(
         //end
         */
         
-        assign debug_pc = pc_out[5:2];
+        //assign debug_pc = pc_out[5:2];
        // assign debug_alu_result = alu_result;
         //assign inst_debug=instruction;
        // assign debug_alu_input1=read_data1;
