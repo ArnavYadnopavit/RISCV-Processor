@@ -11,9 +11,9 @@ module tb_datapath;
 
     pipelined_datapath dut (
         .clk(clk),
-        .reset(reset),
-        .debug_pc(debug_pc),
-        .inst_debug(inst_debug)
+        .resetn(~reset)
+        //.debug_pc(debug_pc),
+        //.inst_debug(inst_debug)
     );
 
     // Clock generator
@@ -88,10 +88,10 @@ module tb_datapath;
         // Compare registers
         for (i = 0; i < 32; i = i + 1) begin
             if (dut.RF.registers[i] === expected[i]) begin
-                $display("x%0d = %0d ✅ PASS", i, dut.RF.registers[i]);
+                $display("x%0d = %0d  PASS", i, dut.RF.registers[i]);
                 pass_count = pass_count + 1;
             end else begin
-                $display("x%0d = %0d ❌ FAIL (expected %0d)", 
+                $display("x%0d = %0d  FAIL (expected %0d)", 
                     i, dut.RF.registers[i], expected[i]);
                 fail_count = fail_count + 1;
             end
@@ -100,9 +100,9 @@ module tb_datapath;
         $display("--------------------------------------------");
         $display("Total PASS: %0d, FAIL: %0d", pass_count, fail_count);
         if (fail_count == 0)
-            $display("✅ ALL TESTS PASSED");
+            $display(" ALL TESTS PASSED");
         else
-            $display("❌ SOME TESTS FAILED");
+            $display(" SOME TESTS FAILED");
         $display("============================================");
             #100
         $finish;

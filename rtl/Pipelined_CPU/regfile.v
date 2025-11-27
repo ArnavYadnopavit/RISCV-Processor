@@ -16,7 +16,7 @@ module reg_file(
     reg [63:0] registers [0:31];
     integer i;
 
-    always @(negedge clk or posedge reset) begin
+    always @(posedge clk or posedge reset) begin
         if (reset)
             for (i = 0; i < 32; i = i + 1)
                 registers[i] <= 64'b0;
@@ -27,6 +27,6 @@ module reg_file(
     end
         assign read_data1 = (rs1 == 5'd0) ? 64'b0 : registers[rs1];
     	assign read_data2 = (rs2 == 5'd0) ? 64'b0 : registers[rs2];
-    	assign debug_data = (debug_reg == 5'd0) ? 64'b0 : registers[debug_reg];
+    	assign debug_data = (debug_reg == 5'd0) ? 8'b0 : registers[debug_reg][7:0];
   
 endmodule

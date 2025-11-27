@@ -154,7 +154,7 @@ module pipelined_datapath(
         );
 
         reg_file RF (
-                .clk(clk),
+                .clk(~clk),
                 .reset(reset),
                 .reg_write(mem_wb_RegWrite_out),
                 .rs1(rs1),
@@ -300,7 +300,7 @@ module pipelined_datapath(
 	);
 	
 	dmemstaller DMSTALL(
-	   .clk(clk),
+	   .clk(~clk),
 	   .MemWrite(ex_mem_MemWrite_out),
 	   .MemRead(ex_mem_MemRead_out),
 	   .MemStall(MemStall)	   
@@ -314,7 +314,7 @@ module pipelined_datapath(
     		.func3_in(id_ex_func3_out),
     		.alu_result_in(alu_result),
     		//.branchAlu_in(branchAlu),
-    		.alu_input2_in(id_ex_rs2_out),
+    		.alu_input2_in(srcB_E_pre),
     		.rd_in(id_ex_rd_out),
     		.RegWrite_in(id_ex_RegWrite_out),
     		.MemRead_in(id_ex_MemRead_out),
