@@ -39,7 +39,7 @@ module tb_datapath_bubble;
         #9000;
 
         $display("============================================");
-        $display("   Register File Values for x27–x31");
+        $display("   Register File Values for x27 to x31");
         $display("============================================");
 
         $display("x27 = %0d", dut.RF.registers[27]);
