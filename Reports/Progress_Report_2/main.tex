@@ -1,0 +1,551 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\setstretch{1.2}
+\titleformat{\section}{\bfseries\large}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\bfseries}{\thesubsection}{0.5em}{}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Large \textbf{CS2323: Computer Architecture}}\\[0.4cm]
+    {\large \textbf{Pre-Final Implementation Status Report}}\\[0.4cm]
+    {\small Submitted as part of course CS2323 – Project Work (Nov 2025)}\\[2cm]
+
+    {\LARGE \textbf{Design and FPGA Implementation of a 64-bit Multicycle RISC-V Processor}}\\[2cm]
+
+    \textbf{Submitted By:}\\[0.5cm]
+    \begin{tabular}{rl}
+        Krishna H. Patil & (EE24BTECH11036)\\
+        Arnav Yadnopavit & (EE24BTECH11007)
+    \end{tabular}\\[1.2cm]
+
+    \textbf{Course Instructor:}\\[0.2cm]
+    Dr. Rajesh Kedia (CS2323)\\[3cm]
+
+    \vfill
+    \today
+\end{titlepage}
+
+\tableofcontents
+
+\section{Current Implementation Status}
+
+Since the submission of the Step-2 report, the project has progressed significantly beyond the initial single-cycle design. We now have a fully functional \textbf{5-stage pipelined RV64IM processor} with hazard detection, forwarding logic, branch prediction, stalling mechanisms, and an improved memory interface. The following subsections summarize the major advancements.
+
+\subsection{Instruction Set Support}
+The processor now supports the complete \textbf{RV64IM} instruction set:
+\begin{itemize}
+    \item All RV64I integer instructions (R, I, S, B, U, J formats)
+    \item M-extension: \texttt{MUL}, \texttt{MULH}, \texttt{MULHSU}, \texttt{MULHU}
+    \item M-extension: \texttt{DIV}, \texttt{DIVU}, \texttt{REM}, \texttt{REMU}
+\end{itemize}
+All instructions have been functionally verified in simulation, including multi-cycle DIV behavior.
+
+\subsection{Pipeline Implementation (5 Stages)}
+The processor implements the standard RISC-V 5-stage pipeline:
+\[
+\text{IF} \rightarrow \text{ID} \rightarrow \text{EX} \rightarrow \text{MEM} \rightarrow \text{WB}
+\]
+with correct stage-wise register transfer and control signal propagation.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figs/pipeline_overview.jpg}
+    \caption{5-stage pipelined datapath (implemented design).}
+\end{figure}
+
+\subsection{Hazard Detection and Data Forwarding}
+A full hazard management subsystem has been implemented:
+\begin{itemize}
+    \item \textbf{Data forwarding} from EX/MEM/WB stages into EX stage
+    \item \textbf{Load-use hazard stall unit} (1-cycle bubble insertion)
+    \item \textbf{DIV staller} that dynamically inserts multiple stalls during long-latency divide operations
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figs/forwarding_logic.jpg}
+    \caption{Forwarding unit and hazard detection logic (implemented design).}
+\end{figure}
+
+\subsection{Branch Prediction}
+We implemented \textbf{early branch resolution} in the \textbf{Decode} stage:
+\begin{itemize}
+    \item Reduces branch penalty from 3–4 cycles to 1 cycle
+    \item Uses immediate evaluation and register read in ID stage
+    \item Ensures compatibility with forwarding and load-use hazards
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.60\linewidth]{figs/branch_prediction_decode.jpg}
+    \caption{Branch resolution in Decode stage.}
+\end{figure}
+
+\subsection{Memory Subsystem Fix and Redesign}
+The earlier Step-2 issue where IMEM/DMEM inferred LUTRAM instead of BRAM has been fully resolved.
+
+We redesigned DMEM into three decoupled modules:
+\begin{itemize}
+    \item \textbf{DMEM Load Unit} – handles data align/extend for loads
+    \item \textbf{BRAM-backed Memory Array} – correctly inferred as block RAM
+    \item \textbf{DMEM Store Unit} – handles byte/half/word/dword stores
+\end{itemize}
+
+Because block RAM cannot simultaneously support arbitrary timing for read and write in the same cycle, we introduced:
+\begin{itemize}
+    \item \textbf{Memory stalls}
+    \item \textbf{Timing-matched handshakes} between EX and MEM
+\end{itemize}
+
+This fixed all inference issues and made synthesis fully BRAM-based.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figs/dmem_split_design.jpg}
+    \caption{Split DMEM design with Load Unit, BRAM Memory, and Store Unit.}
+\end{figure}
+
+\subsection{Integration of Mixed Architectural Models}
+The final pipeline architecture is based on a combination of:
+\begin{itemize}
+    \item Harris and Harris's Model
+    \item Patterson \& Hennessy’s pipeline diagrams
+\end{itemize}
+
+Both were combined where appropriate to achieve:
+\begin{itemize}
+    \item Correct pipeline register behavior
+    \item Timing-safe memory access logic
+    \item Forwarding paths aligned with our CONTROL → ALU → MEM design
+\end{itemize}
+
+\subsection{Pipeline Architecture Overview}
+
+The pipelined processor implemented in this project is based on a combination of two architectural references:  
+(1) the textbook 5-stage RISC-V pipeline with full hazard handling (Figure~7.61), and  
+(2) the Harris \& Harris pipeline diagram (Figure~4.62).  
+Both diagrams were used in complementary ways: the second provided structural clarity while the first provided complete hazard and control signal integration.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figs/pipeline.jpg}
+    \caption{Implemented 5-stage pipelined processor (main reference architecture).}
+    \label{fig:main_pipeline}
+\end{figure}
+
+The actual implementation follows the standard five pipeline stages:
+\[
+\text{IF} \rightarrow \text{ID} \rightarrow \text{EX} \rightarrow \text{MEM} \rightarrow \text{WB}.
+\]
+
+Major contributions of each reference diagram:
+\begin{itemize}
+    \item The full hazard-handling diagram (Figure~7.61) provided the structural basis for the forwarding paths, stall signals, register pipeline boundaries, and control-signal propagation across stages.
+    \item Patterson’s stylized pipeline (Figure~4.62) provided the concept of early hazard outputs, a compact control-flow structure, and simplified muxing patterns that shaped our control-unit wiring.
+\end{itemize}
+
+\subsection{Branch Resolution Moved to Decode Stage}
+
+Branch handling is a major improvement over the textbook EX-stage branch evaluation.  
+To reduce branch penalty, we partially adopted the design from Figure~4.62 and modified the branch datapath so that the branch comparison occurs in the \textbf{Decode (ID) stage} rather than EX.  
+For this purpose:
+\begin{itemize}
+    \item A small comparator block was added in ID stage.
+    \item Immediate generation, register file outputs, and branch condition evaluation are all available early.
+    \item Branch target address calculation (PC + immediate) occurs in parallel in ID.
+    \item A flush signal is generated immediately upon misprediction, giving a 1-cycle penalty.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figs/pipe_branch.jpg}
+    \caption{Branch datapath used to move branch resolution to the Decode stage.}
+    \label{fig:branch_decode}
+\end{figure}
+
+This architectural change significantly improves pipeline efficiency, especially for branch-heavy workloads.
+
+\subsection{Hazard Unit and Data Forwarding}
+
+A complete hazard detection unit has been implemented.  
+It handles:
+\begin{itemize}
+    \item \textbf{Load-use hazards}: a 1-cycle stall is inserted when EX-stage instruction depends on a MEM-stage load.
+    \item \textbf{Branch hazards}: automatic detection and flush of the IF/ID pipeline register.
+    \item \textbf{DIV hazards}: dedicated multi-cycle stalling (stall signal holds PC and IF/ID until division completes).
+\end{itemize}
+
+The forwarding unit forwards:
+\begin{itemize}
+    \item EX/MEM → EX stage  
+    \item MEM/WB → EX stage  
+\end{itemize}
+
+The pipeline supports all RAW hazards without compiler scheduling.
+
+\subsection{Division Staller and Timing Alignment}
+
+Since the division operations (\texttt{DIV}, \texttt{DIVU}, \texttt{REM}, \texttt{REMU}) take multiple cycles, we implemented:
+\begin{itemize}
+    \item a \textbf{division staller} to hold the pipeline during multi-cycle DIV execution,
+    \item handshake signals between EX and MEM to prevent overwriting ALU results,
+    \item cycle-accurate alignment so that DIV results write back correctly through MEM and WB.
+\end{itemize}
+
+This ensures architectural correctness without corrupting pipeline state.
+
+\subsection{Memory Subsystem: Three-Part DMEM Redesign}
+
+To resolve earlier synthesis and BRAM inference problems, DMEM was redesigned as three components:
+\begin{itemize}
+    \item \textbf{DMEM Load Unit} – handles sign/zero extension, alignment.
+    \item \textbf{BRAM-backed memory array} – now always inferred as block RAM.
+    \item \textbf{DMEM Store Unit} – handles byte/half/word/dword stores.
+\end{itemize}
+
+Stalls are inserted during memory operations to match BRAM timing requirements.
+
+The final pipelined memory system is now timing-clean and resource-optimized for FPGA implementation.
+
+\subsection{Summary}
+
+The current pipeline integrates:
+\begin{itemize}
+    \item A full RV64IM instruction set,
+    \item 5-stage pipelining with forwarding and hazard detection,
+    \item Branch resolution moved to ID,
+    \item Full stall management including multi-cycle DIV stalls,
+    \item A BRAM-accurate memory system with load/store units.
+\end{itemize}
+
+This constitutes a complete and functional pipelined RISC-V implementation suitable for FPGA demonstration.
+
+
+\subsection{Waveform and Testbench Verification}
+All major modules and pipeline paths have been verified via:
+\begin{itemize}
+    \item Individual module testbenches (ALU, RegFile, ImmGen, CU, PC, IMEM/DMEM)
+    \item Full pipeline-level testbenches
+    \item Multi-instruction programs (ADD chains, load/store sequences, branch loops)
+    \item Full RV64IM test sequences
+\end{itemize}
+
+\subsection{Testbench Generation Note}
+\textit{Initial versions of the testbenches were generated with the assistance of ChatGPT and later refined, corrected, and extended by us according to module interfaces and debugging needs.}
+
+.
+
+\section{Current Implementation Status}
+
+\subsection{Single-Cycle Processor (Completed Earlier)}
+The initial single-cycle RV64I processor was fully completed during Step-2 of the project.  
+This version included:
+\begin{itemize}
+    \item Full datapath for RV64I integer instructions  
+    \item Working control unit, ALU, immediate generator, register file  
+    \item Separate IMEM and DMEM with \texttt{\$readmemh} initialization  
+\end{itemize}
+This stage served as the foundation for all subsequent enhancements.
+
+\subsection{Transition Away from Multicycle Design}
+Although an intermediate multicycle design was part of the initial plan, we decided to skip the multicycle stage entirely and directly implement a \textbf{5-stage pipelined processor}.  
+This decision was motivated by:
+\begin{itemize}
+    \item The larger benefit of focusing on a complete pipelined RV64IM core  
+    \item Time saved by reusing the single-cycle datapath components  
+    \item Better alignment with modern RISC-V processor architecture  
+\end{itemize}
+
+\subsection{Pipelined Processor (RV64IM) — Fully Implemented}
+We now have a complete, synthesizable \textbf{5-stage pipelined RV64IM processor} with:
+\begin{itemize}
+    \item Instruction Fetch (IF)  
+    \item Instruction Decode (ID)  
+    \item Execute (EX)  
+    \item Memory (MEM)  
+    \item Writeback (WB)  
+\end{itemize}
+
+Major pipeline features:
+\begin{itemize}
+    \item \textbf{Full forwarding} (EX/MEM to EX, MEM/WB to EX)
+    \item \textbf{Load-use hazard stall} (1-cycle bubble)
+    \item \textbf{Branch resolution moved to Decode stage}  
+    \item \textbf{Automatic branch flush logic}  
+    \item \textbf{Pipeline register bundles between all stages}  
+\end{itemize}
+
+\subsection{M Extension (Multiply/Divide)}
+All RV64IM multiply and divide instructions were fully implemented:
+\begin{itemize}
+    \item \texttt{MUL}, \texttt{MULH}, \texttt{MULHU}, \texttt{MULHSU}  
+    \item \texttt{DIV}, \texttt{DIVU}, \texttt{REM}, \texttt{REMU}  
+\end{itemize}
+
+The multiply operations complete in a single cycle using DSP blocks.  
+The division operations are implemented as a multi-cycle iterative algorithm, managed through a:
+\begin{itemize}
+    \item \textbf{DIV staller} that holds IF/ID and ID/EX until the divider finishes  
+    \item handshake between EX and MEM to maintain result alignment  
+\end{itemize}
+
+\subsection{FPU Integration (Deferred)}
+Although originally planned, the RV64F floating-point extension was \textbf{intentionally deferred}.  
+This decision was based on the following considerations:
+\begin{itemize}
+    \item The FPU requires additional floating-point register paths and specialised control logic.
+    \item Integrating add/sub/mul floating-point units would require modifying the EX and MEM stages and reworking hazard detection.
+    \item The complexity multi-cycle FPU behavior would not be feasible within the remaining course deadline.
+\end{itemize}
+Given these constraints, the focus was shifted toward completing a fully functional and stable RV64IM pipelined core and preparing it for FPGA implementation.
+
+
+\subsection{Memory System and Cache (Deferred Cache, Improved DMEM)}
+Cache implementation (L1/L2) was also \textbf{deferred}.  
+However, the memory system was significantly enhanced:
+\begin{itemize}
+    \item DMEM split into three parts:  
+        \begin{itemize}
+            \item Load Unit  
+            \item BRAM-backed memory  
+            \item Store Unit  
+        \end{itemize}
+    \item Timing-correct BRAM behavior with stall signals  
+    \item IMEM and DMEM now reliably inferred as Block RAM  
+\end{itemize}
+
+This ensures correct memory access timing on the FPGA.
+
+\subsection{Synthesis and FPGA Testing}
+The full RV64IM pipelined design successfully synthesizes in Vivado with:
+\begin{itemize}
+    \item Correct BRAM inference for IMEM and DMEM  
+    \item DSP usage for multiplication  
+    \item LUT usage within Arty A7 limits  
+\end{itemize}
+
+Current FPGA status:
+\begin{itemize}
+    \item Bitstream generation successful  
+    \item IMEM initialized using \texttt{\$readmemh} (confirmed via simulation and Vivado logs)  
+    \item LED/UART integration planned for final program output  
+    \item On-board testing underway with small test programs  
+\end{itemize}
+
+The focus now is completing hardware validation and preparing the demonstration sequence.
+
+\subsubsection{Testbench Automation Improvements}
+
+As part of the pre-final development phase, we also began improving the structure of our testbenches.  
+Earlier, each new RISC-V program required manual modifications to the testbench, including changes to file paths, initial conditions, and internal signals. This made iterative testing slower and more error-prone.
+
+To address this, we are redesigning the testbench framework so that:
+\begin{itemize}
+    \item the same testbench can be reused for all RISC-V programs,
+    \item only the instruction memory hex file needs to be changed for each new test,
+    \item the testbench automatically loads the hex file using \texttt{\$readmemh},
+    \item no internal modifications to the testbench are required when switching programs.
+\end{itemize}
+
+This improvement greatly simplifies simulation workflow and makes it easier to validate more complex programs, especially before running them on the FPGA. It also supports rapid debugging of pipeline behavior, hazard response, and multi-instruction sequences.
+
+
+\section{Challenges Faced}
+
+The transition from a single-cycle CPU to a complete RV64IM pipelined processor introduced several non-trivial challenges. Many of these required deeper architectural understanding, careful debugging, and multiple redesign iterations.
+
+\subsection{Pipeline Implementation Complexity}
+Designing the 5-stage pipeline was significantly more difficult than expected.  
+Key challenges included:
+\begin{itemize}
+    \item determining the exact set of signals that needed to be carried across each pipeline stage,
+    \item calculating the widths of IF/ID, ID/EX, EX/MEM, and MEM/WB pipeline registers,
+    \item ensuring that no necessary control or data signal was accidentally omitted,
+    \item identifying which signals were redundant and removing them to avoid resource waste,
+    \item maintaining timing consistency across stage boundaries.
+\end{itemize}
+This phase required repeated refinement of datapath diagrams and debugging through waveform inspection.
+
+\subsection{Interconnection and Signal Propagation Issues}
+A major portion of the debugging time was spent ensuring correct wiring of signals between stages.  
+Typical problems included:
+\begin{itemize}
+    \item incorrect or inconsistent signal naming,
+    \item mismatched bus widths across modules,
+    \item late discovery that some signals needed to be forwarded to later stages,
+    \item duplicated or missing control signals that caused subtle pipeline bugs.
+\end{itemize}
+Many of these issues became apparent only during integrated simulation and required multiple iterations of correction.
+
+\subsection{Integrating M-Extension Instructions}
+The integration of the M-instructions was particularly challenging.  
+While \texttt{MUL} instructions were straightforward, the division instructions introduced several complexities:
+\begin{itemize}
+    \item handling signed vs. unsigned division and remainder instructions,
+    \item designing a multi-cycle iterative divider compatible with the pipeline,
+    \item managing pipeline stalls during division to avoid corrupting subsequent instructions,
+    \item aligning divider output timing with MEM/WB stages,
+    \item ensuring correct flag generation and operand selection.
+\end{itemize}
+The M-extension integration required substantial redesign of the EX-stage logic and hazard-handling unit.
+
+\subsection{Timing Mismatches and Unexpected Pipeline Behavior}
+Certain bugs arose from incorrect assumptions about timing:
+\begin{itemize}
+    \item control signals reaching a stage earlier/later than data signals,
+    \item pipeline registers capturing values before some modules had updated their outputs,
+    \item signed/unsigned interpretation mismatches causing arithmetic failure,
+    \item off-by-one cycle errors that produced subtle writeback bugs.
+\end{itemize}
+Some of these issues were the result of minor mistakes (our own “dumbness”), but resolving them provided deeper insight into cycle-by-cycle hardware timing.
+
+\subsection{Memory Timing and BRAM Behavior}
+The need to restructure DMEM into load/store/BRAM units emerged because:
+\begin{itemize}
+    \item BRAM has fixed read/write latency that doesn’t match textbook single-cycle memory models,
+    \item naive memory integration caused timing mismatch between EX and MEM results,
+    \item unaligned loads/stores required careful data alignment logic.
+\end{itemize}
+This required significant re-engineering of the MEM stage and addition of stalls.
+
+\section{Early Results}
+
+Extensive simulation-based testing was performed on the implemented RV64IM pipelined processor using XSIM. The objective was to validate correctness of the ISA behavior, pipeline control logic, hazard management, memory subsystem, and the M-extension. All programs were assembled into hex format and loaded into IMEM using \texttt{\$readmemh}. Register-file contents were automatically checked after execution.
+
+\subsection{RV64I Functional Tests}
+The first test sequence evaluated the core RV64I instruction set, covering:
+\begin{itemize}
+    \item arithmetic and logical operations,
+    \item shift operations,
+    \item immediate instructions,
+    \item register initialization and sanity checks.
+\end{itemize}
+
+All 32 registers matched their expected values, confirming full correctness of the base integer datapath.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figs/WhatsApp Image 2025-11-16 at 22.44.01_8cf9a6ea.jpg}
+    \caption{RV64I test output – All registers PASS (32/32).}
+\end{figure}
+
+\subsection{Forwarding and Load-Use Hazard Tests}
+A dedicated test program stressed the forwarding unit and hazard detection logic.  
+The test included:
+\begin{itemize}
+    \item RAW hazards generated by back-to-back dependent instructions,
+    \item ALU→ALU forwarding,
+    \item MEM→ALU forwarding,
+    \item load-use hazards requiring a one-cycle stall,
+    \item dependent additions forming a chain.
+\end{itemize}
+
+The pipeline correctly inserted stalls for load-use hazards and forwarded data from EX/MEM and MEM/WB as intended. No mismatches were detected.
+
+
+
+\subsection{Branch and Control Hazard Tests}
+Branch prediction was implemented by resolving branches in the Decode (ID) stage.  
+This test validated:
+\begin{itemize}
+    \item correct early branch decision,
+    \item IF/ID flush on misprediction,
+    \item correct behavior of taken and not-taken branches,
+    \item JAL/JALR link register correctness.
+\end{itemize}
+
+All branch paths behaved as expected, demonstrating that the Decode-stage branch unit and hazard logic function correctly.
+
+
+
+\subsection{Memory Subsystem Tests}
+A BRAM-backed DMEM implementation was tested using known load/store patterns.  
+The results verified:
+\begin{itemize}
+    \item correct sign/zero-extension for loads,
+    \item correct byte/half/word/dword store handling,
+    \item correct BRAM timing using the stall mechanism,
+    \item proper interaction with EX/MEM pipeline registers.
+\end{itemize}
+
+
+\subsection{M Extension (Multiply/Divide) Tests}
+A comprehensive test validated all eight M-extension instructions:
+\begin{itemize}
+    \item \textbf{Multiply}: \texttt{mul}, \texttt{mulh}, \texttt{mulhsu}, \texttt{mulhu}
+    \item \textbf{Divide}: \texttt{div}, \texttt{divu}
+    \item \textbf{Remainder}: \texttt{rem}, \texttt{remu}
+\end{itemize}
+
+Both signed and unsigned corner cases were tested.  
+The multi-cycle divider and DIV staller worked correctly, inserting stalls until the division unit completed and correctly routing the result to the MEM/WB stage.
+
+All registers matched the expected values.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figs/WhatsApp Image 2025-11-16 at 22.49.00_fce31f93.jpg}
+    \caption{M-extension results – MUL/DIV/REM operations fully correct (32/32 PASS).}
+\end{figure}
+
+\subsection{Vivado Synthesis Results}
+The final RV64IM pipelined CPU was synthesized for the Arty A7-100T.  
+Resource utilization is as follows:
+
+\begin{itemize}
+    \item \textbf{Slice LUTs}: 13,574 (21.41\%)
+    \item \textbf{Slice Registers}: 13,725 (10.82\%)
+    \item \textbf{BRAM Tiles}: 32 (23.7\%)
+    \item \textbf{DSP48E1 blocks}: 54 (22.5\%)
+\end{itemize}
+
+This confirms that the design fits comfortably in the FPGA with space for UART and additional I/O.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figs/WhatsApp Image 2025-11-16 at 22.44.14_2bbca0cc.jpg}
+    \caption{Vivado synthesis report – resource utilization summary.}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figs/WhatsApp Image 2025-11-16 at 22.44.39_23590ac8.jpg}
+    \caption{Vivado synthesis report – resource utilization summary.}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figs/WhatsApp Image 2025-11-16 at 22.44.29_4ef0c30a.jpg}
+    \caption{Vivado synthesis report – resource utilization summary.}
+\end{figure}
+
+\subsection{Summary of Early Results}
+Table~\ref{tab:results_summary} summarizes all tested features.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Test Category} & \textbf{Status} \\ \hline
+RV64I Functional Instructions & PASS \\ \hline
+Forwarding Unit (RAW hazards) & PASS \\ \hline
+Load-Use Hazard Detection & PASS \\ \hline
+Decode-Stage Branch Prediction + Flush & PASS \\ \hline
+Load/Store + BRAM Timing & PASS \\ \hline
+RV64M (Multiply/Divide/Rem) Extension & PASS \\ \hline
+Vivado Synthesis (Fit + DRC + Timing) & PASS \\ \hline
+\end{tabular}
+\caption{Summary of simulation and synthesis results.}
+\label{tab:results_summary}
+\end{table}
+.
+
+\end{document}

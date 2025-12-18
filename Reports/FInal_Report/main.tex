@@ -1,0 +1,861 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages (required)
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\setlength{\headheight}{13.6pt}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Design and FPGA Implementation of 64-bit RISC-V Processors},
+    pdfauthor={Krishna H. Patil and Arnav Yadnopavit},
+    pdfkeywords={RISC-V, RV64I, FPGA, Processor Design, Computer Architecture}
+}
+
+% Header / Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{CS2323 }
+\fancyhead[R]{64-bit RISC-V Processors}
+\fancyfoot[C]{\thepage}
+
+% Spacing
+\onehalfspacing
+
+% Shortcuts
+\newcommand{\course}{CS2323 -- Computer Architecture}
+\newcommand{\reporttitle}{Design and FPGA Implementation of 64-bit RISC-V Processors}
+\newcommand{\subtitletext}{Final Project Report}
+\newcommand{\authorone}{Krishna H. Patil (EE24BTECH11036)}
+\newcommand{\authortwo}{Arnav Yadnopavit (EE24BTECH11007)}
+\newcommand{\institute}{IIT Hyderabad}
+
+% Document begins
+\begin{document}
+
+%========================
+% Title page
+%========================
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\LARGE \textbf{\course} \par}
+    \vspace{1.5cm}
+    {\huge \bfseries \reporttitle \par}
+    \vspace{0.4cm}
+    {\Large \subtitletext \par}
+    \vspace{2.2cm}
+    {\large \authorone \\[6pt] \authortwo \par}
+    \vfill
+    {\large \institute \par}
+    \vspace{0.5cm}
+    {\large \today \par}
+    \vspace{1cm}
+\end{titlepage}
+
+%========================
+% Table of Contents
+%========================
+\tableofcontents
+\clearpage
+
+%========================
+% Main content
+%========================
+
+\section{Introduction}
+\label{sec:introduction}
+
+\subsection{Project motivation}
+\label{sub:motivation}
+% Placeholder: Describe motivation for designing RV64 processors, learning outcomes, research/educational goals, and why FPGA implementation.
+\vspace{6pt}
+
+From a personal standpoint, the primary motivation behind this project stemmed from a long–held aspiration to design and build a working processor. The idea of constructing a CPU from the ground up, understanding how instructions move through hardware, how data is transformed, and how control logic orchestrates every computation, has been a childhood dream. This project offered an opportunity to finally realize it.
+
+Beyond personal ambition, we were also driven by the desire to apply the theoretical concepts learned in courses such as Digital Systems and Computer Architecture to a real, functioning hardware system. Topics such as pipelining, hazard detection, control signal generation, and memory interfacing often remain theoretical until they are encountered in actual implementations. Developing a 64-bit RISC-V processor allowed us to bridge that gap between theory and practice.
+
+A further source of motivation was the opportunity to gain hands-on experience with FPGA development for the first time. Working with an FPGA platform provided a unique perspective on digital design, timing closure, resource constraints, and hardware debugging. Implementing a processor on the Arty A7 board offered us a practical and challenging environment to strengthen our understanding of hardware design methodologies while exploring the capabilities of modern reconfigurable logic.
+
+Overall, this project represented the ideal convergence of personal interest, academic learning, and practical engineering experience.
+
+
+\subsection{Initial proposed scope}
+\label{sub:initial-scope}
+% List of initially proposed features and scope
+\begin{itemize}
+    \item RV64I base ISA support (integer instructions)
+    \item Multicycle, Single-cycle, and Pipelined designs (as planned)
+    \item RV64IM (multiply/divide) extensions
+    \item Floating Point Unit (FPU) (planned - e.g., RV64F/RV64D)
+    \item Cache design (e.g., direct-mapped / set-associative L1)
+    \item UART interface for communication
+    \item Memory-mapped I/O (LEDs, switches)
+    \item Target FPGA: Arty A7 (or similar)
+\end{itemize}
+
+\subsection{Differences Between Proposal and Final Implementation}
+
+At the beginning of the project, we proposed a broad and ambitious feature set: a multicycle or single-cycle RV64I core, a fully pipelined variant, support for the RV64IM extension, a Floating Point Unit (FPU), a cache subsystem, UART-based communication, and additional memory-mapped peripherals. As the project progressed, several of these objectives were successfully achieved, while others required scaling down or modification due to time, complexity, and debugging challenges.
+
+Our hardware development proceeded in three major implementation milestones. First, we completed a fully functional single-cycle RV64I processor that served as a correctness baseline. Building upon this, we implemented a 5-stage pipelined RV64I processor with hazard detection and forwarding support. Finally, we extended the pipelined design to support the RV64IM instruction set, including a pipelined and latency-aware divider unit. These three processor versions matched our core architectural goals and represented the most substantial achievements of the project.
+
+On the peripheral side, we initially developed a working UART transmitter as part of the I/O subsystem. However, during an attempted optimization pass, a modification unintentionally broke parts of the design, and we were unable to fully restore UART functionality before the final FPGA demonstration. To compensate for this, we relied on a memory-mapped LED-based debug system that allowed us to visualize the values of registers \texttt{x0} through \texttt{x31} directly on the Arty A7 board. Although less flexible than UART output, this approach proved sufficient for hardware validation and debugging.
+
+Some planned features,most notably the FPU and cache subsystem, remained incomplete due to their complexity and the time required for verification. Despite these deviations from the original proposal, the final implementation still delivered a robust, functioning 64-bit RISC-V processor family with meaningful peripheral integration and extensive FPGA-based testing.
+
+
+\section{Overall Design Overview}
+\label{sec:design-overview}
+
+\subsection{Block diagrams}
+\label{sub:block-diagrams}
+% Placeholder figure for top-level block diagram
+\begin{figure}[H]
+    \centering
+    % Replace 'block_diagram_placeholder.pdf' with the actual file name.
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Top-level block diagram placeholder}}
+    \caption{Top-level system block diagram}
+    \label{fig:block-diagram-top}
+\end{figure}
+\newpage
+\subsection{Development timeline followed (Phase 1, 2, 3 and 4)}
+\label{sub:timeline}
+\begin{description}
+    \item[Phase 1:] Specification of a baseline single-cycle RV64I implementation and the creation of a testbench.
+    \item[Phase 2:] 5-stage pipelined implementation.
+    \item[Phase 3:] hazard handling, basic peripherals, RV64IM support.
+    \item[Phase 4:] FPGA integration, performance tuning, and demo preparation.
+\end{description}
+
+\section{Processor Implementations}
+\label{sec:processor-impl}
+
+\subsection{Single-Cycle RV64I Processor}
+
+The first stage of our processor development involved designing a fully functional single-cycle RV64I core. This version served as the architectural baseline for correctness before we introduced pipelining and the RV64IM extension. In a single-cycle design, all operations—fetch, decode, execute, memory access, and write-back—are completed within a single, long combinational path. While not performance-oriented, this approach significantly simplifies control and verification.
+
+\subsubsection{Datapath Architecture}
+
+The single-cycle datapath consisted of the instruction fetch block, an immediate generator, a 32-register \texttt{64-bit} register file, the ALU, branch comparison hardware, and memory access logic. All functional units are connected through combinational paths, with a single write-back point feeding the register file.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figs/graphviz.png}
+    \caption{Single-cycle RV64I datapath}
+    \label{fig:single-cycle-datapath}
+\end{figure}
+
+Because the entire instruction executes in one clock cycle, there is no need for hazard management or pipeline stalls. The simplicity of this architecture made it ideal as a first implementation phase.
+
+\subsubsection{Control Logic}
+
+The control logic was implemented as a purely combinational decoder. Based on the opcode and funct3/funct7 fields, the controller generated signals for ALU operation selection, branching decisions, register write enables, memory read/write enables, and immediate type decoding. The absence of pipelining meant the control unit did not need stall, forwarding, or branching prediction mechanisms.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figs/graphviz (1).png}
+    \caption{Single-cycle control logic diagram}
+    \label{fig:single-cycle-control-logic}
+\end{figure}
+
+\subsubsection{Supported Instructions}
+
+The implementation covered the complete RV64I base instruction set. All arithmetic, logical, branch, load/store, and control-flow instructions were supported. The ALU included operations such as \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{XOR}, comparison operations, shift operations, and branch target calculations.
+
+\subsubsection{Simulation and Testing}
+
+To test the single-cycle core, we wrote multiple assembly programs. Since we did not use the RISC-V GNU toolchain, we relied on two online tools:
+\begin{itemize}
+    \item An online C-to-assembly converter for generating RISC-V assembly from small C programs.
+    \item An online assembly-to-machine-code converter for producing executable hexadecimal machine code.
+\end{itemize}
+
+To integrate these machine instructions into our FPGA workflow, we developed a small Python script to automatically adjust formatting and alignment so the resulting machine code could be directly pasted into the \texttt{inst.coe} file for Block RAM initialization. This automation allowed rapid iteration during testing.
+
+Our test programs included:
+\begin{itemize}
+    \item A division routine (software-implemented division loop).
+    \item A bubble sort implementation operating on an array in memory.
+    \item A GCD (Greatest Common Divisor) algorithm using the Euclidean method.
+\end{itemize}
+
+These programs verified arithmetic correctness, memory access behavior, control flow operations, and overall datapath stability. Waveform inspection through simulation tools allowed us to confirm instruction-level correctness before moving to pipelined versions of the processor.
+
+\subsection{5-Stage Pipelined RV64I Processor}
+
+After validating the single-cycle core, we extended the design into a 5-stage pipelined RV64I processor. The pipelined architecture significantly improved throughput by overlapping instruction execution across the IF, ID, EX, MEM, and WB stages. Pipeline registers separated each stage, allowing multiple instructions to be in-flight simultaneously.
+
+\subsubsection{Instruction Fetch (IF)}
+
+The IF stage computed the Program Counter (PC) and fetched instructions from instruction memory. Since branch resolution was moved earlier into the decode stage, the PC selection logic depended on signals coming directly from ID. The IF stage was also equipped with stall inputs so it could freeze during division stalls or memory stalls.
+
+\subsubsection{Instruction Decode (ID)}
+
+The ID stage decoded instructions, read source registers, and generated immediates. A major architectural improvement was relocating branch comparison from the EX stage to the ID stage. This was implemented through a dedicated \texttt{Branch\_D} module responsible for evaluating branch conditions (BEQ, BNE, BLT, BGE, etc.) using the RS1 and RS2 operands. 
+
+This reduced branch penalty from two flushed stages to one, since the decision was made earlier. The ID stage also handled hazard detection and generating stall signals for load-use hazards, division stalls, and data memory stalls.
+
+\subsubsection{Execute (EX)}
+
+The EX stage performed ALU operations such as arithmetic, shifts, and logical operations. Since branch decisions were already resolved in the ID stage, the ALU no longer computed branch conditions. Instead, it focused purely on computation and calculating memory addresses for load/store instructions.
+
+Pipeline forwarding from later stages (EX/MEM and MEM/WB) fed the ALU inputs when necessary.
+
+\subsubsection{Memory Access (MEM)}
+
+The MEM stage communicated with data memory. In addition to standard load/store functionality, this stage included handshake and busy signals for the BRAM-based memory system. If the memory unit asserted a \texttt{dmem\_stall}, the pipeline froze until memory became ready. This mechanism simplified timing but required tight integration with the global stall controller.
+
+\subsubsection{Write Back (WB)}
+
+The WB stage wrote the appropriate ALU or memory result back to the register file. A simple multiplexer selected between ALU output and memory-read data. This completed the instruction execution flow.
+
+\subsubsection{Hazard Detection Unit}
+
+The hazard detection unit monitored dependencies between instructions in ID and EX. Classic load-use hazards triggered a one-cycle stall. Additionally, global stall signals from the divider unit and data memory system were integrated into this module. When a stall was asserted, the IF and ID stages froze, and EX received a bubble.
+
+\subsubsection{Forwarding Unit}
+
+The forwarding unit minimized stalls by routing results from the EX/MEM or MEM/WB pipeline stages directly into the ALU input multiplexers. It supported all arithmetic and logical instructions, enabling back-to-back dependent instructions. Load-use hazards and multicycle division operations were the only cases requiring explicit stalls.
+
+\subsubsection{Branch Handling (Using Branch\_D Module)}
+
+Unlike typical pipelines where branches are resolved in EX, we implemented early branch detection in the decode stage through a dedicated \texttt{Branch\_D} module. It performed:
+\begin{itemize}
+    \item Operand comparison using RS1 and RS2,
+    \item Generation of branch-taken signals,
+    \item Calculation of immediate-based branch targets,
+    \item Flushing the instruction in IF when required.
+\end{itemize}
+
+This significantly reduced branch penalties and simplified EX-stage logic.
+
+\subsubsection{Pipeline Diagram}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{figs/graphviz (2).png}
+    \caption{5-stage pipeline diagram with stalls and early-branch detection.}
+    \label{fig:pipeline-diagram}
+\end{figure}
+
+
+\subsection{RV64IM Pipelined Processor}
+
+After completing the RV64I pipelined processor, the next step was extending the design to support the full RV64IM instruction set. This required integrating hardware support for multiplication and division. While multiplication was mapped cleanly into the ALU datapath as a single-cycle combinational operation, division required a separate multicycle pipelined unit. This introduced new control complexities, particularly around stalling the pipeline correctly while the divider was busy.
+
+\subsubsection{Single-Cycle Multiply Unit}
+
+All multiply-class instructions (\texttt{MUL}, \texttt{MULH}, \texttt{MULHSU}, \texttt{MULHU}) were implemented inside the EX-stage ALU as purely combinational operations. The Artix-7 DSP slices allowed 64-bit signed multiplication to be performed in a single cycle. As a result:
+\begin{itemize}
+    \item no special stall logic was required,
+    \item existing forwarding paths handled dependency resolution,
+    \item no changes were required in pipeline control.
+\end{itemize}
+
+\subsubsection{Pipelined Divider (Xilinx div\_gen IP)}
+
+Division (\texttt{DIV}, \texttt{DIVU}, \texttt{REM}, \texttt{REMU}) was implemented using the Xilinx \texttt{div\_gen} IP configured as a Radix-2 pipelined divider with:
+\begin{itemize}
+    \item 64-bit signed dividend,
+    \item 64-bit signed divisor,
+    \item 128-bit output,
+    \item a fixed latency of 7 cycles.
+\end{itemize}
+
+The divider exposed two key signals:
+\begin{itemize}
+    \item \texttt{div\_busy}: asserted while the divider is computing,
+    \item \texttt{div\_done}: asserted when the output is valid.
+\end{itemize}
+
+\subsubsection{DivStaller Module}
+
+Because division instructions occupy the EX stage for multiple cycles, a dedicated \texttt{DivStaller} module was created. It contains an FSM-based counter initialized to the divider latency. Its outputs are:
+\begin{itemize}
+    \item \textbf{DivStalled}: high while the divider is computing,
+    \item \textbf{Divreset}: a one-cycle pulse used to reset or trigger the divider core.
+\end{itemize}
+
+During \textbf{DivStalled}:
+\begin{itemize}
+    \item IF is frozen (\texttt{StallF}),
+    \item ID is frozen (\texttt{StallD}),
+    \item EX holds the division instruction,
+    \item EX/MEM receives a bubble,
+    \item WB is protected to avoid early write-back.
+\end{itemize}
+
+\subsubsection{Data Memory Stallers}
+
+Loads and stores used synchronous BRAM, which may introduce delay depending on read/write operations. The \texttt{dmemstaller} module produced a \texttt{MemStall} signal when the memory was busy.
+
+When \texttt{MemStall} is asserted:
+\begin{itemize}
+    \item IF and ID freeze,
+    \item EX is bubbled once,
+    \item MEM holds the current load/store.
+\end{itemize}
+
+\subsubsection{Interaction with Hazard Detection and Forwarding}
+
+The hazard detection unit was extended to accept:
+\begin{itemize}
+    \item \texttt{DivStalled}, and
+    \item \texttt{MemStall}
+\end{itemize}
+
+as additional stall sources. These operate alongside classic load-use hazard detection. Forwarding was unchanged except that divider results are forwarded only when \texttt{div\_done} is asserted.
+
+\subsubsection{Pipeline Stage Behavior for RV64IM Instructions}
+
+The introduction of multicycle division changed the behavior of several pipeline stages:
+
+\paragraph{IF Stage}
+\begin{itemize}
+    \item Stalled whenever \texttt{DivStalled} or \texttt{MemStall} is high.
+    \item PC does not update during a division.
+\end{itemize}
+
+\paragraph{ID Stage}
+\begin{itemize}
+    \item Also frozen on divider or memory stalls.
+    \item Branch resolution and branch target calculation still occur during ID, unaffected by the divider.
+\end{itemize}
+
+\paragraph{EX Stage}
+\begin{itemize}
+    \item For multiply instructions: behaves like a normal ALU cycle.
+    \item For divide instructions:
+    \begin{itemize}
+        \item The division instruction remains in EX for the full divider latency.
+        \item The EX/MEM register receives bubbles while division is in progress.
+        \item The divider receives a one-cycle \texttt{Divreset} pulse at start.
+    \end{itemize}
+\end{itemize}
+
+\paragraph{MEM Stage}
+\begin{itemize}
+    \item Receives bubbles for division instructions.
+    \item May independently stall due to synchronous BRAM using \texttt{MemStall}.
+\end{itemize}
+
+\paragraph{WB Stage}
+\begin{itemize}
+    \item Multiply results write back normally after one cycle.
+    \item Division results write back only in the cycle where \texttt{div\_done} is asserted.
+    \item Forwarding from the divider is permitted only when valid.
+\end{itemize}
+
+\subsubsection{Testing Strategy}
+
+Testing the RV64IM implementation relied on both our previous RV64I validation programs and new tests designed specifically for the M-extension. Since the underlying pipeline, forwarding logic, and branch handling remained the same, all earlier programs (division routine, bubble sort, GCD, arithmetic tests, memory tests, and branching programs) were rerun to ensure that adding the M-extension did not break RV64I functionality.
+
+In addition to these regression tests, we created a dedicated “all-instruction run” testbench. This testbench executed at least one instance of every instruction we implemented—including all ALU operations, branches, jumps, loads/stores, multiply variants, and divide/remainder variants. The goal of this testbench was to ensure that:
+\begin{itemize}
+    \item every pipeline path was exercised,
+    \item hazard detection and forwarding worked correctly under M-extension interactions,
+    \item division stalls and memory stalls coexisted correctly with branching and load-use hazards,
+    \item results matched software-generated reference outputs.
+\end{itemize}
+
+For generating programs, we continued relying on online C-to-assembly and assembly-to-machine-code tools. A Python script automatically formatted and aligned the resulting machine code so that it could be pasted directly into the \texttt{inst.coe} file for Block RAM initialization.
+
+Waveform-level verification was performed extensively to monitor:
+\begin{itemize}
+    \item the \texttt{Divreset} pulse,
+    \item the \texttt{DivStalled} duration,
+    \item correct bubbling of EX/MEM during division,
+    \item correct write-back timing when \texttt{div\_done} asserted,
+    \item correct forwarding behavior during multiply and divide sequences.
+\end{itemize}
+
+This combination of all-instruction testing, and waveform inspection gave us high confidence that the RV64IM pipeline operated correctly.
+
+Overall, the RV64IM integration required significant architectural modifications, particularly around EX-stage stalls. However, the use of independent staller modules (rather than a unified stall controller) resulted in a modular and easily debuggable pipeline.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figs/graphviz (3).png}
+    \caption{RV64IM pipeline}
+    \label{fig:rv64im-testbench}
+\end{figure}
+
+\section{Unfinished / Modified Features}
+\label{sec:unfinished}
+
+\subsection{Floating Point Unit (FPU)}
+
+Although an F-extension floating-point unit was part of our original project proposal, we were ultimately unable to complete it within the project timeframe. Several factors contributed to this:
+
+\begin{itemize}
+    \item \textbf{Time limitations:} The integration of the RV64IM pipeline itself required significantly more time than expected, especially for handling multicycle division, stalling behavior, and memory interactions. By the time the RV64IM core became stable, the remaining time was insufficient for a full FPU implementation.
+    
+    \item \textbf{Complex design decisions:} Implementing a fully IEEE-754-compliant FPU requires several architectural choices that we could not finalize in time:
+    \begin{itemize}
+        \item determining the number of pipeline stages required for floating-point add, subtract, multiply, and divide,
+        \item selecting between a fully pipelined or iterative design for floating-point operations,
+        \item handling rounding modes, exceptions, and denormal numbers,
+        \item deciding the latency of each operation and how these latencies would affect pipeline stalls.
+    \end{itemize}
+
+    \item \textbf{Register file integration challenges:}  
+    Floating-point instructions require a dedicated 32-entry floating-point register file (\texttt{f0}–\texttt{f31}). We needed to determine:
+    \begin{itemize}
+        \item how to integrate this F-register file alongside the standard integer register file,
+        \item how to route operands between the FPU and the main datapath,
+        \item how to manage write-back arbitration between floating-point and integer results,
+        \item how to handle forwarding and hazards involving both integer and floating-point pipelines.
+    \end{itemize}
+
+    \item \textbf{Pipeline interaction complexity:}  
+    Integrating the FPU with our existing pipeline would have required:
+    \begin{itemize}
+        \item defining stall behavior for long-latency floating-point operations,
+        \item extending the Hazard Detection Unit to support floating-point hazards,
+        \item updating the forwarding network to handle FPU outputs,
+        \item modifying the decode stage to decode floating-point opcodes and format F-type immediates.
+    \end{itemize}
+
+    \item \textbf{Communication/interface uncertainties:}  
+    We had not finalized how the FPU would exchange data and control signals with the main processor pipeline. Questions such as whether FP results would bypass directly into EX or return via a dedicated write-back path were still unresolved.
+\end{itemize}
+
+Given these architectural complexities and the limited remaining time, implementing the FPU would have jeopardized the stability of the entire processor pipeline. For these reasons, we made the deliberate decision to postpone the FPU to future work, ensuring that our RV64IM implementation remained correct and robust.
+
+
+\subsubsection{Cache Design — Planned vs Actual}
+
+Our initial project proposal included designing and integrating a simple instruction and data cache to improve memory performance. However, as development progressed, we realized that caching did not make sense within the constraints of our current memory architecture.
+
+In our implementation, both the instruction memory (IMEM) and data memory (DMEM) were mapped directly onto the FPGA’s on-chip Block RAM (BRAM). BRAM provides:
+\begin{itemize}
+    \item single-cycle access latency,
+    \item no need for burst transfers or prefetching.
+\end{itemize}
+
+Under these conditions, a cache would not provide any performance improvement. Since BRAM is already faster than a realistic cache hierarchy, introducing caching would only add unnecessary complexity without any measurable benefit.
+
+To meaningfully justify a cache, we would need to relocate our memories to the external DDR3 RAM available on the Arty A7 board. Only then would realistic off-chip memory latencies (tens of cycles) make caching beneficial. However:
+\begin{itemize}
+    \item integrating DDR3 would require using the MIG (Memory Interface Generator) IP,
+    \item the MIG adds significant design complexity and requires careful timing closure,
+    \item adapting our RV64IM pipeline to handle DDR3’s burst-based and multi-cycle latency model would require extensive redesign of the memory subsystem.
+\end{itemize}
+
+Due to these practical constraints and time limitations, we decided to postpone cache implementation. The idea remains part of our planned future work, but for this project, BRAM-based IMEM and DMEM made caching unnecessary and impractical.
+
+
+\subsection{UART Interface}
+
+The UART interface was originally intended to provide a convenient way to observe register and memory contents during FPGA execution using a serial terminal. Our initial implementation focused on UART transmission, and during early testing phases it worked reliably. However, later design changes led to unexpected failures that we were not able to resolve before the final presentation.
+
+\paragraph{Initial Working Design}
+
+The first version of the UART subsystem consisted of:
+\begin{itemize}
+    \item a \texttt{uart\_tx} module for serial transmission,
+    \item a custom \texttt{uart\_streamer} module to serialize multi-byte words,
+    \item a \texttt{dump\_controller}, a FSMresponsible for formatting debug data for output,
+    \item a \texttt{halt\_detector} that triggered the data dump once the program halted.
+\end{itemize}
+
+In this setup, we used a ``spare'' internal debug signal named \texttt{debug\_regfile}, which exposed the contents of the integer register file. Using a simple generate block, we copied the register values into this debug bus whenever needed. The UART streamer then transmitted the data byte-by-byte to PuTTY, allowing us to view all 32 registers directly on the terminal. This system worked flawlessly and became our primary debugging tool during early development.
+
+\paragraph{Attempt to Add Memory Dump Support}
+
+Encouraged by the success of register dumping, we attempted to extend the UART system to also dump the contents of data memory. Our plan was to:
+\begin{itemize}
+    \item integrate the DMEM read interface into the dump controller,
+    \item sequentially stream memory bytes just like the register file,
+    \item display the entire memory state on PuTTY after program halt.
+\end{itemize}
+
+However, after integrating memory dumping logic, the UART system suddenly stopped working. The transmitter no longer produced valid output, and the dump controller appeared to freeze or misalign the outgoing data stream. Despite extensive debugging—checking timing, stalling behavior, FSM state transitions, and reset logic—we were unable to isolate the cause of the failure.
+
+This issue persisted until the final hours before the presentation, and due to time constraints we ultimately could not restore full UART functionality.
+
+\paragraph{UART Receiver (Unfinished)}
+
+We also implemented a \texttt{uart\_rx} module intended to accept program input from the user and dynamically populate \texttt{inst.coe}. While the receiver module itself functioned in simulation, we did not have enough time to design the infrastructure needed to:
+\begin{itemize}
+    \item buffer incoming bytes,
+    \item decode ASCII/hex formats,
+    \item write them reliably into instruction memory on the FPGA.
+\end{itemize}
+
+This feature remains unfinished.
+
+\paragraph{Final Workaround: LED-Based Debug Output}
+
+To ensure we could still demonstrate correct processor behavior on hardware, we relied on the “spare” LED-based debug system we had built earlier. The Arty A7 board provides:
+\begin{itemize}
+    \item 4 standard LEDs,
+    \item 4 RGB LEDs,
+    \item 4 switches,
+    \item multiple push buttons.
+\end{itemize}
+
+We used the switches to select a register index (0–15), and a push button acted as a “fifth bit” to access registers 16–31. The LEDs displayed the chosen register’s value in a simplified pattern. Although limited, this system allowed us to meaningfully demonstrate register values on real hardware without relying on UART output.
+
+In summary, the UART interface was initially functional and extremely useful for debugging. However, our attempt to expand it with memory-dump capability introduced unintended side effects that could not be resolved within the time available. The fully featured UART system remains an important target for future work.
+
+\section{Results}
+
+This section summarizes the synthesis, timing, resource utilization, power results, and real FPGA-tested operating frequencies for all three versions of our processor.
+
+\subsection{Timing Results (Post-Implementation WNS)}
+
+The post-implementation Worst Negative Slack (WNS) and corresponding theoretical maximum clock frequencies are shown in Table~\ref{tab:wns}.
+
+\begin{table}[H]
+\centering
+\caption{Timing Results (WNS) and Estimated Maximum Clock Frequency}
+\label{tab:wns}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Design} & \textbf{WNS (ns)} & \textbf{Estimated $f_{\text{max}}$ (MHz)} \\
+\midrule
+RV64I Single-Cycle        & 36.349 ns & $\approx$ 27.5 MHz \\
+RV64I 5-Stage Pipeline    & 12.162 ns & $\approx$ 82.2 MHz \\
+RV64IM 5-Stage Pipeline   & 52.618 ns & $\approx$ 19.0 MHz \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Experimentally Verified Clock Speeds}
+
+Although the theoretical $f_{\text{max}}$ estimates give an upper bound, we also tested each design directly on the Arty A7 FPGA.
+
+\begin{table}[H]
+\centering
+\caption{Experimentally Verified Stable Clock Frequencies}
+\label{tab:testedfreq}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Design} & \textbf{Tested Frequency (MHz)} & \textbf{Result} \\
+\midrule
+RV64I Single-Cycle        & 25 MHz  & Stable \\
+RV64I 5-Stage Pipeline    & 50 MHz  & Stable \\
+RV64IM 5-Stage Pipeline   & 15 MHz  & Stable \\
+RV64IM 5-Stage Pipeline   & 18 MHz  & Functional but timing-sensitive \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The RV64IM design can run up to \textbf{10 MHz reliably}, and up to \textbf{15 MHz with caution}.  
+For safety and to guarantee timing closure, we recommend running it at **5 MHz** during demonstrations.
+
+The RV64I pipelined processor demonstrated excellent timing and remained stable at **50 MHz**, confirming the benefit of pipelining. The single-cycle design operated correctly up to **25 MHz**, as expected for a long-combinational-path architecture.
+
+\subsection{Resource Utilization}
+
+\begin{table}[H]
+\centering
+\caption{FPGA Resource Utilization Summary}
+\label{tab:resources}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Design} & \textbf{LUT} & \textbf{FF} & \textbf{BRAM} & \textbf{DSP} \\
+\midrule
+RV64I Single-Cycle      & 2983 / 2931 & 2048 & 1.5 & 4 \\
+RV64I 5-Stage Pipeline  & 3413 / 3370 & 2618 & 32  & 6 \\
+RV64IM 5-Stage Pipeline & 13900 / 13462 & 13475 / 5277 & 32 & 54 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The sharp increase in DSP usage for the RV64IM design stems from the 64-bit multiplier and the Xilinx Divider IP.
+
+\subsection{Code Size Comparison}
+
+\begin{table}[H]
+\centering
+\caption{RTL Code Size Comparison}
+\label{tab:code-size}
+\begin{tabular}{lc}
+\toprule
+\textbf{Design} & \textbf{Lines of Verilog} \\
+\midrule
+RV64I Single-Cycle      & 510 \\
+RV64I 5-Stage Pipeline  & 993 \\
+RV64IM 5-Stage Pipeline & 1273 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Power Analysis}
+
+\begin{table}[H]
+\centering
+\caption{Estimated Dynamic Power Consumption}
+\label{tab:power}
+\begin{tabular}{lc}
+\toprule
+\textbf{Design} & \textbf{Power (W)} \\
+\midrule
+RV64I Single-Cycle      & 0.093 W \\
+RV64I 5-Stage Pipeline  & 0.094 W \\
+RV64IM 5-Stage Pipeline & 0.103 W \\
+\bottomrule
+\end{tabular}
+\end{table}
+\newpage
+\section{tb results}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figs/Screenshot 2025-11-27 165022.png}
+    \caption{}
+    \label{fig:rv64im-testbench}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figs/Screenshot 2025-11-27 165353.png}
+    \caption{RV64IM pipeline}
+    \label{fig:rv64im-testbench}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figs/WhatsApp Image 2025-11-27 at 19.26.11_1548c192.jpg}
+    \caption{Bubble Sort}
+    \label{fig:rv64im-testbench}
+\end{figure}
+
+
+\subsection{Discussion}
+
+The results illustrate the architectural trade-offs clearly:
+\begin{itemize}
+    \item \textbf{Single-cycle RV64I:} Simple and small, but limited by long combinational paths.
+    \item \textbf{RV64I pipeline:} Excellent frequency and efficiency; best performance per LUT.
+    \item \textbf{RV64IM pipeline:} Most feature-rich, but slowed by the single-cycle 64-bit multiplier and multicycle Divider IP.
+\end{itemize}
+
+Overall, each stage of our processor shows clear progression in capability, complexity, and performance.
+
+
+\subsection{Future Work}
+\label{sub:future-work}
+
+Several extensions and architectural improvements remain open for future development. Completing these would significantly enhance the capability, performance, and usability of our processor:
+
+\begin{itemize}
+    \item \textbf{Full FPU Integration (RV64IMF):}
+    Completing a fully IEEE-754 compliant floating-point unit remains one of our primary goals. This includes implementing FP add, subtract, multiply, divide, rounding modes, exception flags, and an independent floating-point register file. We also aim to integrate the FPU cleanly into the existing pipeline without excessive stalls.
+
+    \item \textbf{Cache Hierarchy (L1 I-Cache and D-Cache):}
+    A realistic cache subsystem will be needed once IMEM/DMEM are moved to external DDR3 memory. Planned features include a direct-mapped or 2-way associative L1 cache, write-back policy, and miss handling FSMs.
+
+    \item \textbf{Fixing and Optimizing the UART Subsystem:}
+    Restoring the previously working UART TX, completing the UART RX pathway, and building a reliable memory/register dump interface are high-priority tasks. A simple binary protocol could greatly improve debugging usability.
+
+    \item \textbf{Improved I/O Support:}
+    We aim to integrate a small display or OLED screen, along with more structured GPIO/I/O peripherals, enabling high-quality on-board interaction without depending on serial terminals.
+
+    \item \textbf{Enhanced Verification Framework:}
+    Future revisions will incorporate stronger verification techniques, including:
+    \begin{itemize}
+        \item formal property checking ,
+        \item constrained and formal testbenches,
+        \item automated instruction-level testing.
+    \end{itemize}
+
+    \item \textbf{Achieving Higher Clock Frequencies:}
+    We are determined to push the RV64IM (and future RV64IMF) core toward a stable operating frequency of \textbf{50 MHz or more}. This will require:
+    \begin{itemize}
+        \item rebalancing pipeline stages and adding more stages if needed ,
+        \item optimizing the multiplier and divider paths,
+        \item reducing long fanout nets,
+        \item improving placement and routing constraints.
+    \end{itemize}
+    Our goal is to outperform typical microcontroller-class CPUs (such as Arduino-class cores) by a wide margin.
+
+    \item \textbf{Long-Term Architectural Ambitions:}
+    As a personal objective, future exploration includes extending this project toward more advanced CPU architectures such as:
+    \begin{itemize}
+        \item a basic VLIW processor
+        \item a simple superscalar pipeline,
+        \item or even a multicore RISC-V system-on-chip.
+    \end{itemize}
+
+\end{itemize}
+
+In summary, our processor forms a strong foundation for continued learning, experimentation, and architectural exploration.
+
+\subsubsection{Challenges for Future Extensions}
+
+While our processor forms a strong foundation for additional architectural features, several challenges make further development significantly more demanding. First, implementing large extensions such as a full IEEE-754 FPU, cache hierarchy, improved I/O subsystems, or display interfaces is not realistically achievable by a team of only two students. Each new component—whether an FPU pipeline, UART subsystem, cache controller, or display driver,requires careful integration with all existing pipeline stages. Ensuring that these independently designed modules work together without causing timing violations, structural hazards, or interface mismatches becomes increasingly time-consuming and complex.
+
+In particular, extending the design with a floating-point unit demands new multi-stage pipelines, precise stall and forwarding logic, and extensive timing optimization. Achieving clean timing closure for such long-latency units on the Artix-7 requires careful microarchitectural planning and iterative experimentation.
+
+Similarly, adding richer I/O functionality requires proper interfacing protocols, handshake mechanisms, buffering strategies, and reliable clock-domain crossing when necessary. For display-based output, an additional challenge is converting raw register or memory values into human-readable characters, which requires implementing binary-to-ASCII conversion hardware or a small formatted output processor.
+
+These challenges highlight that as the processor grows in complexity, so does the engineering effort needed for correct integration, verification, and timing optimization. Future extensions will therefore require not only more manpower but also more disciplined design methodology and more advanced verification infrastructure.
+
+\newpage
+
+\subsection*{Project Files and Resources}
+
+All project files, RTL code, testbenches, IP configurations, simulation outputs, and documentation are available on our project Google Drive:
+
+\begin{center}
+\textbf{\url{https://drive.google.com/drive/folders/1p9z1YLM3DZuk39lXkIerJmVoPrgTB8Wx?usp=sharing}}
+\end{center}
+
+%========================
+% Bibliography / References (optional placeholder)
+%========================
+\section*{References}
+% Use BibTeX or manual references as desired. Placeholders below:
+\begin{itemize}
+    \item Patterson \& Hennessy (Hennessy and Patterson, Computer Organization and Design, RISC-V edition).
+    \item Digital Design and Computer Architecture by Sarah L. Harris and David Harris 
+    \item RISC-V Foundation. RISC-V Instruction Set Manual.
+    \item Xilinx / Digilent FPGA board documentation (Arty A7).
+\end{itemize}
+
+\section*{Appendix: README and Usage Guide}
+\addcontentsline{toc}{section}{Appendix: README and Usage Guide}
+
+\subsection*{A. Steps for Running an Assembly (\texttt{.s}) File}
+
+\textit{Note: For detailed IP configuration screenshots (IMEM, DMEM, Divider), refer to the Appendix section titled \textbf{“IP Generation Settings.”}}
+
+\begin{enumerate}
+    \item Obtain the machine code (hex) for your assembly program using the online RISC-V assembler:\\
+    \url{https://riscvasm.lucasteske.dev/}
+
+    \item Copy the generated hex instructions into the \texttt{instructions.py} script in the \texttt{instructions/} directory.
+
+    \item Run the Python script to generate formatted contents compatible with Vivado’s \texttt{inst.coe} file.
+
+    \item Paste the formatted output into the appropriate section of \texttt{inst.coe}.
+
+    \item Close and reopen the Vivado project to ensure the Block RAM is reinitialized, then run the simulation.
+
+    \item \textbf{Important:} Ensure that \texttt{testb\_dumpreg.v} (or the appropriate testbench) is set as the simulation top.
+\end{enumerate}
+
+\subsection*{B. Setting Up the RISC-V Processor for the First Time}
+
+\textit{Note: IP configuration examples for IMEM, DMEM, and Divider IP can be found in the Appendix under \textbf{“IP Generation Settings.”}}
+
+\begin{enumerate}
+    \item Unzip the project directory and open Vivado.
+
+    \item When creating a new project, choose \textbf{Add Existing Sources}, and select one RTL folder inside \texttt{RISCV-Processor/rtl/}, such as:
+    \begin{itemize}
+        \item \texttt{Single\_Cycle/}
+        \item \texttt{Pipelined\_CPU/}
+        \item \texttt{Pipelined\_CPU\_64I/}
+    \end{itemize}
+
+    \item Right-click \texttt{imem\_ip} → \texttt{Re-customize} → \texttt{Other Options}  
+    and browse to select the correct \texttt{inst.coe} file for initialization.
+
+    \item Click \textbf{Finish}, then generate output products in \textbf{Global mode} (not “Out-of-context”).
+
+    \item Generate the remaining IPs as required:
+    \begin{itemize}
+        \item \texttt{dmem\_ip} in \texttt{dmem\_top.v}
+        \item \texttt{div\_gen\_0} in \texttt{ALU64.v} (only needed for the RV64IM design)
+    \end{itemize}
+
+    \item Add the required testbenches under \texttt{testcodes/}.  
+    The \texttt{dump\_reg} testbench is typically sufficient for most programs.
+\end{enumerate}
+
+\section*{Appendix: IP Generation Settings}
+\addcontentsline{toc}{section}{Appendix: IP Generation Settings}
+
+This appendix contains the IP configuration settings for regenerating the IMEM, DMEM, and Divider IP used in our processor design.
+
+
+
+\subsection*{A. Instruction Memory (IMEM) — Block Memory Generator}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170003.png}
+    \caption{IMEM IP — Basic Configuration }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170029.png}
+    \caption{IMEM IP — Port A Options }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170046.png}
+    \caption{IMEM IP — other Options }
+\end{figure}
+
+\subsection*{B. Data Memory (DMEM) — Block Memory Generator}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170300.png}
+    \caption{DMEM IP — Basic Configuration }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170314.png}
+    \caption{DMEM IP — Port A Options }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170314.png}
+    \caption{DMEM IP — Other Options }
+\end{figure}
+
+\subsection*{C. Divider Generator IP (RV64IM Division Unit)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170124.png}
+    \caption{Divider IP signed — Channel Settings fig a }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170136.png}
+    \caption{Divider IP signed — Channel Settings fig b }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170156.png}
+    \caption{Divider IP signed — Pipeline / Latency Options }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170228.png}
+    \caption{Divider IP unsigned — Channel Settings fig }
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figs/Screenshot 2025-11-27 170241.png}
+    \caption{Divider IP unsigned — Pipeline / Latency Options }
+\end{figure}
+
+% End of document
+\end{document}

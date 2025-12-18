@@ -33,7 +33,7 @@ module ControlUnit(
                                 //InstType = 1'b0;
                         end
 
-                        7'b0010011: begin         // I-type s
+                        7'b0010011: begin         // I-type 
                                 ALUOp    = 3'b011;  
                                 RegWrite = 1'b1;
                                 ALUSrc   = 1'b1;

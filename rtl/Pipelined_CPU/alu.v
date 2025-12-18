@@ -15,8 +15,6 @@
 );
     wire signed [31:0] a32 = a[31:0];
     wire signed [31:0] b32 = b[31:0];
-    wire [5:0] shamt64 = b[5:0];
-    wire [4:0] shamt32 = b[4:0];
 
     reg [63:0] divsin1;
     reg [63:0] divsin2;

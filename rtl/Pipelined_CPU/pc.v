@@ -12,7 +12,7 @@ module program_counter(
     		else if (~stall)
       			pc_out <= pc_next;     // Hold PC during stall
     		else
-      			pc_out <= pc_out;// Hold PC during stall
+      			pc_out <= pc_out;   // Hold PC during stall
   	end
 
 endmodule

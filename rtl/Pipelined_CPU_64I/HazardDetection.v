@@ -1,29 +1,3 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 09.11.2025 23:16:27
-// Design Name: 
-// Module Name: HazardDetection
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// Output StallD, stall whenever a ld instruction followed by usage in exec
-// Output FlushD, to be aadded while control hazard
-//ForwardAE signal controls the mux of alu input 1
-//ForwardBE signal controls mux of alu input 2
-//Stall F when nop has to be placed pc update stopped
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module HazardDetection(
   	input  wire [4:0] rs1_D,
   	input  wire [4:0] rs2_D,
@@ -32,14 +6,12 @@ module HazardDetection(
   	input  wire [4:0] rd_E,
   	input  wire [4:0] rd_M,
   	input  wire [4:0] rd_W,
-  	//input  wire       PCSrc_E,
   	input             regwrite_E,
   	input             regwrite_M,
   	input             regwrite_W,
   	input             MemtoregE,
   	input             MemtoregM,
   	output reg        StallD,
-  	//output reg        FlushD,
   	output reg        FlushE,
   	output reg [1:0]  ForwardAE,
   	output reg [1:0]  ForwardBE,
@@ -52,7 +24,6 @@ module HazardDetection(
     		StallD    = 1'b0;
     		StallF    = 1'b0;
     		FlushE    = 1'b0;
-    		//FlushD  = 1'b0;
     		ForwardAE = 2'b00;
     		ForwardBE = 2'b00;
     		BranchForwardAE = 2'b00;
@@ -78,13 +49,8 @@ module HazardDetection(
       			ForwardBE = 2'b01;  //Forward Mem result
     		end
 
-    		/*
-    		if (PCSrc_E == 1'b1) begin
-      			FlushD = 1'b1;
-      			//FlushE = 1'b1;
-    		end
-    		*/
-    		//Branch forwarding
+    	    //Branch forwarding
+    		
             // rs1 forwarding
             if ( MemtoregM && (rd_M==rs1_D || rd_M==rs2_D) ) begin
                  // second-cycle stall (waiting for WB)

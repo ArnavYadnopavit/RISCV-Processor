@@ -1,0 +1,303 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+
+\setstretch{1.2}
+\titleformat{\section}{\bfseries\large}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\bfseries}{\thesubsection}{0.5em}{}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Large \textbf{CS2323: Computer Architecture}}\\[0.5cm]
+    {\large \textbf{Early implementation status and challenges report}}\\[2.5cm]
+    
+    {\LARGE \textbf{Design and FPGA Implementation of a 64-bit RISC-V Processor with FPU and UART Interface}}\\[2cm]
+
+    \textbf{Submitted By:}\\[0.5cm]
+    \begin{tabular}{rl}
+        Krishna H. Patil & (EE24BTECH11036)\\
+        Arnav Yadnopavit & (EE24BTECH11007)
+    \end{tabular}\\[1.5cm]
+    
+    \vfill
+    Indian Institute of Technology Hyderabad\\
+    \vspace{0.5cm}
+    \today
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Design Plan}
+
+% Briefly restate your project goal and describe the high-level design architecture.
+% Mention key modules (e.g., ALU, Control Unit, Register File, Instruction Memory, Data Memory, etc.)
+% Describe how these modules interact, and include a small block diagram if possible.
+
+
+As suggested in the proposal stage, the final deliverable of our project is to design and demonstrate a \textbf{multicycle 64-bit RISC-V processor} that supports the \textbf{RV64I base instruction set} and is compatible with the \textbf{M (Multiply/Divide)} and \textbf{F (Floating Point)} extensions. The processor will also incorporate a basic \textbf{Floating Point Unit (FPU)} and a two-level cache hierarchy (\textbf{L1 and L2 caches}) to improve performance and to try to match a  realistic system's behavior.
+
+To reach this final goal, we have structured our work into slow and steady but incremental stages. The first stage focuses on developing a \textbf{single-cycle 64-bit RISC-V CPU} implementing the core integer instruction set without the M and F extensions. This phase aims to ensure the working and clear understanding of the fundamental processor components and their interconnections. Specifically, the following modules form the core of the first stage:
+
+\begin{itemize}
+    \item \textbf{ALU (Arithmetic Logic Unit):} Performs basic arithmetic and logical operations.
+    \item \textbf{Datapath:} Defines the overall data flow between key hardware components.
+    \item \textbf{Control Unit:} Generates control signals based on instruction decoding.
+    \item \textbf{Immediate Generator:} Extracts and sign-extends immediates from instructions.
+    \item \textbf{Instruction Memory (IMEM):} Stores program instructions in hexadecimal format.
+    \item \textbf{Data Memory (DMEM):} Used for load and store operations.
+    \item \textbf{Register File:} Contains 32 general-purpose 64-bit registers supporting dual reads and single writes per cycle.
+    \item \textbf{Program Counter and Branch Logic:} Manages instruction sequencing and control flow.
+
+\end{itemize}
+
+The design is being implemented in \textbf{Verilog HDL} and simulated using \textbf{Xilinx Vivado}.
+
+\subsection{block diagram}
+
+For the single-cycle processor stage, we decided to follow the datapath and control model discussed during class and as detailed in \textit{Patterson and Hennessy’s “Computer Organization and Design RISC-V Edition”}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/single_cycle_block_diagram.jpg}
+  \caption{The single cycle block diagram (Adapted from Patterson and Hennessy).}
+  \label{fig:SC-64}
+\end{figure}
+
+
+
+\section{Current Implementation Status}
+
+
+The first implementation stage, corresponding to the complete single-cycle 64-bit RISC-V CPU, has been successfully completed. All core components have been implemented in Verilog HDL, tested through simulation testbenches, and verified using Vivado synthesis tools. The design has been developed in a modular structure, with each hardware block individually implemented, simulated, and validated before integration.
+
+The following Verilog modules constitute the single-cycle processor:
+\begin{itemize}
+    \item \texttt{ALUControl.v} – Generates control signals for the ALU based on the instruction function codes.
+    \item \texttt{ImmGen.v} – Extracts and sign-extends immediate values from the instruction according to RISC-V formats (I, S, B, U, J).
+    \item \texttt{alu.v} – Performs arithmetic and logical operations on 64-bit operands as dictated by control signals.
+    \item \texttt{controlunit.v} – Decodes the opcode and generates the necessary control lines for other modules.
+    \item \texttt{datapath.v} – Integrates all major processor components, forming the complete dataflow for instruction execution.
+    \item \texttt{dmem.v} – Implements the data memory for load and store instructions.
+    \item \texttt{imem.v} – Stores program instructions
+    \item \texttt{pc.v} – Handles the program counter logic, including sequential and branch address updates.
+    \item \texttt{regfile.v} – Implements the 32 general-purpose 64-bit registers with dual read and single write capabilities.
+\end{itemize}
+\begin{itemize}
+
+\item The block-level interconnections form a conventional single-cycle datapath where each instruction is fetched, decoded, executed, and committed within a single clock cycle. The \texttt{controlunit.v} and \texttt{ALUControl.v} modules generate all necessary control signals, while the \texttt{datapath.v} module integrates these functional units to define the overall dataflow.
+
+\item At the moment, the Verilog implementation of all modules has been completed and validated through simulation testbenches. Functional verification has confirmed the correctness of arithmetic, logical, and branch instruction execution. However, during synthesis of the integrated top-level module, we observed higher-than-expected LUT utilization. Individual modules (including IMEM and DMEM) synthesized efficiently and were correctly inferred as BRAMs when compiled separately, but in the integrated synthesis, these memories appear to be mapped to LUT, significantly increasing the total LUT count.
+
+\item We are currently investigating this synthesis behavior. Our hypothesis is that BRAM inference is being lost due to integration-level synthesis context or certain HDL constructs. Once this is fixed, we will proceed to FPGA implementation and then extend the verified single-cycle core into a multicycle 64-bit processor.
+
+\item Preliminary simulations demonstrate correct execution of R-type and I-type instructions such as \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, and \texttt{ADDI},  Work is now focused on transitioning this verified single-cycle design into a multicycle architecture.
+
+\end{itemize}
+
+\section{Early Results}
+
+At this stage of the project, the core functional blocks of the 64-bit single-cycle RISC-V processor have been implemented and verified through simulation. Each module was individually tested with dedicated testbenches to confirm functional correctness before top-level integration. The primary objective of these early experiments was to ensure proper instruction decoding, control signal generation, arithmetic and logic operations, and program counter updates.
+
+\textit{Note: Some initial testbench templates were generated with ChatGPT and later modified as per project requirements.}
+
+\subsection*{Program Counter (PC)}
+The \texttt{pc.v} module was implemented as a 64-bit register with synchronous reset and enable signals. It updates its value every clock cycle based on the branch control logic and immediate offsets.  
+Simulation tests confirmed that the PC correctly increments sequentially during normal execution and properly applies branch and jump targets when control signals are asserted. The timing diagram also verifies clean transitions without metastability or skipped cycles.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\linewidth]{figs/pc_waveform.jpg}
+\caption{Waveform of the Program Counter}
+\label{fig:pc_waveform}
+\end{figure}
+
+\subsection{ALU and ALU Control Verification}
+The Arithmetic Logic Unit (ALU) and ALU Control Unit were among the first modules to be tested. The ALU supports all major arithmetic, logical, and comparison operations defined in the RISC-V base integer ISA. The control unit generates operation select signals based on \texttt{func7}, \texttt{func3}, and the instruction type. Table~\ref{tab:alu_truth_table} summarizes the verified ALU control mapping.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{control [4:0]} & \textbf{out [63:0]} & \textbf{branchAlu} & \textbf{valid} \\ \hline
+00000 & a + b & 0 & 1 \\ \hline
+01000 & a - b & 0 & 1 \\ \hline
+0?100 & a \textasciicircum b & 0 & 1 \\ \hline
+0?110 & a \texttt{|} b & 0 & 1 \\ \hline
+0?111 & a \& b & 0 & 1 \\ \hline
+0?001 & a \textless\textless b & 0 & 1 \\ \hline
+00101 & a \textgreater\textgreater b (logical) & 0 & 1 \\ \hline
+01101 & $a$ \textgreater\textgreater b (arithmetic) & 0 & 1 \\ \hline
+0?010 & \{63'b0, ($signed(a)$ \textless $signed(b)$)\} & 0 & 1 \\ \hline
+0?011 & \{63'b0, (a \textless b)\} & 0 & 1 \\ \hline
+1?000 & 0 & (a == b) & 0 \\ \hline
+1?001 & 0 & (a != b) & 0 \\ \hline
+1?100 & 0 & ($signed(a)$ \textless $signed(b)$) & 0 \\ \hline
+1?101 & 0 & ($signed(a)$ \textgreater= $signed(b)$) & 0 \\ \hline
+1?110 & 0 & (a \textless b) & 0 \\ \hline
+1?111 & 0 & (a \textgreater= b) & 0 \\ \hline
+\textit{default} & 0 & 0 & 0 \\ \hline
+\end{tabular}
+\caption{ALU Control Truth Table for \texttt{control = \{branchinst, func7[5], func3\}}}
+\label{tab:alu_truth_table}
+\end{table}
+
+\vspace{1em}
+The synthesis report for the ALU module is summarized below. The module uses 985 LUTs and 4 DSP blocks, which is well within the available FPGA resources.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Site Type} & \textbf{Used} & \textbf{Fixed} & \textbf{Prohibited} & \textbf{Available} & \textbf{Util\%} \\ \hline
+Slice LUTs* & 985 & 0 & 0 & 63400 & 1.55 \\ \hline
+\quad LUT as Logic & 985 & 0 & 0 & 63400 & 1.55 \\ \hline
+\quad LUT as Memory & 0 & 0 & 0 & 19000 & 0.00 \\ \hline
+Slice Registers & 0 & 0 & 0 & 126800 & 0.00 \\ \hline
+F7 Muxes & 1 & 0 & 0 & 31700 & $<$0.01 \\ \hline
+F8 Muxes & 0 & 0 & 0 & 15850 & 0.00 \\ \hline
+DSPs (DSP48E1) & 4 & 0 & 0 & 240 & 1.67 \\ \hline
+\end{tabular}
+\caption{Synthesis Resource Utilization for \texttt{alu.v}}
+\label{tab:alu_synth}
+\end{table}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\linewidth]{figs/alu_waveform.jpg}
+\caption{Simulation waveform of the ALU}
+\label{fig:alu_waveform}
+\end{figure}
+\newpage
+\subsection{Immediate Generator}
+The Immediate Generator (\texttt{ImmGen.v}) was tested with instruction samples of types I, S, B, U, and J. Timing diagrams confirm proper extraction and sign-extension of immediate values according to the RISC-V specification
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\linewidth]{figs/immgen_tb_results.jpg}
+\caption{Waveform showing immediate generation}
+\label{fig:immgen_waveform}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/immgen_waveform.jpg}
+\caption{Waveform showing immediate generation}
+\label{fig:immgen_waveform}
+\end{figure}
+
+%\newpage
+\subsection{Memory Modules (IMEM and DMEM)}
+Both instruction and data memories were validated through simulation using preloaded contents initialized with the \texttt{\$readmemh} directive. The \texttt{imem.v} module successfully fetches instructions word-by-word based on the current PC value, while \texttt{dmem.v} correctly performs load and store operations. Testbench outputs confirm the expected data flow and address calculations.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\linewidth]{figs/imem_waveform.jpg}
+\caption{Simulation output for IMEM}
+\label{fig:memory_waveform}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\linewidth]{figs/dmem_waveform.jpg}
+\caption{Simulation output for DMEM}
+\label{fig:memory_waveform}
+\end{figure}
+
+
+\subsection{Control Unit}
+The control unit (\texttt{controlunit.v}) was verified for correct decoding of major RISC-V instruction formats. A bug causing constant load instruction decoding was identified and fixed by restructuring the control signal assignment logic. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\linewidth]{figs/control_unit.jpg}
+\caption{Control Unit waveform}
+\label{fig:datapath_timing}
+\end{figure}
+
+\subsection*{Simulation Summary}
+Timing diagrams and testbench waveforms demonstrate correct signal transitions and data propagation across all major modules. These include:
+\begin{itemize}
+    \item ALU operations (\texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, etc.)
+    \item Instruction memory fetch and PC increment
+    \item Immediate generation and control signal decoding
+    \item Data memory load/store operations
+\end{itemize}
+
+Overall, the early simulation and synthesis results confirm that the individual modules and their integrated datapath operate as expected. The next focus will be on addressing synthesis resource optimization, implementing a multicycle control FSM, and extending the instruction set to include the M and F extensions.
+
+\section{Challenges and Observations}
+
+% Describe the main challenges faced so far.
+% Example points:
+% - Timing issues during synthesis
+% - Difficulty in debugging control signals
+% - Limited FPGA resources or slow simulation
+% - Handling 64-bit data paths and sign extensions
+% - Integration of FPU with integer core
+
+% Also mention what you plan to address these challenges.
+\subsection{Revisiting Verilog and Design Fundamentals}
+At the beginning of the project, we faced some difficulty recalling Verilog syntax and structural design conventions. Although both of us had prior exposure, we had not implemented a large-scale processor design before, which required us to revise Verilog such as procedural blocks, signal assignment types, and module interfacing. We spent time reviewing these fundamentals and standardizing our design conventions to ensure consistent module interfaces, and signal widths across all components.
+
+\subsection{Memory Initialization and Data Loading}
+Another significant learning point was related to instruction and data memory initialization. Initially, we were unsure how to include program data in the memory arrays during simulation or synthesis. After consulting documentation and testing different methods, we learned that the \texttt{\$readmemh} system task can be used to load program or data contents directly into the instruction and data memories, even during synthesis. This allowed us to test various instruction sequences and memory operations efficiently without manual intervention.
+
+\subsection{Module Integration and Debugging}
+Although each module worked correctly in isolation, we encountered multiple integration challenges when combining them into the top-level \texttt{datapath.v}. These included signal width mismatches, inconsistent control signal names, and interface definition conflicts between modules developed individually. We resolved these issues through waveform-based debugging, iterative simulation, and careful reorganization of interconnections. This process provided valuable experience in modular hardware design and top-level system integration.
+
+\subsection{Control Unit Logic Issue}
+A specific problem was identified within the \texttt{controlunit.v} module, where the processor always executed load-type instructions regardless of the opcode. Upon inspection, it was found that this behavior resulted from hardcoded control signals defaulting to the load instruction pattern. The issue was corrected by implementing a structured control flow that dynamically assigns control signals based on opcode decoding. After this fix, the control unit correctly handled arithmetic, logic, and branch instructions in simulation.
+
+\subsection{Synthesis Issue: Unexpected LUT Growth when Integrating Modules}
+
+During integration and synthesis of the single-cycle top-level datapath, we observed that the overall LUT usages exceed acceptable limits, despite individual modules (ALUControl.v, ImmGen.v, alu.v, controlunit.v, datapath.v, dmem.v, imem.v, pc.v, regfile.v) synthesizing within constraints when compiled separately. Preliminary investigation suggests that instruction and data memories which were inferred as BRAMs during isolated synthesis are getting implemented as LUT in the full top-level synthesis, leading to a large increase in LUT count.
+
+Evidence and observations:
+\begin{itemize}
+  \item Each module synthesizes under resource limits in isolation; the integrated top-level synthesis report shows a large rise in LUT utilization.
+  \item Vivado synthesis reports indicate memory inference differences between module-level and top-level runs (some memory arrays are reported as LUT in the top-level run).
+  \item No functional differences were detected in simulation, which means this is a synthesis/resource-mapping issue rather than a functional error.
+\end{itemize}
+
+Probable causes:
+\begin{itemize}
+  \item Differences in synthesis optimizations at top-level by vivado cause certain modules to be inferred as LUT instead of BRAM .
+  \item Multiple instantiations or unintended replication caused by how the top-level connects submodules.
+  \item Use of constructs or parameters that does not allow BRAM inference like non-constant sizes, unsupported initialisation.
+\end{itemize}
+
+\section{Next Steps}
+
+% Outline what remains to be done before final submission.
+% Examples:
+% - Complete multicycle control FSM implementation
+% - Add FPU and verify with floating-point operations
+% - Integrate UART and demonstrate terminal communication
+% - Test with RISC-V assembly programs for correctness
+
+Having completed and verified the single-cycle 64-bit RISC-V processor, our next goal is to extend the design into an optimized and feature-rich architecture. We plan to combine the next three logical development phases—multicycle execution, multiplication/division extension, and floating-point integration—into a single unified implementation phase.
+
+\subsection{Phase 2–4: Multicycle Design, M Extension, and FPU Integration}
+The combined phase will include the following major objectives:
+
+\begin{itemize}
+    \item \textbf{Multicycle RISC-V Processor:}
+    Modify the datapath to reuse functional units across multiple clock cycles, thereby reducing hardware duplication and improving timing closure. Implement a finite-state machine (FSM)–based control unit to manage instruction sequencing across fetch, decode, execute, memory, and write-back stages. Validate the design through simulation using the same test programs from the single-cycle phase to ensure functional equivalence.
+    
+    \item \textbf{M Extension (Multiplication and Division):}
+    Integrate hardware to implement RISC-V’s M extension, supporting integer multiplication and division instructions. The design will either use a simple iterative algorithm for area efficiency or a pipelined multiplier for better throughput, depending on synthesis results and FPGA resource availability.
+    
+    \item \textbf{FPU Integration (F Extension):}
+    Implement or integrate a basic IEEE-754 compliant single-precision Floating-Point Unit (FPU) supporting addition, subtraction, and multiplication operations. Extend the control unit to decode floating-point opcodes and manage register file access for floating-point operations. Functional testing will be carried out with mixed integer and floating-point programs.
+\end{itemize}
+
+\subsection{Additional Enhancement: Cache Subsystem (Tentative)}
+If time permit, we plan to prototype a simple memory hierarchy by introducing L1 and L2 caches.The primary objective will be to demonstrate reduced average memory access time and validate correct cache coherence behavior for load/store operations.
+
+\end{document}
