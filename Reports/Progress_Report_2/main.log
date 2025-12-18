@@ -1,0 +1,445 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.9)  18 DEC 2025 12:39
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-04-14>
+(/opt/texlive/2025/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2024/06/29 v1.4n Standard LaTeX document class
+(/opt/texlive/2025/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count272
+\c@section=\count273
+\c@subsection=\count274
+\c@subsubsection=\count275
+\c@paragraph=\count276
+\c@subparagraph=\count277
+\c@figure=\count278
+\c@table=\count279
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen146
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/opt/texlive/2025/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+(/opt/texlive/2025/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/opt/texlive/2025/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+))
+\Gm@cnth=\count280
+\Gm@cntv=\count281
+\c@Gm@tempcnt=\count282
+\Gm@bindingoffset=\dimen147
+\Gm@wd@mp=\dimen148
+\Gm@odd@mp=\dimen149
+\Gm@even@mp=\dimen150
+\Gm@layoutwidth=\dimen151
+\Gm@layoutheight=\dimen152
+\Gm@layouthoffset=\dimen153
+\Gm@layoutvoffset=\dimen154
+\Gm@dimlist=\toks18
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2024/11/05 v2.17t AMS math features
+\@mathmargin=\skip51
+
+For additional information on amsmath, use the `?' option.
+(/opt/texlive/2025/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+
+(/opt/texlive/2025/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks19
+\ex@=\dimen155
+))
+(/opt/texlive/2025/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen156
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count283
+LaTeX Info: Redefining \frac on input line 233.
+\uproot@=\count284
+\leftroot@=\count285
+LaTeX Info: Redefining \overline on input line 398.
+LaTeX Info: Redefining \colon on input line 409.
+\classnum@=\count286
+\DOTSCASE@=\count287
+LaTeX Info: Redefining \ldots on input line 495.
+LaTeX Info: Redefining \dots on input line 498.
+LaTeX Info: Redefining \cdots on input line 619.
+\Mathstrutbox@=\box53
+\strutbox@=\box54
+LaTeX Info: Redefining \big on input line 721.
+LaTeX Info: Redefining \Big on input line 722.
+LaTeX Info: Redefining \bigg on input line 723.
+LaTeX Info: Redefining \Bigg on input line 724.
+\big@size=\dimen157
+LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
+\macc@depth=\count288
+LaTeX Info: Redefining \bmod on input line 904.
+LaTeX Info: Redefining \pmod on input line 909.
+LaTeX Info: Redefining \smash on input line 939.
+LaTeX Info: Redefining \relbar on input line 969.
+LaTeX Info: Redefining \Relbar on input line 970.
+\c@MaxMatrixCols=\count289
+\dotsspace@=\muskip17
+\c@parentequation=\count290
+\dspbrk@lvl=\count291
+\tag@help=\toks20
+\row@=\count292
+\column@=\count293
+\maxfields@=\count294
+\andhelp@=\toks21
+\eqnshift@=\dimen158
+\alignsep@=\dimen159
+\tagshift@=\dimen160
+\tagwidth@=\dimen161
+\totwidth@=\dimen162
+\lineht@=\dimen163
+\@envbody=\toks22
+\multlinegap=\skip52
+\multlinetaggap=\skip53
+\mathdisplay@stack=\toks23
+LaTeX Info: Redefining \[ on input line 2953.
+LaTeX Info: Redefining \] on input line 2954.
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2025/01/04 v2.17 Sectioning titles
+\ttl@box=\box55
+\beforetitleunit=\skip54
+\aftertitleunit=\skip55
+\ttl@plus=\dimen164
+\ttl@minus=\dimen165
+\ttl@toksa=\toks24
+\titlewidth=\dimen166
+\titlewidthlast=\dimen167
+\titlewidthfirst=\dimen168
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/opt/texlive/2025/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
+(/opt/texlive/2025/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 106.
+
+(/opt/texlive/2025/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen169
+\Gin@req@width=\dimen170
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen171
+\lightrulewidth=\dimen172
+\cmidrulewidth=\dimen173
+\belowrulesep=\dimen174
+\belowbottomsep=\dimen175
+\aboverulesep=\dimen176
+\abovetopsep=\dimen177
+\cmidrulesep=\dimen178
+\cmidrulekern=\dimen179
+\defaultaddspace=\dimen180
+\@cmidla=\count295
+\@cmidlb=\count296
+\@aboverulesep=\dimen181
+\@belowrulesep=\dimen182
+\@thisruleclass=\count297
+\@lastruleclass=\count298
+\@thisrulewidth=\dimen183
+)
+(/opt/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2025-04-14 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count299
+)
+No file main.aux.
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(72.26999pt, 452.9679pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 700.50687pt, 72.26999pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=452.9679pt
+* \textheight=700.50687pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-37.0pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=35.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/opt/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count300
+\scratchdimen=\dimen184
+\scratchbox=\box56
+\nofMPsegments=\count301
+\nofMParguments=\count302
+\everyMPshowfont=\toks25
+\MPscratchCnt=\count303
+\MPscratchDim=\dimen185
+\MPnumerator=\count304
+\makeMPintoPDFobject=\count305
+\everyMPtoPDFconversion=\toks26
+) (/opt/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/opt/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+
+[1
+
+{/opt/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+No file main.toc.
+\tf@toc=\write3
+\openout3 = `main.toc'.
+
+<figs/pipeline_overview.jpg, id=9, 1606.0pt x 748.7975pt>
+File: figs/pipeline_overview.jpg Graphic file (type jpg)
+<use figs/pipeline_overview.jpg>
+Package pdftex.def Info: figs/pipeline_overview.jpg  used on input line 60.
+(pdftex.def)             Requested size: 430.31812pt x 200.63554pt.
+<figs/forwarding_logic.jpg, id=10, 1606.0pt x 751.80875pt>
+File: figs/forwarding_logic.jpg Graphic file (type jpg)
+<use figs/forwarding_logic.jpg>
+Package pdftex.def Info: figs/forwarding_logic.jpg  used on input line 74.
+(pdftex.def)             Requested size: 430.31812pt x 201.4424pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[1{/opt/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+<figs/branch_prediction_decode.jpg, id=17, 1606.0pt x 570.13pt>
+File: figs/branch_prediction_decode.jpg Graphic file (type jpg)
+<use figs/branch_prediction_decode.jpg>
+Package pdftex.def Info: figs/branch_prediction_decode.jpg  used on input line 
+88.
+(pdftex.def)             Requested size: 271.7835pt x 96.47714pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[2 <./figs/pipeline_overview.jpg> <./figs/forwarding_logic.jpg>]
+<figs/dmem_split_design.jpg, id=21, 1606.0pt x 605.26125pt>
+File: figs/dmem_split_design.jpg Graphic file (type jpg)
+<use figs/dmem_split_design.jpg>
+Package pdftex.def Info: figs/dmem_split_design.jpg  used on input line 112.
+(pdftex.def)             Requested size: 407.66833pt x 153.64229pt.
+
+
+[3 <./figs/branch_prediction_decode.jpg> <./figs/dmem_split_design.jpg>]
+<figs/pipeline.jpg, id=25, 1606.0pt x 899.36pt>
+File: figs/pipeline.jpg Graphic file (type jpg)
+<use figs/pipeline.jpg>
+Package pdftex.def Info: figs/pipeline.jpg  used on input line 139.
+(pdftex.def)             Requested size: 430.31812pt x 240.97783pt.
+
+
+[4 <./figs/pipeline.jpg>]
+<figs/pipe_branch.jpg, id=30, 757.32938pt x 625.58719pt>
+File: figs/pipe_branch.jpg Graphic file (type jpg)
+<use figs/pipe_branch.jpg>
+Package pdftex.def Info: figs/pipe_branch.jpg  used on input line 169.
+(pdftex.def)             Requested size: 430.31812pt x 355.462pt.
+
+Overfull \hbox (9.06342pt too wide) in paragraph at lines 174--175
+[]\OT1/cmr/m/n/12 This ar-chi-tec-tural change sig-nif-i-cantly im-proves pipel
+ine ef-fi-ciency, es-pe-cially for branch-
+ []
+
+
+
+[5 <./figs/pipe_branch.jpg>]
+
+[6]
+
+[7]
+
+[8]
+
+[9]
+
+[10]
+
+[11]
+<figs/WhatsApp Image 2025-11-16 at 22.44.01_8cf9a6ea.jpg, id=55, 1299.85625pt x
+ 951.555pt>
+File: figs/WhatsApp Image 2025-11-16 at 22.44.01_8cf9a6ea.jpg Graphic file (typ
+e jpg)
+<use figs/WhatsApp Image 2025-11-16 at 22.44.01_8cf9a6ea.jpg>
+Package pdftex.def Info: figs/WhatsApp Image 2025-11-16 at 22.44.01_8cf9a6ea.jp
+g  used on input line 436.
+(pdftex.def)             Requested size: 407.66833pt x 298.42014pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[12]
+
+[13 <./figs/WhatsApp Image 2025-11-16 at 22.44.01_8cf9a6ea.jpg>]
+<figs/WhatsApp Image 2025-11-16 at 22.49.00_fce31f93.jpg, id=63, 1166.3575pt x 
+866.23625pt>
+File: figs/WhatsApp Image 2025-11-16 at 22.49.00_fce31f93.jpg Graphic file (typ
+e jpg)
+<use figs/WhatsApp Image 2025-11-16 at 22.49.00_fce31f93.jpg>
+Package pdftex.def Info: figs/WhatsApp Image 2025-11-16 at 22.49.00_fce31f93.jp
+g  used on input line 495.
+(pdftex.def)             Requested size: 407.66833pt x 302.76427pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<figs/WhatsApp Image 2025-11-16 at 22.44.14_2bbca0cc.jpg, id=64, 737.75626pt x 
+366.36874pt>
+File: figs/WhatsApp Image 2025-11-16 at 22.44.14_2bbca0cc.jpg Graphic file (typ
+e jpg)
+<use figs/WhatsApp Image 2025-11-16 at 22.44.14_2bbca0cc.jpg>
+Package pdftex.def Info: figs/WhatsApp Image 2025-11-16 at 22.44.14_2bbca0cc.jp
+g  used on input line 514.
+(pdftex.def)             Requested size: 407.66833pt x 202.4482pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<figs/WhatsApp Image 2025-11-16 at 22.44.39_23590ac8.jpg, id=65, 612.2875pt x 1
+99.74625pt>
+File: figs/WhatsApp Image 2025-11-16 at 22.44.39_23590ac8.jpg Graphic file (typ
+e jpg)
+<use figs/WhatsApp Image 2025-11-16 at 22.44.39_23590ac8.jpg>
+Package pdftex.def Info: figs/WhatsApp Image 2025-11-16 at 22.44.39_23590ac8.jp
+g  used on input line 520.
+(pdftex.def)             Requested size: 407.66833pt x 132.99417pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<figs/WhatsApp Image 2025-11-16 at 22.44.29_4ef0c30a.jpg, id=66, 637.38126pt x 
+231.86626pt>
+File: figs/WhatsApp Image 2025-11-16 at 22.44.29_4ef0c30a.jpg Graphic file (typ
+e jpg)
+<use figs/WhatsApp Image 2025-11-16 at 22.44.29_4ef0c30a.jpg>
+Package pdftex.def Info: figs/WhatsApp Image 2025-11-16 at 22.44.29_4ef0c30a.jp
+g  used on input line 526.
+(pdftex.def)             Requested size: 407.66833pt x 148.3019pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: Reference `tab:results_summary' on page 14 undefined on input li
+ne 531.
+
+
+
+[14]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[15 <./figs/WhatsApp Image 2025-11-16 at 22.49.00_fce31f93.jpg> <./figs/WhatsAp
+p Image 2025-11-16 at 22.44.14_2bbca0cc.jpg>]
+
+[16 <./figs/WhatsApp Image 2025-11-16 at 22.44.39_23590ac8.jpg> <./figs/WhatsAp
+p Image 2025-11-16 at 22.44.29_4ef0c30a.jpg>] (./main.aux)
+ ***********
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-04-14>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 3083 strings out of 469608
+ 48204 string characters out of 5446120
+ 442726 words of memory out of 5000000
+ 29909 multiletter control sequences out of 15000+600000
+ 633809 words of font info for 64 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 57i,8n,65p,449b,240s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</opt/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt
+/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></opt/texliv
+e/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></opt/texlive/2025/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></opt/texlive/2025/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmsy10.pfb></opt/texlive/2025/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmti12.pfb></opt/texlive/2025/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmtt12.pfb></opt/texlive/2025/texmf-dist/fonts/type1/public/
+cm-super/sfrm1200.pfb></opt/texlive/2025/texmf-dist/fonts/type1/public/cm-super
+/sftt1200.pfb>
+Output written on main.pdf (17 pages, 1477737 bytes).
+PDF statistics:
+ 116 PDF objects out of 1000 (max. 8388607)
+ 67 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+

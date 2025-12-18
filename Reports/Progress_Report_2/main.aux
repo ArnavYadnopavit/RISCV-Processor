@@ -1,0 +1,55 @@
+\relax 
+\@writefile{toc}{\contentsline {section}{\numberline {1}Current Implementation Status}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Instruction Set Support}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Pipeline Implementation (5 Stages)}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Hazard Detection and Data Forwarding}{1}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 5-stage pipelined datapath (implemented design).}}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Forwarding unit and hazard detection logic (implemented design).}}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Branch Prediction}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Memory Subsystem Fix and Redesign}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Branch resolution in Decode stage.}}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Split DMEM design with Load Unit, BRAM Memory, and Store Unit.}}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}Integration of Mixed Architectural Models}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7}Pipeline Architecture Overview}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Implemented 5-stage pipelined processor (main reference architecture).}}{4}{}\protected@file@percent }
+\newlabel{fig:main_pipeline}{{5}{4}{Pipeline Architecture Overview}{figure.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.8}Branch Resolution Moved to Decode Stage}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Branch datapath used to move branch resolution to the Decode stage.}}{5}{}\protected@file@percent }
+\newlabel{fig:branch_decode}{{6}{5}{Branch Resolution Moved to Decode Stage}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.9}Hazard Unit and Data Forwarding}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.10}Division Staller and Timing Alignment}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.11}Memory Subsystem: Three-Part DMEM Redesign}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.12}Summary}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.13}Waveform and Testbench Verification}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.14}Testbench Generation Note}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Current Implementation Status}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Single-Cycle Processor (Completed Earlier)}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Transition Away from Multicycle Design}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Pipelined Processor (RV64IM) — Fully Implemented}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}M Extension (Multiply/Divide)}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}FPU Integration (Deferred)}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Memory System and Cache (Deferred Cache, Improved DMEM)}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Synthesis and FPGA Testing}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.7.1}Testbench Automation Improvements}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Challenges Faced}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Pipeline Implementation Complexity}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Interconnection and Signal Propagation Issues}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Integrating M-Extension Instructions}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Timing Mismatches and Unexpected Pipeline Behavior}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Memory Timing and BRAM Behavior}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Early Results}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}RV64I Functional Tests}{12}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces RV64I test output – All registers PASS (32/32).}}{13}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Forwarding and Load-Use Hazard Tests}{13}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Branch and Control Hazard Tests}{13}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Memory Subsystem Tests}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}M Extension (Multiply/Divide) Tests}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Vivado Synthesis Results}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces M-extension results – MUL/DIV/REM operations fully correct (32/32 PASS).}}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Vivado synthesis report – resource utilization summary.}}{15}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Summary of Early Results}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Vivado synthesis report – resource utilization summary.}}{16}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Vivado synthesis report – resource utilization summary.}}{16}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Summary of simulation and synthesis results.}}{16}{}\protected@file@percent }
+\newlabel{tab:results_summary}{{1}{16}{Summary of Early Results}{table.1}{}}
+\gdef \@abspage@last{17}

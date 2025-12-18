@@ -36,11 +36,6 @@
 
 \section{Design Plan}
 
-% Briefly restate your project goal and describe the high-level design architecture.
-% Mention key modules (e.g., ALU, Control Unit, Register File, Instruction Memory, Data Memory, etc.)
-% Describe how these modules interact, and include a small block diagram if possible.
-
-
 As suggested in the proposal stage, the final deliverable of our project is to design and demonstrate a \textbf{multicycle 64-bit RISC-V processor} that supports the \textbf{RV64I base instruction set} and is compatible with the \textbf{M (Multiply/Divide)} and \textbf{F (Floating Point)} extensions. The processor will also incorporate a basic \textbf{Floating Point Unit (FPU)} and a two-level cache hierarchy (\textbf{L1 and L2 caches}) to improve performance and to try to match a  realistic system's behavior.
 
 To reach this final goal, we have structured our work into slow and steady but incremental stages. The first stage focuses on developing a \textbf{single-cycle 64-bit RISC-V CPU} implementing the core integer instruction set without the M and F extensions. This phase aims to ensure the working and clear understanding of the fundamental processor components and their interconnections. Specifically, the following modules form the core of the first stage:
@@ -233,15 +228,6 @@ Overall, the early simulation and synthesis results confirm that the individual 
 
 \section{Challenges and Observations}
 
-% Describe the main challenges faced so far.
-% Example points:
-% - Timing issues during synthesis
-% - Difficulty in debugging control signals
-% - Limited FPGA resources or slow simulation
-% - Handling 64-bit data paths and sign extensions
-% - Integration of FPU with integer core
-
-% Also mention what you plan to address these challenges.
 \subsection{Revisiting Verilog and Design Fundamentals}
 At the beginning of the project, we faced some difficulty recalling Verilog syntax and structural design conventions. Although both of us had prior exposure, we had not implemented a large-scale processor design before, which required us to revise Verilog such as procedural blocks, signal assignment types, and module interfacing. We spent time reviewing these fundamentals and standardizing our design conventions to ensure consistent module interfaces, and signal widths across all components.
 
@@ -273,13 +259,6 @@ Probable causes:
 \end{itemize}
 
 \section{Next Steps}
-
-% Outline what remains to be done before final submission.
-% Examples:
-% - Complete multicycle control FSM implementation
-% - Add FPU and verify with floating-point operations
-% - Integrate UART and demonstrate terminal communication
-% - Test with RISC-V assembly programs for correctness
 
 Having completed and verified the single-cycle 64-bit RISC-V processor, our next goal is to extend the design into an optimized and feature-rich architecture. We plan to combine the next three logical development phases—multicycle execution, multiplication/division extension, and floating-point integration—into a single unified implementation phase.
 

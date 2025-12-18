@@ -67,22 +67,18 @@
     \vspace{1cm}
 \end{titlepage}
 
-%========================
 % Table of Contents
-%========================
+
 \tableofcontents
 \clearpage
 
-%========================
 % Main content
-%========================
 
 \section{Introduction}
 \label{sec:introduction}
 
 \subsection{Project motivation}
 \label{sub:motivation}
-% Placeholder: Describe motivation for designing RV64 processors, learning outcomes, research/educational goals, and why FPGA implementation.
 \vspace{6pt}
 
 From a personal standpoint, the primary motivation behind this project stemmed from a long–held aspiration to design and build a working processor. The idea of constructing a CPU from the ground up, understanding how instructions move through hardware, how data is transformed, and how control logic orchestrates every computation, has been a childhood dream. This project offered an opportunity to finally realize it.
@@ -96,7 +92,6 @@ Overall, this project represented the ideal convergence of personal interest, ac
 
 \subsection{Initial proposed scope}
 \label{sub:initial-scope}
-% List of initially proposed features and scope
 \begin{itemize}
     \item RV64I base ISA support (integer instructions)
     \item Multicycle, Single-cycle, and Pipelined designs (as planned)
@@ -122,17 +117,6 @@ Some planned features,most notably the FPU and cache subsystem, remained incompl
 \section{Overall Design Overview}
 \label{sec:design-overview}
 
-\subsection{Block diagrams}
-\label{sub:block-diagrams}
-% Placeholder figure for top-level block diagram
-\begin{figure}[H]
-    \centering
-    % Replace 'block_diagram_placeholder.pdf' with the actual file name.
-    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Top-level block diagram placeholder}}
-    \caption{Top-level system block diagram}
-    \label{fig:block-diagram-top}
-\end{figure}
-\newpage
 \subsection{Development timeline followed (Phase 1, 2, 3 and 4)}
 \label{sub:timeline}
 \begin{description}
@@ -718,11 +702,10 @@ All project files, RTL code, testbenches, IP configurations, simulation outputs,
 \textbf{\url{https://drive.google.com/drive/folders/1p9z1YLM3DZuk39lXkIerJmVoPrgTB8Wx?usp=sharing}}
 \end{center}
 
-%========================
 % Bibliography / References (optional placeholder)
-%========================
+
 \section*{References}
-% Use BibTeX or manual references as desired. Placeholders below:
+
 \begin{itemize}
     \item Patterson \& Hennessy (Hennessy and Patterson, Computer Organization and Design, RISC-V edition).
     \item Digital Design and Computer Architecture by Sarah L. Harris and David Harris 
@@ -857,5 +840,4 @@ This appendix contains the IP configuration settings for regenerating the IMEM, 
     \caption{Divider IP unsigned — Pipeline / Latency Options }
 \end{figure}
 
-% End of document
 \end{document}

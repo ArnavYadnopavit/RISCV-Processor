@@ -1,0 +1,104 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{3}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{3}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Project motivation}{3}{subsection.1.1}\protected@file@percent }
+\newlabel{sub:motivation}{{1.1}{3}{Project motivation}{subsection.1.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Initial proposed scope}{3}{subsection.1.2}\protected@file@percent }
+\newlabel{sub:initial-scope}{{1.2}{3}{Initial proposed scope}{subsection.1.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Differences Between Proposal and Final Implementation}{3}{subsection.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Overall Design Overview}{4}{section.2}\protected@file@percent }
+\newlabel{sec:design-overview}{{2}{4}{Overall Design Overview}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Development timeline followed (Phase 1, 2, 3 and 4)}{4}{subsection.2.1}\protected@file@percent }
+\newlabel{sub:timeline}{{2.1}{4}{Development timeline followed (Phase 1, 2, 3 and 4)}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Processor Implementations}{4}{section.3}\protected@file@percent }
+\newlabel{sec:processor-impl}{{3}{4}{Processor Implementations}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Single-Cycle RV64I Processor}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Datapath Architecture}{5}{subsubsection.3.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Single-cycle RV64I datapath}}{5}{figure.caption.2}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:single-cycle-datapath}{{1}{5}{Single-cycle RV64I datapath}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Control Logic}{5}{subsubsection.3.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Single-cycle control logic diagram}}{6}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:single-cycle-control-logic}{{2}{6}{Single-cycle control logic diagram}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Supported Instructions}{6}{subsubsection.3.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.4}Simulation and Testing}{7}{subsubsection.3.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}5-Stage Pipelined RV64I Processor}{7}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Instruction Fetch (IF)}{7}{subsubsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Instruction Decode (ID)}{7}{subsubsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Execute (EX)}{8}{subsubsection.3.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.4}Memory Access (MEM)}{8}{subsubsection.3.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.5}Write Back (WB)}{8}{subsubsection.3.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.6}Hazard Detection Unit}{8}{subsubsection.3.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.7}Forwarding Unit}{8}{subsubsection.3.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.8}Branch Handling (Using Branch\_D Module)}{8}{subsubsection.3.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.9}Pipeline Diagram}{9}{subsubsection.3.2.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 5-stage pipeline diagram with stalls and early-branch detection.}}{9}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:pipeline-diagram}{{3}{9}{5-stage pipeline diagram with stalls and early-branch detection}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}RV64IM Pipelined Processor}{9}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Single-Cycle Multiply Unit}{9}{subsubsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Pipelined Divider (Xilinx div\_gen IP)}{9}{subsubsection.3.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}DivStaller Module}{10}{subsubsection.3.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}Data Memory Stallers}{10}{subsubsection.3.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}Interaction with Hazard Detection and Forwarding}{10}{subsubsection.3.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.6}Pipeline Stage Behavior for RV64IM Instructions}{11}{subsubsection.3.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{IF Stage}{11}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{ID Stage}{11}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{EX Stage}{11}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{MEM Stage}{11}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{WB Stage}{11}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.7}Testing Strategy}{11}{subsubsection.3.3.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces RV64IM pipeline}}{12}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:rv64im-testbench}{{4}{12}{RV64IM pipeline}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Unfinished / Modified Features}{13}{section.4}\protected@file@percent }
+\newlabel{sec:unfinished}{{4}{13}{Unfinished / Modified Features}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Floating Point Unit (FPU)}{13}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Cache Design — Planned vs Actual}{14}{subsubsection.4.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}UART Interface}{14}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Initial Working Design}{14}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Attempt to Add Memory Dump Support}{15}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{UART Receiver (Unfinished)}{15}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Final Workaround: LED-Based Debug Output}{15}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{16}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Timing Results (Post-Implementation WNS)}{16}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Timing Results (WNS) and Estimated Maximum Clock Frequency}}{16}{table.caption.15}\protected@file@percent }
+\newlabel{tab:wns}{{1}{16}{Timing Results (WNS) and Estimated Maximum Clock Frequency}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Experimentally Verified Clock Speeds}{16}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Experimentally Verified Stable Clock Frequencies}}{16}{table.caption.16}\protected@file@percent }
+\newlabel{tab:testedfreq}{{2}{16}{Experimentally Verified Stable Clock Frequencies}{table.caption.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Resource Utilization}{17}{subsection.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces FPGA Resource Utilization Summary}}{17}{table.caption.17}\protected@file@percent }
+\newlabel{tab:resources}{{3}{17}{FPGA Resource Utilization Summary}{table.caption.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Code Size Comparison}{17}{subsection.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces RTL Code Size Comparison}}{17}{table.caption.18}\protected@file@percent }
+\newlabel{tab:code-size}{{4}{17}{RTL Code Size Comparison}{table.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Power Analysis}{17}{subsection.5.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Estimated Dynamic Power Consumption}}{17}{table.caption.19}\protected@file@percent }
+\newlabel{tab:power}{{5}{17}{Estimated Dynamic Power Consumption}{table.caption.19}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}tb results}{18}{section.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \relax }}{18}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:rv64im-testbench}{{5}{18}{\relax }{figure.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces RV64IM pipeline}}{19}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:rv64im-testbench}{{6}{19}{RV64IM pipeline}{figure.caption.21}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Bubble Sort}}{20}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:rv64im-testbench}{{7}{20}{Bubble Sort}{figure.caption.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Discussion}{20}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Future Work}{20}{subsection.6.2}\protected@file@percent }
+\newlabel{sub:future-work}{{6.2}{20}{Future Work}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Challenges for Future Extensions}{21}{subsubsection.6.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Appendix: README and Usage Guide}{23}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Appendix: IP Generation Settings}{24}{section*.28}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces IMEM IP — Basic Configuration }}{25}{figure.caption.30}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces IMEM IP — Port A Options }}{26}{figure.caption.31}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces IMEM IP — other Options }}{27}{figure.caption.32}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces DMEM IP — Basic Configuration }}{28}{figure.caption.34}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces DMEM IP — Port A Options }}{29}{figure.caption.35}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces DMEM IP — Other Options }}{30}{figure.caption.36}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Divider IP signed — Channel Settings fig a }}{31}{figure.caption.38}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Divider IP signed — Channel Settings fig b }}{32}{figure.caption.39}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Divider IP signed — Pipeline / Latency Options }}{33}{figure.caption.40}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Divider IP unsigned — Channel Settings fig }}{34}{figure.caption.41}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Divider IP unsigned — Pipeline / Latency Options }}{35}{figure.caption.42}\protected@file@percent }
+\gdef \@abspage@last{36}

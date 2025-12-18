@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Design Plan}{2}{}%
+\contentsline {subsection}{\numberline {1.1}block diagram}{2}{}%
+\contentsline {section}{\numberline {2}Current Implementation Status}{3}{}%
+\contentsline {section}{\numberline {3}Early Results}{4}{}%
+\contentsline {subsection}{\numberline {3.1}ALU and ALU Control Verification}{5}{}%
+\contentsline {subsection}{\numberline {3.2}Immediate Generator}{7}{}%
+\contentsline {subsection}{\numberline {3.3}Memory Modules (IMEM and DMEM)}{7}{}%
+\contentsline {subsection}{\numberline {3.4}Control Unit}{7}{}%
+\contentsline {section}{\numberline {4}Challenges and Observations}{9}{}%
+\contentsline {subsection}{\numberline {4.1}Revisiting Verilog and Design Fundamentals}{9}{}%
+\contentsline {subsection}{\numberline {4.2}Memory Initialization and Data Loading}{9}{}%
+\contentsline {subsection}{\numberline {4.3}Module Integration and Debugging}{10}{}%
+\contentsline {subsection}{\numberline {4.4}Control Unit Logic Issue}{10}{}%
+\contentsline {subsection}{\numberline {4.5}Synthesis Issue: Unexpected LUT Growth when Integrating Modules}{10}{}%
+\contentsline {section}{\numberline {5}Next Steps}{11}{}%
+\contentsline {subsection}{\numberline {5.1}Phase 2–4: Multicycle Design, M Extension, and FPU Integration}{11}{}%
+\contentsline {subsection}{\numberline {5.2}Additional Enhancement: Cache Subsystem (Tentative)}{11}{}%
