@@ -55,7 +55,7 @@ add  x24, x23, x2      # hazard: x23 just loaded -> x24 = 0x0F
 # Branch and control hazards
 # --------------------------
 # Branch based on previous computation (should use forwarded value)
-add  x25, x1, x2       # x25 = 0x0F
+add  x25, x1, x2       # x25 = 0x0C
 beq  x25, x6, equal_label   # should not take (15!=7)
 addi x26, x0, 0        # skipped if branch taken
 j    branch_done
