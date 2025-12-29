@@ -104,9 +104,9 @@ The project was developed incrementally, starting from a single-cycle baseline a
 |------|------------------|
 | Single-cycle RV64I | 25 MHz |
 | Pipelined RV64I | 50 MHz |
-| Pipelined RV64IM | 10–15 MHz |
+| Pipelined RV64IM | 30–35 MHz |
 
-> **Recommended:** Run RV64IM at **5–10 MHz** for guaranteed timing closure.
+> **Recommended:** Run RV64IM at **30 MHz** for guaranteed timing closure.
 
 ---
 
