@@ -22,7 +22,7 @@ module ex_mem_reg(
         output reg MemRead_out,
         output reg MemWrite_out,
         output reg MemReg_out,
-        output reg Branch_out,
+        //output reg Branch_out,
         output reg Jump_out
 );
 
@@ -38,7 +38,7 @@ module ex_mem_reg(
                         MemRead_out <= 1'b0;
                         MemWrite_out <= 1'b0;
                         MemReg_out <= 1'b0;
-                        Branch_out <= 1'b0;
+                        //Branch_out <= 1'b0;
                         Jump_out <= 1'b0;
 
                 end 
@@ -52,7 +52,7 @@ module ex_mem_reg(
                         MemRead_out <= MemRead_out;
                         MemWrite_out <= MemWrite_out;
                         MemReg_out <= MemReg_out;
-                        Branch_out <= Branch_out;
+                        //Branch_out <= Branch_out;
                         Jump_out <= Jump_out;
         end
 		else begin
@@ -66,10 +66,9 @@ module ex_mem_reg(
                         MemRead_out <= MemRead_in;
                         MemWrite_out <= MemWrite_in;
                         MemReg_out <= MemReg_in;
-                        Branch_out <= Branch_in;
+                        //Branch_out <= Branch_in;
                         Jump_out <= Jump_in;
 
                 end
         end
 endmodule
-
