@@ -83,6 +83,8 @@ module pipelined_datapath(
 	assign PcSrc = Jump || (Branch && branch_D);
 	
 	assign FlushD = PcSrc;
+	
+	assign FlushE_ctrl = PcSrc;
 
 	program_counter PC (
   		.clk(clk),
@@ -93,8 +95,8 @@ module pipelined_datapath(
 	);
           
     	imem_ip IM(
-        	.clka(~clk),
-        	.ena(1'b1),
+        	.clka(clk),
+        	.ena(~StallF),   // fixed the instruction miss due to the stall in the dmem
         	.wea(4'b0),
         	.addra(pc_out[15:2]),
         	.dina(32'd0),
@@ -133,7 +135,7 @@ module pipelined_datapath(
         );
 
         reg_file RF (
-                .clk(~clk),
+                .clk(clk),
                 .reset(reset),
                 .reg_write(mem_wb_RegWrite_out),
                 .rs1(rs1),
@@ -147,21 +149,22 @@ module pipelined_datapath(
         );
         
         // Muxes for branch comparing regs forwarding
-        mux3 BranchD_A (
-            .a(read_data1),
-            .b(alu_result),
-            .c(write_data),
-            .sel(BranchForwardAE),
-            .y(BranchD_in1)
-        );
-        
-        mux3 BranchD_B (
-            .a(read_data2),
-            .b(alu_result),
-            .c(write_data),
-            .sel(BranchForwardBE),
-            .y(BranchD_in2)
-        );
+mux3 BranchD_A (
+    .a(read_data1),
+    .b(write_data),               // WB
+    .c(ex_mem_alu_result_out),    // EX/MEM
+    .sel(BranchForwardAE),
+    .y(BranchD_in1)
+);
+
+mux3 BranchD_B (
+    .a(read_data2),
+    .b(write_data),
+    .c(ex_mem_alu_result_out),
+    .sel(BranchForwardBE),
+    .y(BranchD_in2)
+);
+
         
         
         
@@ -179,7 +182,7 @@ module pipelined_datapath(
                 .clk(clk),
                 .reset(reset),
                 .StallE(StallE),
-                .FlushE(FlushE),
+                .FlushE((FlushE | PcSrc) & ~StallE),
                 .pc_in(if_id_pc_out),
                 .rs1_D_in(rs1),
                 .rs2_D_in(rs2),
@@ -282,7 +285,8 @@ module pipelined_datapath(
 	);
 	
 	dmemstaller DMSTALL(
-	   .clk(~clk),
+	   .clk(clk),
+	   .reset(reset),
 	   .MemWrite(ex_mem_MemWrite_out),
 	   .MemRead(ex_mem_MemRead_out),
 	   .MemStall(MemStall)	   
@@ -342,7 +346,8 @@ module pipelined_datapath(
     		.rd_out(mem_wb_rd_out),
     		.RegWrite_out(mem_wb_RegWrite_out),
     		.MemtoReg_out(mem_wb_MemtoReg_out),
-    		.Jump_out(mem_wb_Jump_out)   
+    		.Jump_out(mem_wb_Jump_out),
+    		.StallW(StallM)
   	);
   	
   	wire [1:0] wb_sel;
@@ -390,7 +395,8 @@ module pipelined_datapath(
   		.ForwardBE(ForwardBE),
   		.StallF(StallF),
   		.BranchForwardAE(BranchForwardAE),
-  		.BranchForwardBE(BranchForwardBE)
+  		.BranchForwardBE(BranchForwardBE),
+  		.opcode_D(opcode)
 );
 
 	wire [63:0] pc_plus4;
@@ -413,4 +419,3 @@ module pipelined_datapath(
 	);
 
 endmodule
-
