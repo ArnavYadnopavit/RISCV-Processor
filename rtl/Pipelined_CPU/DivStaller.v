@@ -1,5 +1,27 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 13.11.2025 16:08:44
+// Design Name: 
+// Module Name: DivStaller
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
 module DivStaller#(
-    parameter integer DIV_LATENCY = 9   // number of cycles to stall (must be >= 1)
+    parameter integer DIV_LATENCY =71   // number of cycles to stall (must be >= 1)
 )(
     input clk,
     input reset,
@@ -37,6 +59,6 @@ module DivStaller#(
             end
         end
     end
-
+    
     assign DivStalled=!(Divfsm==4'b0000);
 endmodule
