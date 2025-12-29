@@ -1,20 +1,21 @@
 module dmemstaller(
-    input clk,
-    input MemWrite,
-    input MemRead,
-    output reg MemStall
-    );
-    wire isMem;
-    assign isMem=MemWrite||MemRead;
-    always@(posedge clk or posedge isMem)begin
-        //if(reset)MemStall<=1'b0;
-        casez(MemStall)
-            1'b0:if(isMem)begin
-                MemStall<=1'b1;
-                end
-                else MemStall<=1'b0;
-            1'b1:MemStall<=1'b0;
-            default:MemStall<=1'b0;        
-        endcase
-    end 
+    input  wire clk,
+    input  wire reset,
+    input  wire MemRead,
+    input  wire MemWrite,
+    output reg  MemStall
+);
+    reg prev_mem;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            MemStall  <= 1'b0;
+            prev_mem <= 1'b0;
+        end else begin
+            prev_mem <= (MemRead || MemWrite);
+            // one-cycle pulse when a new mem op enters MEM
+            MemStall <= (MemRead || MemWrite) && !prev_mem;
+        end
+    end
 endmodule
+
